@@ -1,0 +1,26 @@
+docs_dir: pages
+
+theme:
+  name: null
+  custom_dir: '../../themes/mkdocs-material/material'
+  language: en
+  feature:
+  palette:
+    primary: indigo
+    accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: /favicon.ico
+  logo:
+    icon: "\uE80C"
+  base_url: '/phaser/'
+
+site_name: Phaser
+site_url: https://opensource.bloom.sh/phaser/
+repo_url: https://github.com/bloom42/phaser/
+edit_uri: https://github.com/bloom42/phaser/edit/master/docs/pages/
+site_dir: ../../../dist/phaser
+
+nav:
+  - index.md
