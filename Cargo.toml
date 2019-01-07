@@ -3,7 +3,6 @@ name = "phaser"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.com>"]
 edition = "2018"
-license = "Server Side Publice Licence v1"
 homepage = "https://github.com/bloom42/phaser"
 repository = "https://github.com/bloom42/phaser.git"
 description = "Security scanner 🔍"
