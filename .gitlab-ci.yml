@@ -29,10 +29,10 @@ build:
     - make docker_push
 
 
-release:
+release_docker:
+  stage: release
   only:
     - tags
-  stage: release
   tags:
     - docker
     - bloom42cicd
@@ -40,5 +40,28 @@ release:
     - apk update && apk add make
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - make docker_release
+
+release_crates:
+  stage: release
+  image: 'rust:1.31-stretch'
+  only:
+    - tags
+  tags:
+    - docker
+    - bloom42cicd
+  script:
     - cargo login $CRATES_TOKEN
     - cargo publish
+
+
+release_github:
+  stage: release
+  image: 'golang:1.11-stretch'
+  only:
+    - tags
+  tags:
+    - docker
+    - bloom42cicd
+  script:
+    - go get -u github.com/bloom42/rocket
+    - rocket
