@@ -13,7 +13,8 @@ It can be used both from CLI and as a worker waiting for messages from a message
 
 1. [Usage](#usage)
 2. [Documentation](#documentation)
-3. [License](#license)
+3. [Docker image](#docker-image)
+4. [License](#license)
 
 -------------------
 
@@ -27,6 +28,11 @@ phaser help
 ## Documentation
 
 See [https://opensource.bloom.sh/phaser](https://opensource.bloom.sh/phaser)
+
+
+## Docker image
+
+[registry.gitlab.com/bloom42/phaser](https://gitlab.com/bloom42/phaser/container_registry)
 
 
 ## License
