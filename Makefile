@@ -1,4 +1,4 @@
-.PHONY: build lint test audit docker docker_release docker_push
+.PHONY: build lint test audit docker docker_release docker_push release
 
 NAME = $(shell cat src/info.rs  | grep NAME | cut -d'"' -f2)
 DIST_DIR = target
@@ -12,6 +12,10 @@ $(NAME): build
 
 build:
 	cargo build --release
+
+release:
+	git tag v$(VERSION)
+	git push origin v$(VERSION)
 
 lint:
 	cargo clippy
