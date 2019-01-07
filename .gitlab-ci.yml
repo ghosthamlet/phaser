@@ -40,3 +40,5 @@ release:
     - apk update && apk add make
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - make docker_release
+    - cargo login $CRATES_TOKEN
+    - cargo publish
