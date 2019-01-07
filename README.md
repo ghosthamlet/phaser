@@ -6,6 +6,7 @@
 --------
 
 [![pipeline status](https://gitlab.com/bloom42/phaser/badges/master/pipeline.svg)](https://gitlab.com/bloom42/phaser/commits/master)
+[![Docker image](https://img.shields.io/badge/docker-registry.gitlab.com/bloom42/phaser-blue.svg)](https://gitlab.com/bloom42/phaser/container_registry)
 
 
 `phaser` is an automated security scanner for both networks and web applicaitons.
