@@ -7,6 +7,7 @@ homepage = "https://github.com/bloom42/phaser"
 repository = "https://github.com/bloom42/phaser.git"
 description = "Security scanner 🔍"
 keywords = ["security", "bloom", "phaser", "scanner"]
+license-file = "LICENSE.txt"
 
 [dependencies]
 clap = "2.32.0"
