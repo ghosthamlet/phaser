@@ -6,8 +6,8 @@
 
 --------
 
-[![Phaser crate](https://img.shields.io/crates/v/phaser.svg)](https://crates.io/crates/phaser)
-[![Phaser documentation](https://docs.rs/phaser/badge.svg)](https://docs.rs/phaser)
+[![GoDoc](https://godoc.org/github.com/bloom42/phaser?status.svg)](https://godoc.org/github.com/bloom42/phaser)
+[![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
 [![pipeline status](https://gitlab.com/bloom42/phaser/badges/master/pipeline.svg)](https://gitlab.com/bloom42/phaser/commits/master)
 
 
