@@ -23,7 +23,7 @@ var scanAssetsFolder string
 func init() {
 	scanCmd.Flags().StringVarP(&scanTargetsFile, "targets", "t", "", "A file containing new line separated targets (use -- for stdin, and fallback to arguments if not provided)")
 	scanCmd.Flags().StringVarP(&scanProfileFile, "profile", "p", "", "A .sane file containing the scanner's profile. Default to 'network'")
-	scanCmd.Flags().StringVarP(&scanOutputFormat, "format", "f", "text", "The logging ouput format. Valid values are [text, json]")
+	scanCmd.Flags().StringVarP(&scanOutputFormat, "format", "f", "text", "The logging output format. Valid values are [text, json]")
 	scanCmd.Flags().BoolVarP(&scanEnableDebug, "debug", "d", false, "Set logging level to debug")
 	scanCmd.Flags().StringVarP(&scanOutputFolder, "output", "o", "", "The output folder for the scan data. Default to 'scans/target'")
 	scanCmd.Flags().StringVarP(&scanAssetsFolder, "assets", "a", "assets", "The assets folder")

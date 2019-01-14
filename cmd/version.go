@@ -22,7 +22,7 @@ type versionJSON struct {
 var versionOutputFormat string
 
 func init() {
-	versionCmd.Flags().StringVarP(&versionOutputFormat, "format", "f", "text", "The ouput format. Valid values are [text, json]")
+	versionCmd.Flags().StringVarP(&versionOutputFormat, "format", "f", "text", "The output format. Valid values are [text, json]")
 	rootCmd.AddCommand(versionCmd)
 }
 
