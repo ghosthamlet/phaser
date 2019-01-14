@@ -10,8 +10,7 @@
 [![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
 [![pipeline status](https://gitlab.com/bloom42/phaser/badges/master/pipeline.svg)](https://gitlab.com/bloom42/phaser/commits/master)
 
-
-`phaser` is an automated security scanner for both networks and web applicaitons.
+`phaser` is an automated security scanner for both networks and web applications.
 It can be used both from CLI and as a worker waiting for messages from a message queue.
 
 1. [Usage](#usage)
