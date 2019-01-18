@@ -11,10 +11,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/bloom42/astro-go/log"
-	"gitlab.com/bloom42/shared/phaser"
+	"github.com/bloom42/common/phaser"
 )
 
 type hashs struct {
@@ -67,7 +65,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 }
 
 // save a file in the output folder
-func  saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, error) {
+func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, error) {
 	var err error
 	reader := bytes.NewReader(data)
 	var ret phaser.File
@@ -85,16 +83,17 @@ func  saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, er
 		SHA512: hashs.SHA512,
 	}
 
-	if scan.Config.AwsSession != nil { // save to a cloud bucket
-		filePath = filepath.Join("platform", "phaser", "scans", *scan.ID, "reports", *scan.ReportID, filePath)
-		s3Service := s3.New(scan.Config.AwsSession)
-		log.With("file", filePath).Debug("writing file to s3")
-		_, err = s3Service.PutObject(&s3.PutObjectInput{
-			Bucket: aws.String(*scan.Config.AWSS3Bucket),
-			Key:    aws.String(filePath),
-			Body:   reader,
-		})
-	} else if scan.Config.Folder != nil { // save to local FS
+	// if scan.Config.AwsSession != nil { // save to a cloud bucket
+	// 	filePath = filepath.Join("platform", "phaser", "scans", *scan.ID, "reports", *scan.ReportID, filePath)
+	// 	s3Service := s3.New(scan.Config.AwsSession)
+	// 	log.With("file", filePath).Debug("writing file to s3")
+	// 	_, err = s3Service.PutObject(&s3.PutObjectInput{
+	// 		Bucket: aws.String(*scan.Config.AWSS3Bucket),
+	// 		Key:    aws.String(filePath),
+	// 		Body:   reader,
+	// 	})
+	// } else
+	if scan.Config.Folder != nil { // save to local FS
 		filePath = filepath.Join(*scan.Config.Folder, filePath)
 		log.With("file", filePath).Debug("writing file to fs")
 		err = ioutil.WriteFile(filePath, data, 0600)

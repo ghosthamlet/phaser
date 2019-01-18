@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/bloom42/astro-go/log"
-	"gitlab.com/bloom42/phaser/version"
-	"gitlab.com/bloom42/shared/phaser"
+	"github.com/bloom42/phaser/version"
+	"github.com/bloom42/common/phaser"
 )
 
 const (

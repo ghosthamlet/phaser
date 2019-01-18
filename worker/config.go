@@ -7,7 +7,7 @@ import (
 	"github.com/astrolib/godotenv"
 	"github.com/bloom42/astro-go"
 	"github.com/bloom42/astro-go/log"
-	"gitlab.com/bloom42/phaser/version"
+	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/denv-go"
 )
 

@@ -3,7 +3,7 @@ package profile
 import (
 	"fmt"
 
-	"gitlab.com/bloom42/phaser/version"
+	"github.com/bloom42/phaser/version"
 )
 
 var (

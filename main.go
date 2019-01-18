@@ -4,7 +4,7 @@ import (
 	stdlog "log"
 	"os"
 
-	"gitlab.com/bloom42/phaser/cmd"
+	"github.com/bloom42/phaser/cmd"
 )
 
 func main() {

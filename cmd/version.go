@@ -6,7 +6,7 @@ import (
 
 	"github.com/bloom42/astro-go/log"
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/phaser/version"
+	"github.com/bloom42/phaser/version"
 )
 
 type versionJSON struct {

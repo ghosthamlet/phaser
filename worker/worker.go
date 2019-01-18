@@ -10,10 +10,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"gitlab.com/bloom42/phaser/scanner"
-	"gitlab.com/bloom42/phaser/scanner/profile"
-	sharedasync "gitlab.com/bloom42/shared/async"
-	"gitlab.com/bloom42/shared/phaser"
+	"github.com/bloom42/phaser/scanner"
+	"github.com/bloom42/phaser/scanner/profile"
+	commonasync "github.com/bloom42/common/async"
+	"github.com/bloom42/common/phaser"
 	"github.com/getsentry/raven-go"
 )
 
@@ -77,7 +77,7 @@ func (worker *Worker) Run() error {
 
 		for _, message := range result.Messages {
 
-			asyncMessage := sharedasync.DecodedMessage{}
+			asyncMessage := commonasync.DecodedMessage{}
 			err := json.Unmarshal([]byte(*message.Body), &asyncMessage)
 			if err != nil {
 				log.With("err", err.Error()).Error("error decoding async message")
@@ -124,7 +124,6 @@ func (worker *Worker) runScan(message phaser.ScanQueuedMessage) {
 		ReportID: &message.ReportID,
 		AWSS3Bucket: &worker.config.AWSS3Bucket,
 		Assets: worker.config.AssetsPath,
-		AwsSession: worker.awsSession,
 	}
 	scan := scanner.NewScan(scanConfig)
 	worker.sendScanStarted(*scan.ReportID, scan.StartedAt)

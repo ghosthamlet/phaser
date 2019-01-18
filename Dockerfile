@@ -1,7 +1,6 @@
 FROM golang:1.11-alpine AS builder
 
 ARG CI_JOB_TOKEN
-RUN echo -e "machine gitlab.com\nlogin gitlab-ci-token\npassword $CI_JOB_TOKEN" > ~/.netrc
 
 RUN apk update && apk add git ca-certificates make
 
@@ -24,8 +23,7 @@ COPY assets /phaser/assets
 RUN echo "deb http://deb.debian.org/debian unstable main" >> /etc/apt/sources.list
 RUN apt update -y && apt dist-upgrade -y && apt upgrade -y
 RUN apt install -y  python3 python3-pip \
-    dnsutils \
-    nmap whois \
+    dnsutils whois \
     ca-certificates libssl-dev
 RUN apt -t unstable install -y sqlmap
 

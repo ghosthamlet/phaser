@@ -4,19 +4,18 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/bloom42/astro-go/log"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"gitlab.com/bloom42/shared/async"
-	"gitlab.com/bloom42/shared/phaser"
+	"github.com/bloom42/astro-go/log"
+	"github.com/bloom42/common/async"
+	"github.com/bloom42/common/phaser"
 )
-
 
 func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) error {
 	svc := sqs.New(worker.awsSession)
 
 	data := phaser.ScanStartedMessage{
-		ReportID: reportID,
+		ReportID:  reportID,
 		StartedAt: startedAt,
 	}
 	message := async.Message{
@@ -27,7 +26,7 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 	encodedMessage, err := json.Marshal(message)
 	if err != nil {
 		log.With("err", err.Error, "report_id", reportID).
-		Error("marshaling scan_started message")
+			Error("marshaling scan_started message")
 		return err
 	}
 
@@ -40,8 +39,8 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 	})
 
 	if err != nil {
-		log.With("err", err.Error,  "report_id", reportID).
-		Error("sending scan_started to SQS")
+		log.With("err", err.Error, "report_id", reportID).
+			Error("sending scan_started to SQS")
 		return err
 	}
 
@@ -53,7 +52,7 @@ func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 	svc := sqs.New(worker.awsSession)
 	messageData := phaser.ScanCompletedMessage{
 		ReportID: *scan.ReportID,
-		File: scan.ResultFile,
+		File:     scan.ResultFile,
 	}
 
 	message := async.Message{
@@ -64,7 +63,7 @@ func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 	encodedMessage, err := json.Marshal(message)
 	if err != nil {
 		log.With("err", err.Error, "scan_id", scan.ID, "report_id", scan.ReportID).
-		Error("marshaling scan_completed message")
+			Error("marshaling scan_completed message")
 		return err
 	}
 
@@ -78,7 +77,7 @@ func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 
 	if err != nil {
 		log.With("err", err.Error, "scan_id", scan.ID, "report_id", scan.ReportID).
-		Error("sending scan result to SQS")
+			Error("sending scan result to SQS")
 		return err
 	}
 

@@ -6,11 +6,11 @@ import (
 
 	"github.com/bloom42/astro-go/log"
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/phaser/scanner"
-	"gitlab.com/bloom42/phaser/scanner/profile"
+	"github.com/bloom42/phaser/scanner"
+	"github.com/bloom42/phaser/scanner/profile"
 	"github.com/bloom42/sane-go"
 	"github.com/bloom42/astro-go"
-	"gitlab.com/bloom42/shared/phaser"
+	"github.com/bloom42/common/phaser"
 )
 
 var scanTargetsFile string

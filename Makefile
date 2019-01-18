@@ -3,7 +3,7 @@
 NAME = $(shell cat version/version.go| grep "\sName" | cut -d '"' -f2)
 DIST_DIR = dist
 VERSION := $(shell cat version/version.go| grep "\sVersion" | cut -d '"' -f2)
-DOCKER_IMAGE = "registry.gitlab.com/bloom42/phaser"
+DOCKER_IMAGE = "registry.github.com/bloom42/phaser"
 COMMIT = $(shell git rev-parse HEAD)
 
 

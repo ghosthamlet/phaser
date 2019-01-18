@@ -5,8 +5,8 @@ import (
 	"os/exec"
 
 	"github.com/astrolib/go-nmap"
-	"gitlab.com/bloom42/shared/phaser"
-	"gitlab.com/bloom42/shared/phaser/findings"
+	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/common/phaser/findings"
 )
 
 const (
@@ -59,7 +59,7 @@ func Ports(scan *phaser.Scan, target *phaser.Target) []error {
 	portsToScan += ",26257"                                                            // cockroachDB
 	portsToScan += ",4000"                                                             // TiDB
 	portsToScan += ",5080,6080,9080,7080"                                              // dgraph
-	portsToScan += ",81"                                                               //Goahead
+	portsToScan += ",81"                                                               // Goahead
 	portsToScan += ",2003,2004,2023,2024"                                              // Carbon
 	portsToScan += ",8125,8126"                                                        // statsd
 

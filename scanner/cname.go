@@ -3,7 +3,7 @@ package scanner
 import (
 	"net"
 
-	"gitlab.com/bloom42/shared/phaser"
+	"github.com/bloom42/common/phaser"
 )
 
 func CNAME(scan *phaser.Scan, target *phaser.Target) []error {
