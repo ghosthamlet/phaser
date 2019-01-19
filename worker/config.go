@@ -34,6 +34,11 @@ var RequiredEnvVars = []string{
 	"SENTRY_URL",
 }
 
+var DefaultEnvVars = denv.Env{
+	"GO_ENV":      "development",
+	"ASSETS_PATH": "assets",
+}
+
 // CheckEnv checks if the required environment variables are present
 func checkEnv() {
 	for _, v := range RequiredEnvVars {
@@ -47,10 +52,7 @@ func checkEnv() {
 func (worker *Worker) initConfig() error {
 	godotenv.Load()
 	checkEnv()
-	denv.Init(denv.Env{
-		"GO_ENV":      "development",
-		"ASSETS_PATH": "assets",
-	})
+	denv.Init(DefaultEnvVars)
 	var conf config
 
 	conf.GoEnv = os.Getenv("GO_ENV")
