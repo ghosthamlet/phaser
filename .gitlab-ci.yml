@@ -15,6 +15,7 @@ test:
     - docker
     - bloom42cicd
   script:
+    - apk update && apk add make
     - make test
 
 build:
