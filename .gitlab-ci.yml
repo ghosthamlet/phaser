@@ -6,6 +6,7 @@ services:
 stages:
   - test
   - build
+  - push
   - release
 
 test:
@@ -26,7 +27,19 @@ build:
   script:
     - apk update && apk add make
     - make docker
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+push:
+  stage: push
+  only:
+    refs:
+      - master
+  tags:
+    - docker
+    - bloom42cicd
+  script:
+    - apk update && apk add make
+    - make docker
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
     - make docker_push
 
 
@@ -39,7 +52,7 @@ release_docker:
     - bloom42cicd
   script:
     - apk update && apk add make
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
     - make docker_release
 
 release_github:
