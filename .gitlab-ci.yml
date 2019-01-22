@@ -15,7 +15,7 @@ test:
     - docker
     - bloom42cicd
   script:
-    - apk update && apk add make git ca-certificates gcc
+    - apt update && apt install -y gcc make git
     - make test
 
 build:
