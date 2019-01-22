@@ -5,7 +5,8 @@ require (
 	github.com/astrolib/godotenv v1.3.0
 	github.com/astrolib/govalidator v0.0.0-20180720115003-f9ffefc3facf
 	github.com/aws/aws-sdk-go v1.16.8
-	github.com/bloom42/astro-go v0.11.2
+	github.com/bloom42/astro-go v0.12.7
+	github.com/bloom42/astro-go/examples/simple v0.0.0-20190122213441-e48bf210adb9 // indirect
 	github.com/bloom42/common v0.1.4
 	github.com/bloom42/denv-go v1.0.0
 	github.com/bloom42/sane-go v0.6.1

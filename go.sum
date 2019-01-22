@@ -9,6 +9,11 @@ github.com/aws/aws-sdk-go v1.16.8 h1:zVTnpnMXhoSr3HcCqe01Y1jM8WMy6r2oWbLeqj6C+5o
 github.com/aws/aws-sdk-go v1.16.8/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/bloom42/astro-go v0.11.2 h1:qt3HUbfSnURtCgEc4bkzXic0o6ADM1lbV4oNO+bFmNE=
 github.com/bloom42/astro-go v0.11.2/go.mod h1:j6wCDMzQEgLLifSjoMoFQvd06r/TcCF2itBy1nxwVqo=
+github.com/bloom42/astro-go v0.12.3/go.mod h1:j6wCDMzQEgLLifSjoMoFQvd06r/TcCF2itBy1nxwVqo=
+github.com/bloom42/astro-go v0.12.7 h1:RrKXtKG1oyP5G7mayhv9WeFx7RGGZnkyztF2o3wSslg=
+github.com/bloom42/astro-go v0.12.7/go.mod h1:fbH8rKXtvdLwZNE/Y6nkivYpj4ypqpvp1AN88XnlcxU=
+github.com/bloom42/astro-go/examples/simple v0.0.0-20190122205458-34fcaa70f04a/go.mod h1:ETy/S0uiHLt60YP2+rJz5x7ZXDuIDC+7a/Vnyxwgs38=
+github.com/bloom42/astro-go/examples/simple v0.0.0-20190122213441-e48bf210adb9/go.mod h1:0wZb9oy5vxs0JskkX+Vm6iB2Uo+WEiOGz967QUwkMs4=
 github.com/bloom42/common v0.1.4 h1:1AkApKZmCzrIg0p+8PMY5+q/X+8KuHP0P0yz+C0h6Xw=
 github.com/bloom42/common v0.1.4/go.mod h1:30/aK9PljAOMgWlVOI9d05Uvdv7wcjkY73WCzkW0aPM=
 github.com/bloom42/denv-go v1.0.0 h1:3RXdzOFlh9eItnNM9ODHbKAwqzQRF3ZgP0isX4c84GA=
