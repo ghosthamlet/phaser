@@ -27,6 +27,7 @@ static:
 
 docker:
 	docker build -t $(DOCKER_IMAGE):latest .
+	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
 
 release:
 	git tag v$(VERSION)
@@ -36,5 +37,4 @@ docker_push:
 	docker push $(DOCKER_IMAGE):latest
 
 docker_release: docker
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):$(VERSION)
