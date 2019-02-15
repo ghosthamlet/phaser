@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"github.com/bloom42/astro-go/log"
-	"github.com/spf13/cobra"
 	"github.com/bloom42/phaser/worker"
+	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/log"
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -18,7 +19,7 @@ var workerCmd = &cobra.Command{
 		var w worker.Worker
 
 		if err := w.Run(); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal("running worker", rz.Err(err))
 		}
 	},
 }

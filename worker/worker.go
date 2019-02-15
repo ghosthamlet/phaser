@@ -5,7 +5,8 @@ import (
 	"strings"
 	"os"
 
-	"github.com/bloom42/astro-go/log"
+	"github.com/bloom42/rz-go/log"
+	"github.com/bloom42/rz-go"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -51,7 +52,7 @@ func (worker *Worker) Run() error {
 	sqsService := sqs.New(worker.awsSession)
 
 	qURL := worker.config.AWSSQSAPIToPhaser
-	log.With("queue", qURL).Info("listenning queue for async messages")
+	log.Info("listenning queue for async messages", rz.String("queue", qURL))
 	for {
 		result, err := sqsService.ReceiveMessage(&sqs.ReceiveMessageInput{
 			AttributeNames: []*string{
@@ -65,11 +66,11 @@ func (worker *Worker) Run() error {
 		})
 
 		if err != nil {
-			log.With("err", err.Error()).Error("error receiving SQS message")
+			log.Error("receiving SQS message", rz.Err(err))
 			continue
 		}
 
-		log.With("messages", len(result.Messages)).Debug("sqs request ended")
+		log.Info("sqs request ended", rz.Int("messages", len(result.Messages)))
 
 		if len(result.Messages) == 0 {
 			continue
@@ -80,7 +81,7 @@ func (worker *Worker) Run() error {
 			asyncMessage := commonasync.DecodedMessage{}
 			err := json.Unmarshal([]byte(*message.Body), &asyncMessage)
 			if err != nil {
-				log.With("err", err.Error()).Error("error decoding async message")
+				log.Error("decoding async message", rz.Err(err))
 				continue
 			}
 
@@ -89,10 +90,10 @@ func (worker *Worker) Run() error {
 				scanMessage := phaser.ScanQueuedMessage{}
 				err := json.Unmarshal(asyncMessage.Data, &scanMessage)
 				if err != nil {
-					log.With("err", err.Error()).Error("error decoding scan_queued message data")
+					log.Error("decoding scan_queued message data", rz.Err(err))
 					continue
 				}
-				log.With("message", scanMessage).Info("scan_queued message successfully received and decoded")
+				log.Info("scan_queued message successfully received and decoded", rz.String("scan.id", scanMessage.ScanID))
 				go worker.runScan(scanMessage)
 			}
 
@@ -102,7 +103,7 @@ func (worker *Worker) Run() error {
 			})
 
 			if err != nil {
-				log.With("err", err.Error()).Error("error deleting message from SQS queue")
+				log.Error("deleting message from SQS queue", rz.Err(err))
 				continue
 			}
 		}

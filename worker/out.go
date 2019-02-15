@@ -6,9 +6,10 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"github.com/bloom42/astro-go/log"
 	"github.com/bloom42/common/async"
 	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/log"
 )
 
 func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) error {
@@ -25,8 +26,7 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 
 	encodedMessage, err := json.Marshal(message)
 	if err != nil {
-		log.With("err", err.Error, "report_id", reportID).
-			Error("marshaling scan_started message")
+		log.Error("marshaling scan_started message", rz.Err(err), rz.String("report.id", reportID))
 		return err
 	}
 
@@ -39,12 +39,11 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 	})
 
 	if err != nil {
-		log.With("err", err.Error, "report_id", reportID).
-			Error("sending scan_started to SQS")
+		log.Error("sending scan_started to SQS", rz.Err(err), rz.String("report.id", reportID))
 		return err
 	}
 
-	log.With("report_id", reportID).Info("scan started message successfully sent")
+	log.Info("scan started message successfully sent", rz.String("report_id", reportID))
 	return nil
 }
 
@@ -62,8 +61,8 @@ func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 
 	encodedMessage, err := json.Marshal(message)
 	if err != nil {
-		log.With("err", err.Error, "scan_id", scan.ID, "report_id", scan.ReportID).
-			Error("marshaling scan_completed message")
+		log.Error("marshaling scan_completed message", rz.Err(err), rz.Interface("scan_id", scan.ID),
+			rz.Interface("report_id", scan.ReportID))
 		return err
 	}
 
@@ -76,11 +75,11 @@ func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 	})
 
 	if err != nil {
-		log.With("err", err.Error, "scan_id", scan.ID, "report_id", scan.ReportID).
-			Error("sending scan result to SQS")
+		log.Error("sending scan result to SQS", rz.Err(err), rz.Interface("scan_id", scan.ID),
+			rz.Interface("report_id", scan.ReportID))
 		return err
 	}
 
-	log.With("scan_id", scan.ID, "report_id", scan.ReportID).Info("scan result successfully sent to API")
+	log.Info("scan result successfully sent to API", rz.Interface("scan_id", scan.ID), rz.Interface("report_id", scan.ReportID))
 	return nil
 }

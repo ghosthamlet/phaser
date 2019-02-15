@@ -3,13 +3,14 @@ package cmd
 import (
 	"path/filepath"
 	"os"
+	"fmt"
 
-	"github.com/bloom42/astro-go/log"
+	"github.com/bloom42/rz-go/log"
 	"github.com/spf13/cobra"
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/phaser/scanner/profile"
 	"github.com/bloom42/sane-go"
-	"github.com/bloom42/astro-go"
+	"github.com/bloom42/rz-go"
 	"github.com/bloom42/common/phaser"
 )
 
@@ -40,32 +41,31 @@ var scanCmd = &cobra.Command{
 		// TODO: parse targets
 		var scanProfile phaser.Profile
 
-		log.Config(
-			astro.SetFormatter(astro.NewCLIFormatter()),
-			astro.SetLevel(astro.InfoLevel),
+		log.Logger = log.Config(
+			rz.Level(rz.InfoLevel),
 		)
 
 		// configure output format
-		if scanOutputFormat == "json" {
-			log.Config(astro.SetFormatter(astro.JSONFormatter{}))
-		} else if scanOutputFormat != "text" {
-			log.Fatalf("%s is not a valid output format", scanOutputFormat)
+		if scanOutputFormat == "text" {
+			log.Logger = log.Config(rz.Formatter(rz.FormatterCLI()))
+		} else if scanOutputFormat != "json" {
+			log.Fatal(fmt.Sprintf("%s is not a valid output format", scanOutputFormat))
 		}
 
 		// configure log level
 		if scanEnableDebug == false {
-			log.Config(astro.SetLevel(astro.InfoLevel))
+			log.Logger = log.Config(rz.Level(rz.InfoLevel))
 		}
 
 		// load scan profile
 		if scanProfileFile != "" {
-			log.With("file", scanProfileFile).Info("loading profile file")
+			log.Info("loading profile file", rz.String("file", scanProfileFile))
 			err = sane.Load(scanProfileFile, &scanProfile)
 			if err != nil {
 				log.Fatal(err.Error())
 			}
 		} else {
-			log.With("profile", "network").Info("using default profile")
+			log.Info("using defaul profile", rz.String("profile", "network"))
 			scanProfile = profile.Network
 		}
 

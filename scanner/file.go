@@ -11,8 +11,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/bloom42/astro-go/log"
 	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/log"
 )
 
 type hashs struct {
@@ -28,7 +29,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	// md5
 	h := md5.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.With("file", filePath, "err", err.Error()).Error("hashing md5")
+		log.Error("hashing md5", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -37,7 +38,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	//sha1
 	h = sha1.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.With("file", filePath, "err", err.Error()).Error("hashing sha1")
+		log.Error("hashing sha1", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -46,7 +47,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	// sha256
 	h = sha256.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.With("file", filePath, "err", err.Error()).Error("hashing sha256")
+		log.Error("hashing sha256", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -55,7 +56,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	// sha512
 	h = sha512.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.With("file", filePath, "err", err.Error()).Error("hashing sha512")
+		log.Error("hashing sha512", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -72,7 +73,7 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 
 	hashs, err := hash(filePath, reader)
 	if err != nil {
-		log.With("file", filePath, "err", err.Error()).Error("computing hashs")
+		log.Error("computing hashs", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	ret = phaser.File{
@@ -95,10 +96,10 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 	// } else
 	if scan.Config.Folder != nil { // save to local FS
 		filePath = filepath.Join(*scan.Config.Folder, filePath)
-		log.With("file", filePath).Debug("writing file to fs")
+		log.Info("writing file to fs", rz.String("file", filePath))
 		err = ioutil.WriteFile(filePath, data, 0600)
 	} else {
-		log.With("file", filePath).Error("aws_session nor folder are configured")
+		log.Error("aws_session nor folder are configured", rz.String("file", filePath))
 	}
 
 	return ret, err

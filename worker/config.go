@@ -5,22 +5,22 @@ import (
 	"os"
 
 	"github.com/astrolib/godotenv"
-	"github.com/bloom42/astro-go"
-	"github.com/bloom42/astro-go/log"
-	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/denv-go"
+	"github.com/bloom42/phaser/version"
+	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/log"
 )
 
 type config struct {
-	GoEnv                      string
-	AWSSecretAccessKey         string
-	AWSAccessKeyID             string
-	AWSRegion                  string
-	AWSSQSAPIToPhaser string
-	AWSSQSPhaserToAPI string
-	AWSS3Bucket                string
-	AssetsPath                 string
-	SentryURL string
+	GoEnv              string
+	AWSSecretAccessKey string
+	AWSAccessKeyID     string
+	AWSRegion          string
+	AWSSQSAPIToPhaser  string
+	AWSSQSPhaserToAPI  string
+	AWSS3Bucket        string
+	AssetsPath         string
+	SentryURL          string
 }
 
 // RequiredEnvVars are the required environment variables to run the server
@@ -55,6 +55,14 @@ func (worker *Worker) initConfig() error {
 	denv.Init(DefaultEnvVars)
 	var conf config
 
+	errorCallerHook := rz.HookFunc(func(e *rz.Event, level rz.LogLevel, msg string) {
+		if level >= rz.ErrorLevel {
+			e.Append(rz.Caller(true))
+		}
+	})
+
+	log.Logger = log.Config(rz.Hooks(errorCallerHook))
+
 	conf.GoEnv = os.Getenv("GO_ENV")
 	conf.AssetsPath = os.Getenv("ASSETS_PATH")
 
@@ -68,30 +76,27 @@ func (worker *Worker) initConfig() error {
 
 	// configure logger
 	if conf.GoEnv == "production" {
-		log.Config(
-			astro.SetFormatter(astro.JSONFormatter{}),
-			astro.SetLevel(astro.InfoLevel),
+		log.Logger = log.Config(
+			rz.Level(rz.InfoLevel),
 		)
 	} else {
-		log.Config(astro.SetFormatter(astro.NewConsoleFormatter()))
+		log.Logger = log.Config(rz.Formatter(rz.FormatterConsole()))
 	}
 
 	hostname, _ := os.Hostname()
-	log.Config(
-		astro.AddFields(
-			"service", map[string]string{"name": version.Name, "version": version.Version},
-			"host", hostname,
-			"environment", conf.GoEnv,
-		),
+	log.Append(
+		rz.Dict("service", log.NewDict(rz.String("name", version.Name), rz.String("version", version.Version))),
+		rz.String("host", hostname),
+		rz.String("environment", conf.GoEnv),
 	)
 
-	log.With(
-		"aws_region", conf.AWSRegion,
-		"aws_sqs_api_to_phaser", conf.AWSSQSAPIToPhaser,
-		"aws_sqs_phaser_to_api", conf.AWSSQSPhaserToAPI,
-		"aws_s3_bucket", conf.AWSS3Bucket,
-		"assets_path", conf.AssetsPath,
-	).Debug("worker configuration successfully loaded")
+	log.Info("worker configuration successfully loaded",
+		rz.String("aws_region", conf.AWSRegion),
+		rz.String("aws_sqs_api_to_phaser", conf.AWSSQSAPIToPhaser),
+		rz.String("aws_sqs_phaser_to_api", conf.AWSSQSPhaserToAPI),
+		rz.String("aws_s3_bucket", conf.AWSS3Bucket),
+		rz.String("assets_path", conf.AssetsPath),
+	)
 
 	worker.config = conf
 	return nil

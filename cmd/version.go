@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bloom42/astro-go/log"
-	"github.com/spf13/cobra"
 	"github.com/bloom42/phaser/version"
+	"github.com/bloom42/rz-go/log"
+	"github.com/spf13/cobra"
 )
 
 type versionJSON struct {

@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/bloom42/astro-go/log"
-	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/phaser/version"
+	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/log"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 )
 
 func NewScan(config phaser.Config) *phaser.Scan {
-	log.With("scan_id", config.ID, "report_id", config.ReportID).Info("scan created")
+	log.Info("scan created", rz.Interface("scan_id", config.ID), rz.Interface("report_id", config.ReportID))
 	targets := parseTargets(config.Targets)
 	scan := phaser.Scan{
 		ID:             config.ID,
@@ -45,10 +46,12 @@ func RunScan(scan *phaser.Scan) {
 
 	err := end(scan)
 	if err != nil {
-		log.With("err", err.Error()).Error("saving scan")
+		log.Error("saving scan", rz.Err(err))
 	} else {
-		log.With("scan_id", scan.ID, "report_id", scan.ReportID, "file", scan.ResultFile.Path, "sha256", scan.ResultFile.SHA256).
-			Info("scan successfully completed")
+		log.Info("scan successfully completed",
+			rz.Interface("scan_id", scan.ID), rz.Interface("report_id", scan.ReportID),
+			rz.String("file", scan.ResultFile.Path), rz.String("sha256", scan.ResultFile.SHA256),
+		)
 	}
 }
 
@@ -60,7 +63,7 @@ func end(scan *phaser.Scan) error {
 	// save scan result
 	data, err := json.MarshalIndent(scan, "", "  ")
 	if err != nil {
-		log.With("err", err.Error()).Error("saving")
+		log.Error("saving", rz.Err(err))
 		return err
 	}
 	resultFile, err := saveFile(scan, ScanResultFile, data)
