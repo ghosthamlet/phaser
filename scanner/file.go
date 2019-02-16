@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 
 	"github.com/bloom42/common/phaser"
-	"github.com/bloom42/rz-go"
-	"github.com/bloom42/rz-go/log"
+	"github.com/bloom42/rz-go/v2"
+	"github.com/bloom42/rz-go/v2/log"
 )
 
 type hashs struct {

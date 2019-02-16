@@ -5,12 +5,12 @@ import (
 	"os"
 	"fmt"
 
-	"github.com/bloom42/rz-go/log"
+	"github.com/bloom42/rz-go/v2/log"
 	"github.com/spf13/cobra"
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/phaser/scanner/profile"
 	"github.com/bloom42/sane-go"
-	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/common/phaser"
 )
 
@@ -41,20 +41,18 @@ var scanCmd = &cobra.Command{
 		// TODO: parse targets
 		var scanProfile phaser.Profile
 
-		log.Logger = log.Config(
-			rz.Level(rz.InfoLevel),
-		)
+		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
 
 		// configure output format
 		if scanOutputFormat == "text" {
-			log.Logger = log.Config(rz.Formatter(rz.FormatterCLI()))
+			log.SetLogger(log.With(rz.Formatter(rz.FormatterCLI())))
 		} else if scanOutputFormat != "json" {
 			log.Fatal(fmt.Sprintf("%s is not a valid output format", scanOutputFormat))
 		}
 
 		// configure log level
 		if scanEnableDebug == false {
-			log.Logger = log.Config(rz.Level(rz.InfoLevel))
+			log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
 		}
 
 		// load scan profile

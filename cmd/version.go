@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/bloom42/phaser/version"
-	"github.com/bloom42/rz-go/log"
+	"github.com/bloom42/rz-go/v2/log"
 	"github.com/spf13/cobra"
 )
 

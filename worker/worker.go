@@ -5,8 +5,8 @@ import (
 	"strings"
 	"os"
 
-	"github.com/bloom42/rz-go/log"
-	"github.com/bloom42/rz-go"
+	"github.com/bloom42/rz-go/v2/log"
+	"github.com/bloom42/rz-go/v2"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"

@@ -1,12 +1,12 @@
 module github.com/bloom42/phaser
 
 require (
-	github.com/astrolib/godotenv v1.3.0
 	github.com/astrolib/govalidator v0.0.0-20180720115003-f9ffefc3facf
 	github.com/aws/aws-sdk-go v1.16.8
 	github.com/bloom42/common v0.1.4
 	github.com/bloom42/denv-go v1.0.0
-	github.com/bloom42/rz-go v0.0.0-20190214183155-ef3c3fdc3b7f
+	github.com/bloom42/dotenv-go v1.4.0
+	github.com/bloom42/rz-go/v2 v2.4.1
 	github.com/bloom42/sane-go v0.6.1
 	github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 // indirect
 	github.com/getsentry/raven-go v0.2.0

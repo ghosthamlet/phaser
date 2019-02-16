@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/astrolib/godotenv"
 	"github.com/bloom42/denv-go"
+	"github.com/bloom42/dotenv-go"
 	"github.com/bloom42/phaser/version"
-	"github.com/bloom42/rz-go"
-	"github.com/bloom42/rz-go/log"
+	"github.com/bloom42/rz-go/v2"
+	"github.com/bloom42/rz-go/v2/log"
 )
 
 type config struct {
@@ -50,7 +50,7 @@ func checkEnv() {
 
 // Init loads the server configuration
 func (worker *Worker) initConfig() error {
-	godotenv.Load()
+	dotenv.Load()
 	checkEnv()
 	denv.Init(DefaultEnvVars)
 	var conf config
@@ -61,7 +61,7 @@ func (worker *Worker) initConfig() error {
 		}
 	})
 
-	log.Logger = log.Config(rz.Hooks(errorCallerHook))
+	log.SetLogger(log.With(rz.Hooks(errorCallerHook)))
 
 	conf.GoEnv = os.Getenv("GO_ENV")
 	conf.AssetsPath = os.Getenv("ASSETS_PATH")
@@ -76,11 +76,9 @@ func (worker *Worker) initConfig() error {
 
 	// configure logger
 	if conf.GoEnv == "production" {
-		log.Logger = log.Config(
-			rz.Level(rz.InfoLevel),
-		)
+		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
 	} else {
-		log.Logger = log.Config(rz.Formatter(rz.FormatterConsole()))
+		log.SetLogger(log.With(rz.Formatter(rz.FormatterConsole())))
 	}
 
 	hostname, _ := os.Hostname()

@@ -6,8 +6,8 @@ import (
 
 	"github.com/bloom42/common/phaser"
 	"github.com/bloom42/phaser/version"
-	"github.com/bloom42/rz-go"
-	"github.com/bloom42/rz-go/log"
+	"github.com/bloom42/rz-go/v2"
+	"github.com/bloom42/rz-go/v2/log"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 )
 
 func NewScan(config phaser.Config) *phaser.Scan {
-	log.Info("scan created", rz.Interface("scan_id", config.ID), rz.Interface("report_id", config.ReportID))
+	log.Info("scan created", rz.Any("scan_id", config.ID), rz.Any("report_id", config.ReportID))
 	targets := parseTargets(config.Targets)
 	scan := phaser.Scan{
 		ID:             config.ID,
@@ -49,7 +49,7 @@ func RunScan(scan *phaser.Scan) {
 		log.Error("saving scan", rz.Err(err))
 	} else {
 		log.Info("scan successfully completed",
-			rz.Interface("scan_id", scan.ID), rz.Interface("report_id", scan.ReportID),
+			rz.Any("scan_id", scan.ID), rz.Any("report_id", scan.ReportID),
 			rz.String("file", scan.ResultFile.Path), rz.String("sha256", scan.ResultFile.SHA256),
 		)
 	}
