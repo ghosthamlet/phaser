@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="phaser logo" src="https://bloom.sh/imgs/logos/phaser_256.png" height="180" />
   <h3 align="center">Phaser</h3>
-  <p align="center">Security scanner 🔍</p>
+  <p align="center">Continuous security made easy ✅</p>
 </p>
 
 --------
