@@ -12,6 +12,8 @@ github.com/bloom42/rz-go/v2 v2.4.1 h1:2yQzlHFNw496sn31Yp+pDm6EuiNUXvsGubsha1HPjS
 github.com/bloom42/rz-go/v2 v2.4.1/go.mod h1:6+Jf0CiW6O0p6s3x5hmH6ruFlXj8XCPLftwzjY9S2v0=
 github.com/bloom42/sane-go v0.6.1 h1:OjrZQV1BjoHAa+IHuzBwvQAsFLUyMdKFL55KgU14ptI=
 github.com/bloom42/sane-go v0.6.1/go.mod h1:xKbKQgmvEcERtOHiXvu63BjmcmNfYeU1OuGxJbKDrh0=
+github.com/bloom42/sane-go v0.8.2 h1:V2KIeRs//fwpx7UgvxkCXHomX590XZJ5AXs+Ohafw10=
+github.com/bloom42/sane-go v0.8.2/go.mod h1:xKbKQgmvEcERtOHiXvu63BjmcmNfYeU1OuGxJbKDrh0=
 github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 h1:MmeatFT1pTPSVb4nkPmBFN/LRZ97vPjsFKsZrU3KKTs=
 github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2/go.mod h1:GJKEexRPVJrBSOjoqN5VNOIKJ5Q3RViH6eu3puDRwx4=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
