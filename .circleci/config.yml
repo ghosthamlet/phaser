@@ -6,7 +6,7 @@ jobs: # basic units of work in a run
     working_directory: /workspace
 
     environment: # environment variables for the build itself
-      GO111MODULE: on
+      GO111MODULE: 'on'
 
     steps: # steps that comprise the `build` job
       - checkout
