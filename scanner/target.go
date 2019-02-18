@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/astrolib/govalidator"
-	"github.com/bloom42/phaser/phaser"
+	"github.com/bloom42/phaser/common/phaser"
 )
 
 func parseTargets(targets []string) []phaser.Target {

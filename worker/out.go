@@ -6,8 +6,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"github.com/bloom42/phaser/worker/async"
-	"github.com/bloom42/phaser/phaser"
+	"github.com/bloom42/phaser/common/async"
+	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
 )

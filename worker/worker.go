@@ -13,8 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/phaser/scanner/profile"
-	"github.com/bloom42/phaser/worker/async"
-	"github.com/bloom42/phaser/phaser"
+	"github.com/bloom42/phaser/common/async"
+	"github.com/bloom42/phaser/common/phaser"
 	"github.com/getsentry/raven-go"
 )
 

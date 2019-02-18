@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/bloom42/phaser/phaser"
+	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"

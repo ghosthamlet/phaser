@@ -3,7 +3,7 @@ package scanner
 import (
 	"time"
 
-	"github.com/bloom42/phaser/phaser"
+	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/modules/ports"
 )
 
