@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/phaser/scanner/profile"
-	commonasync "github.com/bloom42/common/async"
+	"github.com/bloom42/phaser/worker/async"
 	"github.com/bloom42/phaser/phaser"
 	"github.com/getsentry/raven-go"
 )
@@ -78,7 +78,7 @@ func (worker *Worker) Run() error {
 
 		for _, message := range result.Messages {
 
-			asyncMessage := commonasync.DecodedMessage{}
+			asyncMessage := async.DecodedMessage{}
 			err := json.Unmarshal([]byte(*message.Body), &asyncMessage)
 			if err != nil {
 				log.Error("decoding async message", rz.Err(err))
