@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/phaser/phaser"
 )
 
 const (

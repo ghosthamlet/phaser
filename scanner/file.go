@@ -11,7 +11,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/phaser/phaser"
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
 )

@@ -3,7 +3,7 @@ package scanner
 import (
 	"testing"
 
-	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/phaser/phaser"
 )
 
 func checkTarget(t *testing.T, target string, expected phaser.Target) {

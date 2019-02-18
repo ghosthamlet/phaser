@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/bloom42/common/phaser/findings"
+	"github.com/bloom42/phaser/phaser/findings"
 )
 
 func Scan(ip string, ports []uint16, protocol string, timeout time.Duration) []findings.Port {

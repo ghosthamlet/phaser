@@ -14,7 +14,7 @@ import (
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/phaser/scanner/profile"
 	commonasync "github.com/bloom42/common/async"
-	"github.com/bloom42/common/phaser"
+	"github.com/bloom42/phaser/phaser"
 	"github.com/getsentry/raven-go"
 )
 

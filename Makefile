@@ -9,6 +9,7 @@ COMMIT = $(shell git rev-parse HEAD)
 
 build:
 	go build -o $(DIST_DIR)/$(NAME)
+	cp -r assets $(DIST_DIR)/
 
 dev:
 	go run main.go worker
