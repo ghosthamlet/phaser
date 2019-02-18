@@ -7,7 +7,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var workerDataFolder string
+var workerAssetsFolder string
+
 func init() {
+	workerCmd.Flags().StringVarP(&workerAssetsFolder, "assets", "a", "assets", "The assets folder")
+	workerCmd.Flags().StringVar(&workerDataFolder, "data", "scans", "The data directory where to store temporary scans data")
+
 	rootCmd.AddCommand(workerCmd)
 }
 

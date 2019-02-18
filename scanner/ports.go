@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/bloom42/common/phaser"
-	"github.com/bloom42/phaser/scanner/checks/ports"
+	"github.com/bloom42/phaser/scanner/modules/ports"
 )
 
 const (

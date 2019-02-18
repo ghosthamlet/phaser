@@ -9,7 +9,6 @@
 [![GoDoc](https://godoc.org/github.com/bloom42/phaser?status.svg)](https://godoc.org/github.com/bloom42/phaser)
 [![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
 [![CircleCI](https://circleci.com/gh/bloom42/phaser.svg?style=svg)](https://circleci.com/gh/bloom42/phaser)
-<!-- [![pipeline status](https://gitlab.com/bloom42/phaser/badges/master/pipeline.svg)](https://gitlab.com/bloom42/phaser/pipelines) -->
 
 
 `phaser` is an automated security scanner for both networks and web applications.

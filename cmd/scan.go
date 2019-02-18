@@ -1,17 +1,13 @@
 package cmd
 
 import (
-	"path/filepath"
-	"os"
+	"bufio"
 	"fmt"
+	"os"
 
+	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
 	"github.com/spf13/cobra"
-	"github.com/bloom42/phaser/scanner"
-	"github.com/bloom42/phaser/scanner/profile"
-	"github.com/bloom42/sane-go"
-	"github.com/bloom42/rz-go/v2"
-	"github.com/bloom42/common/phaser"
 )
 
 var scanTargetsFile string
@@ -20,6 +16,7 @@ var scanOutputFormat string
 var scanEnableDebug bool
 var scanOutputFolder string
 var scanAssetsFolder string
+var scanConcurrency uint
 
 func init() {
 	scanCmd.Flags().StringVarP(&scanTargetsFile, "targets", "t", "", "A file containing new line separated targets (use -- for stdin, and fallback to arguments if not provided)")
@@ -28,24 +25,24 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanEnableDebug, "debug", "d", false, "Set logging level to debug")
 	scanCmd.Flags().StringVarP(&scanOutputFolder, "output", "o", "", "The output folder for the scan data. Default to 'scans/target'")
 	scanCmd.Flags().StringVarP(&scanAssetsFolder, "assets", "a", "assets", "The assets folder")
+	scanCmd.Flags().UintVarP(&scanConcurrency, "concurrency", "c", 8, "Max targets to scan in parallel")
 
 	rootCmd.AddCommand(scanCmd)
 }
 
 var scanCmd = &cobra.Command{
-	Use:   "scan",
+	Use:   "scan [targets...]",
 	Short: "Run the scanner from CLI. Configuration is done with flags",
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
-		// TODO: parse targets
-		var scanProfile phaser.Profile
+		// var scanProfile phaser.Profile
+		var targetsStr []string
 
 		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
 
 		// configure output format
 		if scanOutputFormat == "text" {
-			log.SetLogger(log.With(rz.Formatter(rz.FormatterCLI())))
+			log.SetLogger(log.With(rz.Formatter(rz.FormatterConsole())))
 		} else if scanOutputFormat != "json" {
 			log.Fatal(fmt.Sprintf("%s is not a valid output format", scanOutputFormat))
 		}
@@ -55,30 +52,67 @@ var scanCmd = &cobra.Command{
 			log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
 		}
 
-		// load scan profile
-		if scanProfileFile != "" {
-			log.Info("loading profile file", rz.String("file", scanProfileFile))
-			err = sane.Load(scanProfileFile, &scanProfile)
+		// load targets
+		if len(args) != 0 && scanTargetsFile != "" {
+			log.Fatal("you can't have targets both from arguments and from file")
+		}
+		if len(args) == 0 && scanTargetsFile == "" {
+			log.Error("please provide at least 1 target")
+			cmd.Help()
+		}
+
+		if len(args) != 0 {
+			targetsStr = args
+		} else if scanTargetsFile != "" {
+			targetsStr, err = readLines(scanTargetsFile)
 			if err != nil {
-				log.Fatal(err.Error())
+				log.Fatal("reading target file", rz.Err(err), rz.String("path", scanTargetsFile))
 			}
-		} else {
-			log.Info("using defaul profile", rz.String("profile", "network"))
-			scanProfile = profile.Network
 		}
 
-		if scanOutputFolder == "" {
-			scanOutputFolder = filepath.Join("scans", args[0])
-		}
-		os.MkdirAll(scanOutputFolder, os.ModePerm)
+		fmt.Println(targetsStr)
 
-		scanConfig := phaser.Config{
-			Profile: scanProfile,
-			Targets: args,
-			Folder: &scanOutputFolder,
-			Assets: scanAssetsFolder,
-		}
+		// // load scan profile
+		// if scanProfileFile != "" {
+		// 	log.Info("loading profile file", rz.String("file", scanProfileFile))
+		// 	err = sane.Load(scanProfileFile, &scanProfile)
+		// 	if err != nil {
+		// 		log.Fatal(err.Error())
+		// 	}
+		// } else {
+		// 	log.Info("using defaul profile", rz.String("profile", "network"))
+		// 	scanProfile = profile.Network
+		// }
 
-		scanner.Run(scanConfig)
+		// if scanOutputFolder == "" {
+		// 	scanOutputFolder = filepath.Join("scans", args[0])
+		// }
+		// os.MkdirAll(scanOutputFolder, os.ModePerm)
+
+		// scanConfig := phaser.Config{
+		// 	Profile: scanProfile,
+		// 	Targets: args,
+		// 	Folder: &scanOutputFolder,
+		// 	Assets: scanAssetsFolder,
+		// }
+
+		// scanner.Run(scanConfig)
 	},
+}
+
+// readLines reads a whole file into memory
+// and returns a slice of its lines.
+func readLines(path string) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
 }
