@@ -9,6 +9,7 @@ import (
 	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
+	"github.com/getsentry/raven-go"
 )
 
 type config struct {
@@ -64,6 +65,7 @@ func (worker *Worker) initConfig() error {
 	log.SetLogger(log.With(rz.Hooks(errorCallerHook)))
 
 	conf.GoEnv = os.Getenv("GO_ENV")
+	raven.SetEnvironment(conf.GoEnv)
 	conf.AssetsPath = os.Getenv("ASSETS_PATH")
 
 	conf.AWSRegion = os.Getenv("AWS_REGION")
