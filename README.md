@@ -36,7 +36,7 @@ See [https://opensource.bloom.sh/phaser](https://opensource.bloom.sh/phaser)
 
 ## Docker image
 
-[registry.gitlab.com/bloom42/phaser](https://gitlab.com/bloom42/phaser/container_registry)
+[quay.io/bloom42/phaser](https://quay.io/repository/bloom42/phaser?tab=tags)
 
 
 ## Contributing
