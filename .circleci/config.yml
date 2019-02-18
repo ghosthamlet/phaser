@@ -11,3 +11,4 @@ jobs: # basic units of work in a run
     steps: # steps that comprise the `build` job
       - checkout
       - run: make
+      - run: make test
