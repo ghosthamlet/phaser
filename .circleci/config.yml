@@ -51,13 +51,4 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - deploy_production:
-          type: approval
-          requires:
-            - deploy_staging
-          filters: # runs for no branches and only for tags starting with ‘v’.
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
 
