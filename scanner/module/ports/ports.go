@@ -28,12 +28,6 @@ func (Ports) Version() string {
 	return "0.1.0"
 }
 
-type Port struct {
-	ID       uint16 `json:"id"`
-	State    string `json:"state"`
-	Protocol string `json:"protocol"`
-}
-
 // unique returns a unique subset of the uint16 slice provided.
 func unique(input []uint16) []uint16 {
 	u := make([]uint16, 0, len(input))
@@ -124,7 +118,7 @@ func (ports Ports) Run(scan *phaser.Scan, target *phaser.Target) (module.Result,
 	command := "nmap"
 	portsStr := portsToStr(portsToScan)
 	commandArgs := []string{"-p", portsStr, "-oX", "-", target.Host, "-dd", "--host-timeout", "2m"}
-	ret := []Port{}
+	ret := []phaser.Port{}
 	// protocol := "tcp"
 
 	// for i, portID := range portsToScan {
@@ -164,7 +158,7 @@ func (ports Ports) Run(scan *phaser.Scan, target *phaser.Target) (module.Result,
 	for _, host := range scanResult.Hosts {
 		for _, port := range host.Ports {
 			if port.State.State != "closed" && port.State.State != "filtered" {
-				port := Port{
+				port := phaser.Port{
 					ID:       uint16(port.PortId),
 					State:    port.State.State,
 					Protocol: port.Protocol,

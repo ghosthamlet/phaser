@@ -26,5 +26,5 @@ type HostModule interface {
 // They will be run at most once per port per host.
 type PortModule interface {
 	BaseModule
-	Run(*phaser.Scan, uint16 /*host*/) Result
+	Run(*phaser.Scan, *phaser.Target, phaser.Port) (Result, []error)
 }

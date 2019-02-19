@@ -10,11 +10,11 @@ type ScanCompletedMessage struct {
 }
 
 type File struct {
-	Path   string
-	MD5    string
-	SHA1   string
-	SHA256 string
-	SHA512 string
+	Path   string `json:"path"`
+	MD5    string `json:"md5,omitempty"`
+	SHA1   string `json:"sha1,omitempty"`
+	SHA256 string `json:"sha256,omitempty"`
+	SHA512 string `json:"sha512,omitempty"`
 }
 
 type ScanQueuedMessage struct {
