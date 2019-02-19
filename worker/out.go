@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/bloom42/phaser/common/async"
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/worker/config"
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
 )
@@ -31,7 +32,7 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 	}
 
 	// URL to our queue
-	qURL := worker.config.AWSSQSPhaserToAPI
+	qURL := config.AWSSQSPhaserToAPI
 	_, err = svc.SendMessage(&sqs.SendMessageInput{
 		DelaySeconds: aws.Int64(0),
 		MessageBody:  aws.String(string(encodedMessage)),
@@ -67,7 +68,7 @@ func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 	}
 
 	// URL to our queue
-	qURL := worker.config.AWSSQSPhaserToAPI
+	qURL := config.AWSSQSPhaserToAPI
 	_, err = svc.SendMessage(&sqs.SendMessageInput{
 		DelaySeconds: aws.Int64(0),
 		MessageBody:  aws.String(string(encodedMessage)),

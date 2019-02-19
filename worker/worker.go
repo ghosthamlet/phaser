@@ -3,7 +3,6 @@ package worker
 import (
 	"encoding/json"
 	"strings"
-	"os"
 
 	"github.com/bloom42/rz-go/v2/log"
 	"github.com/bloom42/rz-go/v2"
@@ -12,31 +11,26 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/bloom42/phaser/scanner"
+	"github.com/bloom42/phaser/worker/config"
 	"github.com/bloom42/phaser/scanner/profile"
 	"github.com/bloom42/phaser/common/async"
 	"github.com/bloom42/phaser/common/phaser"
-	"github.com/getsentry/raven-go"
 )
 
 type Worker struct {
 	awsSession *session.Session
-	config     config
 }
 
 func (worker *Worker) init() error {
-	raven.SetDSN(os.Getenv("SENTRY_URL"))
-
-	err := worker.initConfig()
+	err := config.Init()
 	if err != nil {
 		return err
 	}
 
-	raven.SetEnvironment(worker.config.GoEnv)
-
 	awsConf := aws.Config{
-		Credentials: credentials.NewStaticCredentials(worker.config.AWSAccessKeyID, worker.config.AWSSecretAccessKey, ""),
+		Credentials: credentials.NewStaticCredentials(config.AWSAccessKeyID, config.AWSSecretAccessKey, ""),
 	}
-	awsConf.Region = aws.String(worker.config.AWSRegion)
+	awsConf.Region = aws.String(config.AWSRegion)
 	worker.awsSession = session.New(&awsConf)
 	return nil
 }
@@ -51,7 +45,7 @@ func (worker *Worker) Run() error {
 
 	sqsService := sqs.New(worker.awsSession)
 
-	qURL := worker.config.AWSSQSAPIToPhaser
+	qURL := config.AWSSQSAPIToPhaser
 	log.Info("listenning queue for async messages", rz.String("queue", qURL))
 	for {
 		result, err := sqsService.ReceiveMessage(&sqs.ReceiveMessageInput{
@@ -123,8 +117,8 @@ func (worker *Worker) runScan(message phaser.ScanQueuedMessage) {
 		Targets: message.Targets,
 		ID: &message.ScanID,
 		ReportID: &message.ReportID,
-		AWSS3Bucket: &worker.config.AWSS3Bucket,
-		Assets: worker.config.AssetsPath,
+		AWSS3Bucket: &config.AWSS3Bucket,
+		Assets: config.AssetsPath,
 	}
 	scan := scanner.NewScan(scanConfig)
 	worker.sendScanStarted(*scan.ReportID, scan.StartedAt)
