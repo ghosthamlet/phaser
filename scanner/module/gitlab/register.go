@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module"
@@ -41,7 +42,9 @@ func (OpenRegistration) Run(scan *phaser.Scan, target *phaser.Target, port phase
 	}
 
 	URL := fmt.Sprintf("%s://%s", protocol, target.Host)
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 3,
+	}
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		errs = append(errs, err)

@@ -132,7 +132,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 			result, errs := module.Run(scan, target, port)
 			logger.Info("port module ended")
 			if result != nil {
-				logger.Info("found something")
+				logger.Info("found something", rz.String("target", target.Host))
 				finding := phaser.Finding{
 					Module:  moduleName,
 					Version: moduleVersion,
