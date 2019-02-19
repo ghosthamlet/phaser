@@ -13,7 +13,6 @@ import (
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/rz-go/v2"
-	"github.com/bloom42/rz-go/v2/log"
 )
 
 type hashs struct {
@@ -23,13 +22,13 @@ type hashs struct {
 	SHA512 string
 }
 
-func hash(filePath string, reader *bytes.Reader) (hashs, error) {
+func hash(logger *rz.Logger, filePath string, reader *bytes.Reader) (hashs, error) {
 	var ret hashs
 
 	// md5
 	h := md5.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.Error("hashing md5", rz.Err(err), rz.String("file", filePath))
+		logger.Error("hashing md5", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -38,7 +37,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	//sha1
 	h = sha1.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.Error("hashing sha1", rz.Err(err), rz.String("file", filePath))
+		logger.Error("hashing sha1", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -47,7 +46,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	// sha256
 	h = sha256.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.Error("hashing sha256", rz.Err(err), rz.String("file", filePath))
+		logger.Error("hashing sha256", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -56,7 +55,7 @@ func hash(filePath string, reader *bytes.Reader) (hashs, error) {
 	// sha512
 	h = sha512.New()
 	if _, err := io.Copy(h, reader); err != nil {
-		log.Error("hashing sha512", rz.Err(err), rz.String("file", filePath))
+		logger.Error("hashing sha512", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	reader.Seek(0, 0)
@@ -70,10 +69,11 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 	var err error
 	reader := bytes.NewReader(data)
 	var ret phaser.File
+	logger := rz.FromCtx(scan.Ctx)
 
-	hashs, err := hash(filePath, reader)
+	hashs, err := hash(logger, filePath, reader)
 	if err != nil {
-		log.Error("computing hashs", rz.Err(err), rz.String("file", filePath))
+		logger.Error("computing hashs", rz.Err(err), rz.String("file", filePath))
 		return ret, err
 	}
 	ret = phaser.File{
@@ -87,7 +87,7 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 	// if scan.Config.AwsSession != nil { // save to a cloud bucket
 	// 	filePath = filepath.Join("platform", "phaser", "scans", *scan.ID, "reports", *scan.ReportID, filePath)
 	// 	s3Service := s3.New(scan.Config.AwsSession)
-	// 	log.With("file", filePath).Debug("writing file to s3")
+	// 	logger.With("file", filePath).Debug("writing file to s3")
 	// 	_, err = s3Service.PutObject(&s3.PutObjectInput{
 	// 		Bucket: aws.String(*scan.Config.AWSS3Bucket),
 	// 		Key:    aws.String(filePath),
@@ -96,7 +96,7 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 	// } else
 	// save to local FS
 	filePath = filepath.Join(scan.Config.DataFolder, filePath)
-	log.Info("writing file to fs", rz.String("file", filePath))
+	logger.Info("writing file to fs", rz.String("file", filePath))
 	err = ioutil.WriteFile(filePath, data, 0600)
 
 	return ret, err

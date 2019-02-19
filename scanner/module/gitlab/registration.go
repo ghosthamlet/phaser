@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module"
@@ -37,21 +36,21 @@ func (OpenRegistration) Run(scan *phaser.Scan, target *phaser.Target, port phase
 	var ret interface{}
 	errs := []error{}
 	protocol := "http"
-	if port.ID == 443 {
+	if !port.HTTP && !port.HTTPS {
+		return ret, errs
+	}
+	if port.HTTPS {
 		protocol = "https"
 	}
 
-	URL := fmt.Sprintf("%s://%s", protocol, target.Host)
-	client := &http.Client{
-		Timeout: time.Second * 3,
-	}
+	URL := fmt.Sprintf("%s://%s:%d", protocol, target.Host, port.ID)
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		errs = append(errs, err)
 		return ret, errs
 	}
 	req.Header.Set("User-Agent", scan.Profile.UserAgent)
-	res, err := client.Do(req)
+	res, err := scan.HTTPClient.Do(req)
 	if err != nil {
 		errs = append(errs, err)
 		return ret, errs

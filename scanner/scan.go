@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"context"
 	"encoding/json"
 	"time"
 
@@ -8,15 +9,16 @@ import (
 	"github.com/bloom42/phaser/scanner/module/ports"
 	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/rz-go/v2"
-	"github.com/bloom42/rz-go/v2/log"
 )
 
 const (
 	ScanResultFile = "scan.json"
 )
 
-func NewScan(config phaser.Config) *phaser.Scan {
-	log.Info("scan created", rz.Any("scan_id", config.ID), rz.Any("report_id", config.ReportID))
+func NewScan(ctx context.Context, config phaser.Config) *phaser.Scan {
+	logger := rz.FromCtx(ctx)
+	logger.Info("scan created", rz.Any("report_id", config.ReportID))
+
 	targets := parseTargets(config.Targets)
 	scan := phaser.Scan{
 		ID:             config.ID,
@@ -26,13 +28,15 @@ func NewScan(config phaser.Config) *phaser.Scan {
 		StartedAt:      time.Now().UTC(),
 		ScannerVersion: version.Version,
 		Config:         config,
+		HTTPClient:     createHTTPClient(),
+		Ctx:            ctx,
 	}
 	return &scan
 }
 
 // Run a complete scan
-func Run(config phaser.Config) *phaser.Scan {
-	scan := NewScan(config)
+func Run(ctx context.Context, config phaser.Config) *phaser.Scan {
+	scan := NewScan(ctx, config)
 	RunScan(scan)
 	return scan
 }
@@ -45,12 +49,14 @@ func RunScan(scan *phaser.Scan) {
 		scanTarget(scan, &scan.Targets[i])
 	}
 
+	logger := rz.FromCtx(scan.Ctx)
+
 	err := end(scan)
 	if err != nil {
-		log.Error("saving scan", rz.Err(err))
+		logger.Error("saving scan", rz.Err(err))
 	} else {
-		log.Info("scan successfully completed",
-			rz.Any("scan_id", scan.ID), rz.Any("report_id", scan.ReportID),
+		logger.Info("scan successfully completed",
+			rz.Any("report_id", scan.ReportID),
 			rz.String("file", scan.ResultFile.Path), rz.String("sha256", scan.ResultFile.SHA256),
 			rz.String("directory", scan.Config.DataFolder),
 		)
@@ -61,11 +67,12 @@ func end(scan *phaser.Scan) error {
 	completedAt := time.Now().UTC()
 	scan.CompletedAt = completedAt
 	scan.Duration = uint64(completedAt.Sub(scan.StartedAt) / 1000000) // convert to ms
+	logger := rz.FromCtx(scan.Ctx)
 
 	// save scan result
 	data, err := json.MarshalIndent(scan, "", "  ")
 	if err != nil {
-		log.Error("saving", rz.Err(err))
+		logger.Error("saving", rz.Err(err))
 		return err
 	}
 	resultFile, err := saveFile(scan, ScanResultFile, data)
@@ -74,12 +81,13 @@ func end(scan *phaser.Scan) error {
 }
 
 func scanTarget(scan *phaser.Scan, target *phaser.Target) {
+	logger := rz.FromCtx(scan.Ctx)
 
 	// start by scanning ports
-	log.Info("starting ports scan")
+	logger.Info("starting ports scan")
 	portsModule := ports.Ports{}
 	portsData, errs := portsModule.Run(scan, target)
-	log.Info("ports scan ended")
+	logger.Info("ports scan ended")
 	portsFinding := phaser.Finding{
 		Module:  portsModule.Name(),
 		Version: portsModule.Version(),
@@ -97,12 +105,12 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	for _, module := range AllHostModules {
 		moduleName := module.Name()
 		moduleVersion := module.Version()
-		logger := log.With(rz.Fields(rz.Dict("module", log.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion)))))
+		logger := logger.With(rz.Fields(rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion)))))
 		logger.Info("starting host module")
 		result, errs := module.Run(scan, target)
 		logger.Info("host module ended")
 		if result != nil {
-			logger.Info("found something")
+			logger.Warn("found something")
 			finding := phaser.Finding{
 				Module:  moduleName,
 				Version: moduleVersion,
@@ -124,8 +132,8 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 		for _, module := range AllPortModules {
 			moduleName := module.Name()
 			moduleVersion := module.Version()
-			logger := log.With(rz.Fields(
-				rz.Dict("module", log.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
+			logger := logger.With(rz.Fields(
+				rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
 				rz.Uint16("port", port.ID),
 			))
 			logger.Info("starting port module")

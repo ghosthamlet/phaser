@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"context"
 
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
@@ -98,6 +99,9 @@ var scanCmd = &cobra.Command{
 		scanOutputFolder = filepath.Join(scanOutputFolder, uuidv4.String())
 		os.MkdirAll(scanOutputFolder, os.ModePerm)
 
+		logger := log.With(rz.Fields(rz.String("scan.id", uuidv4.String())))
+		ctx := logger.ToCtx(context.Background())
+
 		scanConfig := phaser.Config{
 			Profile:    scanProfile,
 			Targets:    targetsStr,
@@ -105,7 +109,7 @@ var scanCmd = &cobra.Command{
 			AssetsPath: scanAssetsFolder,
 		}
 
-		scanner.Run(scanConfig)
+		scanner.Run(ctx, scanConfig)
 	},
 }
 

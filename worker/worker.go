@@ -3,6 +3,7 @@ package worker
 import (
 	"encoding/json"
 	"strings"
+	"context"
 
 	"github.com/bloom42/rz-go/v2/log"
 	"github.com/bloom42/rz-go/v2"
@@ -120,7 +121,8 @@ func (worker *Worker) runScan(message phaser.ScanQueuedMessage) {
 		AWSS3Bucket: &config.AWSS3Bucket,
 		AssetsPath: config.AssetsPath,
 	}
-	scan := scanner.NewScan(scanConfig)
+	ctx := context.Background()
+	scan := scanner.NewScan(ctx, scanConfig)
 	worker.sendScanStarted(*scan.ReportID, scan.StartedAt)
 	scanner.RunScan(scan)
 	worker.sendScanCompleted(*scan)

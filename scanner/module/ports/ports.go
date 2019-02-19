@@ -1,6 +1,7 @@
 package ports
 
 import (
+	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -158,10 +159,24 @@ func (ports Ports) Run(scan *phaser.Scan, target *phaser.Target) (module.Result,
 	for _, host := range scanResult.Hosts {
 		for _, port := range host.Ports {
 			if port.State.State != "closed" && port.State.State != "filtered" {
+				isHTTP := false
+				isHTTPS := false
+				res, err := scan.HTTPClient.Get(fmt.Sprintf("https://%s:%d", target.Host, port.PortId))
+				if err != nil {
+					errStr := err.Error()
+					if strings.Contains(errStr, "HTTP response to HTTPS") {
+						isHTTP = true
+					}
+				} else if err == nil {
+					isHTTPS = true
+					res.Body.Close()
+				}
 				port := phaser.Port{
 					ID:       uint16(port.PortId),
 					State:    port.State.State,
 					Protocol: port.Protocol,
+					HTTP:     isHTTP,
+					HTTPS:    isHTTPS,
 				}
 				ret = append(ret, port)
 			}
