@@ -7,7 +7,7 @@ import (
 
 func createHTTPClient() *http.Client {
 	client := &http.Client{
-		Timeout: time.Second * 3,
+		Timeout: time.Second * 10,
 	}
 	return client
 }
