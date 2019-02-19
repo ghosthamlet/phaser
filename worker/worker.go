@@ -107,7 +107,7 @@ func (worker *Worker) Run() error {
 
 func (worker *Worker) runScan(message phaser.ScanQueuedMessage) {
 	prof := profile.Network
-	if strings.ToLower(message.Profile) == profile.ApplicationName {
+	if strings.ToLower(message.Profile) == "application" {
 		prof = profile.Application
 	}
 
