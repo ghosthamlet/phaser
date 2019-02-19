@@ -51,6 +51,7 @@ func RunScan(scan *phaser.Scan) {
 		log.Info("scan successfully completed",
 			rz.Any("scan_id", scan.ID), rz.Any("report_id", scan.ReportID),
 			rz.String("file", scan.ResultFile.Path), rz.String("sha256", scan.ResultFile.SHA256),
+			rz.String("directory", scan.Config.DataFolder),
 		)
 	}
 }
@@ -72,20 +73,34 @@ func end(scan *phaser.Scan) error {
 }
 
 func scanTarget(scan *phaser.Scan, target *phaser.Target) {
-	errs := []error{}
-
 	/////////////////////////////////////////////////////////////////////////////
-	// per host
+	// host modules
 	/////////////////////////////////////////////////////////////////////////////
-	if scan.Profile.Checks.Ports {
-		scanErrs := Ports(scan, target)
-		errs = append(errs, scanErrs...)
+	for _, module := range AllHostModules {
+		moduleName := module.Name()
+		moduleVersion := module.Version()
+		logger := log.With(rz.Fields(rz.Dict("module", log.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion)))))
+		logger.Info("starting module")
+		result, errs := module.Run(scan, target)
+		logger.Info("module ended")
+		finding := phaser.Finding{
+			Module:  moduleName,
+			Version: moduleVersion,
+			Data:    result,
+		}
+		target.Findings = append(target.Findings, finding)
+		target.Errors = append(target.Errors, errorsToStr(errs)...)
 	}
 
-	if scan.Profile.Checks.CNAME && target.Type == phaser.TargetTypeDomain {
-		scanErrs := CNAME(scan, target)
-		errs = append(errs, scanErrs...)
-	}
+	// if scan.Profile.Checks.Ports {
+	// 	scanErrs := Ports(scan, target)
+	// 	errs = append(errs, scanErrs...)
+	// }
 
-	target.Errors = append(target.Errors, errorsToStr(errs)...)
+	// if scan.Profile.Checks.CNAME && target.Type == phaser.TargetTypeDomain {
+	// 	scanErrs := CNAME(scan, target)
+	// 	errs = append(errs, scanErrs...)
+	// }
+
+	// target.Errors = append(target.Errors, errorsToStr(errs)...)
 }

@@ -94,13 +94,10 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 	// 		Body:   reader,
 	// 	})
 	// } else
-	if scan.Config.Folder != nil { // save to local FS
-		filePath = filepath.Join(*scan.Config.Folder, filePath)
-		log.Info("writing file to fs", rz.String("file", filePath))
-		err = ioutil.WriteFile(filePath, data, 0600)
-	} else {
-		log.Error("aws_session nor folder are configured", rz.String("file", filePath))
-	}
+	// save to local FS
+	filePath = filepath.Join(scan.Config.DataFolder, filePath)
+	log.Info("writing file to fs", rz.String("file", filePath))
+	err = ioutil.WriteFile(filePath, data, 0600)
 
 	return ret, err
 }

@@ -6,6 +6,7 @@ require (
 	github.com/bloom42/denv-go v1.0.0
 	github.com/bloom42/dotenv-go v1.4.0
 	github.com/bloom42/rz-go/v2 v2.4.1
+	github.com/bloom42/uuid-go v0.0.0-20190217115539-dc11954538a8
 	github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 // indirect
 	github.com/getsentry/raven-go v0.2.0
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect

@@ -9,7 +9,6 @@ const (
 )
 
 var Network = phaser.Profile{
-	Name:       NetworkName,
 	UserAgent:  DefaultUserAgent,
 	Subdomains: true,
 	Checks: phaser.Checks{

@@ -4,9 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
+	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/scanner/profile"
+	"github.com/bloom42/phaser/scanner"
+	"github.com/bloom42/uuid-go"
 	"github.com/spf13/cobra"
 )
 
@@ -20,10 +25,10 @@ var scanConcurrency uint
 
 func init() {
 	scanCmd.Flags().StringVarP(&scanTargetsFile, "targets", "t", "", "A file containing new line separated targets (use -- for stdin, and fallback to arguments if not provided)")
-	scanCmd.Flags().StringVarP(&scanProfileFile, "profile", "p", "", "A .sane file containing the scanner's profile. Default to 'network'")
+	scanCmd.Flags().StringVarP(&scanProfileFile, "profile", "p", "phaser.sane", "A .sane file containing the scanner's profile. Default to 'network'")
 	scanCmd.Flags().StringVarP(&scanOutputFormat, "format", "f", "text", "The logging output format. Valid values are [text, json]")
 	scanCmd.Flags().BoolVarP(&scanEnableDebug, "debug", "d", false, "Set logging level to debug")
-	scanCmd.Flags().StringVarP(&scanOutputFolder, "output", "o", "", "The output folder for the scan data. Default to 'scans/target'")
+	scanCmd.Flags().StringVarP(&scanOutputFolder, "output", "o", "scans", "The output folder for the scan data. Default to 'scans/target'")
 	scanCmd.Flags().StringVarP(&scanAssetsFolder, "assets", "a", "assets", "The assets folder")
 	scanCmd.Flags().UintVarP(&scanConcurrency, "concurrency", "c", 8, "Max targets to scan in parallel")
 
@@ -35,7 +40,7 @@ var scanCmd = &cobra.Command{
 	Short: "Run the scanner from CLI. Configuration is done with flags",
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
-		// var scanProfile phaser.Profile
+		var scanProfile phaser.Profile
 		var targetsStr []string
 
 		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
@@ -70,9 +75,9 @@ var scanCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Println(targetsStr)
+		// fmt.Println(targetsStr)
 
-		// // load scan profile
+		// load scan profile
 		// if scanProfileFile != "" {
 		// 	log.Info("loading profile file", rz.String("file", scanProfileFile))
 		// 	err = sane.Load(scanProfileFile, &scanProfile)
@@ -83,20 +88,24 @@ var scanCmd = &cobra.Command{
 		// 	log.Info("using defaul profile", rz.String("profile", "network"))
 		// 	scanProfile = profile.Network
 		// }
+		scanProfile = profile.Network
 
-		// if scanOutputFolder == "" {
-		// 	scanOutputFolder = filepath.Join("scans", args[0])
-		// }
-		// os.MkdirAll(scanOutputFolder, os.ModePerm)
+		uuidv4, err := uuid.NewV4()
+		if err != nil {
+			log.Fatal("failed to generate UUID", rz.Err(err))
+		}
 
-		// scanConfig := phaser.Config{
-		// 	Profile: scanProfile,
-		// 	Targets: args,
-		// 	Folder: &scanOutputFolder,
-		// 	Assets: scanAssetsFolder,
-		// }
+		scanOutputFolder = filepath.Join(scanOutputFolder, uuidv4.String())
+		os.MkdirAll(scanOutputFolder, os.ModePerm)
 
-		// scanner.Run(scanConfig)
+		scanConfig := phaser.Config{
+			Profile:    scanProfile,
+			Targets:    targetsStr,
+			DataFolder: scanOutputFolder,
+			AssetsPath: scanAssetsFolder,
+		}
+
+		scanner.Run(scanConfig)
 	},
 }
 

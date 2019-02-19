@@ -18,7 +18,6 @@ type Scan struct {
 }
 
 type Profile struct {
-	Name       string `json:"name" sane:"name"`
 	UserAgent  string `json:"user_agent" sane:"user_agent"` // default useragent to use
 	Subdomains bool   `json:"subdomains" sane:"subdomains"` // enable subdomains scan
 	Checks     Checks `json:"checks" sane:"checks"`
@@ -32,9 +31,9 @@ type Checks struct {
 type Config struct {
 	Profile     Profile
 	Targets     []string
-	Assets      string
+	AssetsPath  string
 	ID          *string
 	ReportID    *string
 	AWSS3Bucket *string
-	Folder      *string
+	DataFolder  string
 }

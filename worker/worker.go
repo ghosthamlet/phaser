@@ -118,7 +118,7 @@ func (worker *Worker) runScan(message phaser.ScanQueuedMessage) {
 		ID: &message.ScanID,
 		ReportID: &message.ReportID,
 		AWSS3Bucket: &config.AWSS3Bucket,
-		Assets: config.AssetsPath,
+		AssetsPath: config.AssetsPath,
 	}
 	scan := scanner.NewScan(scanConfig)
 	worker.sendScanStarted(*scan.ReportID, scan.StartedAt)
