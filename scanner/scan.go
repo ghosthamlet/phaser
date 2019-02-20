@@ -82,6 +82,7 @@ func end(scan *phaser.Scan) error {
 
 func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	logger := rz.FromCtx(scan.Ctx)
+	hostModules, portModules := getEnbaledModules(&scan.Profile)
 
 	// start by scanning ports
 	logger.Info("starting ports scan")
@@ -102,7 +103,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	/////////////////////////////////////////////////////////////////////////////
 	// host modules
 	/////////////////////////////////////////////////////////////////////////////
-	for _, module := range AllHostModules {
+	for _, module := range hostModules {
 		moduleName := module.Name()
 		moduleVersion := module.Version()
 		logger := logger.With(rz.Fields(rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion)))))
@@ -129,7 +130,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	/////////////////////////////////////////////////////////////////////////////
 	scannedPorts := portsData.([]phaser.Port)
 	for _, port := range scannedPorts {
-		for _, module := range AllPortModules {
+		for _, module := range portModules {
 			moduleName := module.Name()
 			moduleVersion := module.Version()
 			logger := logger.With(rz.Fields(

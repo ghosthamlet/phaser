@@ -27,38 +27,49 @@ func (MissingOrInsufficientDMARCRecord) Version() string {
 	return "0.1.0"
 }
 
-type Data struct {
-	Domain  string   `json:"domain"`
-	Records []string `json:"records"`
+type dmarcData struct {
+	Domain    string   `json:"domain"`
+	IsMIssing bool     `json:"is_missing"`
+	Records   []string `json:"records"`
 }
 
 func (MissingOrInsufficientDMARCRecord) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []error) {
 	errs := []error{}
 
-	isDMARCRecordPresent := false
+	isDMARCRecordMissing := true
 	var ret module.Result
 	location := fmt.Sprintf("_dmarc.%s", target.Host)
 	records, err := net.LookupTXT(location)
 
 	if err != nil {
-		errs = append(errs, err)
-		return ret, errs
+		errStr := err.Error()
+		if strings.Contains(strings.ToLower(errStr), "no such host") == false {
+			errs = append(errs, err)
+			return ret, errs
+		}
 	}
 
 	for _, record := range records {
 		recordLower := strings.ToLower(record)
 		if strings.Contains(recordLower, "v=dmarc1") {
-			isDMARCRecordPresent = true
+			isDMARCRecordMissing = false
 			break
 		}
 	}
 
-	if !isDMARCRecordPresent {
-		data := Data{
-			Domain:  location,
-			Records: records,
+	// if "no such host"
+	if records == nil {
+		records = []string{}
+	}
+
+	if isDMARCRecordMissing {
+		data := dmarcData{
+			Domain:    location,
+			Records:   records,
+			IsMIssing: isDMARCRecordMissing,
 		}
 		ret = data
 	}
+	// if present, we found nothing so ret = nil
 	return ret, errs
 }

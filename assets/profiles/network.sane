@@ -1,8 +1,9 @@
 scan_subdomains = true
 
 modules = {
-  "http/gitlab/open_registration" = {}
+  "http/gitlab/open_registration" = {},
   cname = {},
-  whois = {}
-  "dns/missing_or_insufficient_dmarc_record" = {}
+  whois = {},
+  "dns/missing_or_insufficient_dmarc_record" = {},
+  "dns/missing_or_insufficient_spf_record" = {}
 }
