@@ -57,8 +57,10 @@ var AllPortModules = []module.PortModule{
 	kibana.UnauthenticatedAccess{},
 	git.HeadFileDisclosure{},
 	git.DirectoryDisclosure{},
+	git.ConfigFileDisclosure{},
 }
 
+// loadModules load all modules to unique maps
 func loadModules() (map[string]module.HostModule, map[string]module.PortModule, error) {
 	hostModulesMap := map[string]module.HostModule{}
 	portModulesMap := map[string]module.PortModule{}
