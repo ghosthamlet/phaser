@@ -8,6 +8,8 @@ github.com/bloom42/dotenv-go v1.4.0 h1:ciNx48M4chCdHlYdnYpb0moRZvvb9/PNxI/EQhSIg
 github.com/bloom42/dotenv-go v1.4.0/go.mod h1:nj5BaGpyshXEum3JevtaQcQywWEhXECWDl3yw7/x5A4=
 github.com/bloom42/rz-go/v2 v2.4.2 h1:vJALA2tQ3wfMg01I4VGMvqRAttDhQhZkFdR88/tcBWA=
 github.com/bloom42/rz-go/v2 v2.4.2/go.mod h1:6+Jf0CiW6O0p6s3x5hmH6ruFlXj8XCPLftwzjY9S2v0=
+github.com/bloom42/sane-go v0.8.2 h1:V2KIeRs//fwpx7UgvxkCXHomX590XZJ5AXs+Ohafw10=
+github.com/bloom42/sane-go v0.8.2/go.mod h1:xKbKQgmvEcERtOHiXvu63BjmcmNfYeU1OuGxJbKDrh0=
 github.com/bloom42/uuid-go v0.0.0-20190217115539-dc11954538a8 h1:vz2QzkRY4HBpDJZ3lV61WDKiOKsZmizs3bFGBw1677c=
 github.com/bloom42/uuid-go v0.0.0-20190217115539-dc11954538a8/go.mod h1:Hg8f5KgdGFGxPLAMifUSXTnvYfSCuEWz58GBYtjVXAg=
 github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 h1:MmeatFT1pTPSVb4nkPmBFN/LRZ97vPjsFKsZrU3KKTs=

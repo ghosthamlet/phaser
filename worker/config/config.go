@@ -20,7 +20,7 @@ var (
 	AWSSQSAPIToPhaser  string
 	AWSSQSPhaserToAPI  string
 	AWSS3Bucket        string
-	AssetsPath         string
+	AssetsFolder         string
 	SentryURL          string
 )
 
@@ -37,7 +37,7 @@ var RequiredEnvVars = []string{
 
 var DefaultEnvVars = denv.Env{
 	"GO_ENV":      "development",
-	"ASSETS_PATH": "assets",
+	"ASSETS_FOLDER": "assets",
 }
 
 // checkEnv checks if the required environment variables are present
@@ -66,7 +66,7 @@ func Init() error {
 
 	GoEnv = os.Getenv("GO_ENV")
 	raven.SetEnvironment(GoEnv)
-	AssetsPath = os.Getenv("ASSETS_PATH")
+	AssetsFolder = os.Getenv("ASSETS_FOLDER")
 
 	AWSRegion = os.Getenv("AWS_REGION")
 	AWSAccessKeyID = os.Getenv("AWS_ACCESS_KEY_ID")
@@ -95,7 +95,7 @@ func Init() error {
 		rz.String("aws_sqs_api_to_phaser", AWSSQSAPIToPhaser),
 		rz.String("aws_sqs_phaser_to_api", AWSSQSPhaserToAPI),
 		rz.String("aws_s3_bucket", AWSS3Bucket),
-		rz.String("assets_path", AssetsPath),
+		rz.String("assets_path", AssetsFolder),
 	)
 
 	return nil

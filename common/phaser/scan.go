@@ -29,7 +29,7 @@ type Checks struct {
 type Config struct {
 	Profile     Profile
 	Targets     []string
-	AssetsPath  string
+	AssetsFolder  string
 	ID          *string
 	ReportID    *string
 	AWSS3Bucket *string

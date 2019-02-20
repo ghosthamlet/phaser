@@ -10,7 +10,6 @@ import (
 	"github.com/bloom42/rz-go/v2"
 	"github.com/bloom42/rz-go/v2/log"
 	"github.com/bloom42/phaser/common/phaser"
-	"github.com/bloom42/phaser/scanner/profile"
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/uuid-go"
 	"github.com/spf13/cobra"
@@ -26,7 +25,7 @@ var scanConcurrency uint
 
 func init() {
 	scanCmd.Flags().StringVarP(&scanTargetsFile, "targets", "t", "", "A file containing new line separated targets (use -- for stdin, and fallback to arguments if not provided)")
-	scanCmd.Flags().StringVarP(&scanProfileFile, "profile", "p", "phaser.sane", "A .sane file containing the scanner's profile. Default to 'network'")
+	scanCmd.Flags().StringVarP(&scanProfileFile, "profile", "p", "network", "A .sane file containing the scanner's profile. Default to 'network'")
 	scanCmd.Flags().StringVarP(&scanOutputFormat, "format", "f", "text", "The logging output format. Valid values are [text, json]")
 	scanCmd.Flags().BoolVarP(&scanEnableDebug, "debug", "d", false, "Set logging level to debug")
 	scanCmd.Flags().StringVarP(&scanOutputFolder, "output", "o", "scans", "The output folder for the scan data. Default to 'scans/target'")
@@ -41,7 +40,6 @@ var scanCmd = &cobra.Command{
 	Short: "Run the scanner from CLI. Configuration is done with flags",
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
-		var scanProfile phaser.Profile
 		var targetsStr []string
 
 		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
@@ -76,20 +74,12 @@ var scanCmd = &cobra.Command{
 			}
 		}
 
-		// fmt.Println(targetsStr)
 
-		// load scan profile
-		// if scanProfileFile != "" {
-		// 	log.Info("loading profile file", rz.String("file", scanProfileFile))
-		// 	err = sane.Load(scanProfileFile, &scanProfile)
-		// 	if err != nil {
-		// 		log.Fatal(err.Error())
-		// 	}
-		// } else {
-		// 	log.Info("using defaul profile", rz.String("profile", "network"))
-		// 	scanProfile = profile.Network
-		// }
-		scanProfile = profile.Network
+		// load profile
+		scanProfile, err := scanner.GetProfile(scanAssetsFolder, scanProfileFile)
+		if err != nil {
+			log.Fatal("loading profile", rz.Err(err))
+		}
 
 		uuidv4, err := uuid.NewV4()
 		if err != nil {
@@ -106,7 +96,7 @@ var scanCmd = &cobra.Command{
 			Profile:    scanProfile,
 			Targets:    targetsStr,
 			DataFolder: scanOutputFolder,
-			AssetsPath: scanAssetsFolder,
+			AssetsFolder: scanAssetsFolder,
 		}
 
 		scanner.Run(ctx, scanConfig)

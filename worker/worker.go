@@ -2,7 +2,6 @@ package worker
 
 import (
 	"encoding/json"
-	"strings"
 	"context"
 
 	"github.com/bloom42/rz-go/v2/log"
@@ -13,7 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/bloom42/phaser/scanner"
 	"github.com/bloom42/phaser/worker/config"
-	"github.com/bloom42/phaser/scanner/profile"
 	"github.com/bloom42/phaser/common/async"
 	"github.com/bloom42/phaser/common/phaser"
 )
@@ -107,19 +105,17 @@ func (worker *Worker) Run() error {
 }
 
 func (worker *Worker) runScan(message phaser.ScanQueuedMessage) {
-	prof := profile.Network
-	if strings.ToLower(message.Profile) == "application" {
-		prof = profile.Application
-	}
+	//  message.Profile must be either "network" or "application", nothing else
+	scanProfile, _ := scanner.GetProfile(config.AssetsFolder, message.Profile)
 
 	// TODO: qeueue
 	scanConfig := phaser.Config{
-		Profile: prof,
+		Profile: scanProfile,
 		Targets: message.Targets,
 		ID: &message.ScanID,
 		ReportID: &message.ReportID,
 		AWSS3Bucket: &config.AWSS3Bucket,
-		AssetsPath: config.AssetsPath,
+		AssetsFolder: config.AssetsFolder,
 	}
 	ctx := context.Background()
 	scan := scanner.NewScan(ctx, scanConfig)
