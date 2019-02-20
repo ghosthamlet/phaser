@@ -6,5 +6,6 @@ modules = {
   whois = {},
   "dns/missing_or_insufficient_dmarc_record" = {},
   "dns/missing_or_insufficient_spf_record" = {},
-  "dns/zone_trasnfer_information_disclosure" = {}
+  "dns/zone_trasnfer_information_disclosure" = {},
+  "http/atlassian/cve_2017_9506" = {}
 }

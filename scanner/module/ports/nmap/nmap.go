@@ -1,4 +1,4 @@
-/*Package nmap parses Nmap XML data into a similary formed struct.*/
+/*Package nmap parses Nmap XML data into a similarly formed struct.*/
 package nmap
 
 import (

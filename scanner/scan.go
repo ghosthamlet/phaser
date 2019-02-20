@@ -106,7 +106,10 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	for _, module := range hostModules {
 		moduleName := module.Name()
 		moduleVersion := module.Version()
-		logger := logger.With(rz.Fields(rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion)))))
+		logger := logger.With(rz.Fields(
+			rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
+			rz.String("target", target.Host),
+		))
 		logger.Info("starting host module")
 		result, errs := module.Run(scan, target)
 		logger.Info("host module ended")
@@ -134,6 +137,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 			moduleName := module.Name()
 			moduleVersion := module.Version()
 			logger := logger.With(rz.Fields(
+				rz.String("target", target.Host),
 				rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
 				rz.Uint16("port", port.ID),
 			))
@@ -141,7 +145,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 			result, errs := module.Run(scan, target, port)
 			logger.Info("port module ended")
 			if result != nil {
-				logger.Info("found something", rz.String("target", target.Host))
+				logger.Warn("found something")
 				finding := phaser.Finding{
 					Module:  moduleName,
 					Version: moduleVersion,

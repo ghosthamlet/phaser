@@ -8,6 +8,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module"
 	"github.com/bloom42/phaser/scanner/module/cname"
 	"github.com/bloom42/phaser/scanner/module/http/gitlab"
+	"github.com/bloom42/phaser/scanner/module/http/atlassian"
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
@@ -27,6 +28,7 @@ var AllHostModules = []module.HostModule{
 // You must register you module here in order to be able to use it.
 var AllPortModules = []module.PortModule{
 	gitlab.OpenRegistration{},
+	atlassian.CVE_2017_9506{},
 }
 
 
