@@ -27,6 +27,7 @@ jobs: # basic units of work in a run
     steps: # steps that comprise the `build` job
       - checkout
       - run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY
+      - run: make docker
       - run: make docker_release
 
 
