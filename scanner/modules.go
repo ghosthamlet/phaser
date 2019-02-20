@@ -9,6 +9,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/cname"
 	"github.com/bloom42/phaser/scanner/module/http/gitlab"
 	"github.com/bloom42/phaser/scanner/module/http/atlassian"
+	"github.com/bloom42/phaser/scanner/module/http/elasticsearch"
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
@@ -29,6 +30,7 @@ var AllHostModules = []module.HostModule{
 var AllPortModules = []module.PortModule{
 	gitlab.OpenRegistration{},
 	atlassian.CVE_2017_9506{},
+	elasticsearch.UnauthenticatedAccess{},
 }
 
 
