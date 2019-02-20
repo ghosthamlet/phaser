@@ -20,6 +20,7 @@ var AllHostModules = []module.HostModule{
 	whois.Whois{},
 	dns.MissingOrInsufficientDMARCRecord{},
 	dns.MissingOrInsufficientSPFRecord{},
+	dns.ZoneTransferInformationDisclosure{},
 }
 
 // AllPortModules contains all phaser's modules which will be run for each port for each host.
