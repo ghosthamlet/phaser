@@ -21,7 +21,7 @@ func parseTargets(targets []string) []phaser.Target {
 func parseTarget(target string) phaser.Target {
 	ret := phaser.Target{
 		Host:     target,
-		Errors:   []string{},
+		Errors:   []phaser.TargetError{},
 		Findings: phaser.Findings{},
 	}
 
@@ -34,7 +34,10 @@ func parseTarget(target string) phaser.Target {
 		ret.Type = phaser.TargetTypeIP
 		ret.IPVersion = phaser.TargetIPV6
 	} else {
-		ret.Errors = append(ret.Errors, fmt.Sprintf("%s is neither a domain nor an IP address", target))
+		err := phaser.TargetError{
+			Error: fmt.Sprintf("%s is neither a domain nor an IP address", target),
+		}
+		ret.Errors = append(ret.Errors, err)
 	}
 
 	return ret

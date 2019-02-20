@@ -11,9 +11,22 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/atlassian"
 	"github.com/bloom42/phaser/scanner/module/http/elasticsearch"
 	"github.com/bloom42/phaser/scanner/module/http/traefik"
+	"github.com/bloom42/phaser/scanner/module/http/cadvisor"
+	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
+
+
+func toTargetErrors(module module.BaseModule, errs []error) []phaser.TargetError {
+	ret := make([]phaser.TargetError, len(errs))
+	moduleName := module.Name()
+
+	for i, err := range errs {
+		ret[i] = phaser.TargetError{moduleName, err.Error()}
+	}
+	return ret
+}
 
 // AllHostModules contains all phaser's modules which will be run for each host.
 // You must register you module here in order to be able to use it.
@@ -33,6 +46,8 @@ var AllPortModules = []module.PortModule{
 	atlassian.CVE_2017_9506{},
 	elasticsearch.UnauthenticatedAccess{},
 	traefik.UnauthenticatedAccess{},
+	consul.UnauthenticatedAccess{},
+	cadvisor.UnauthenticatedAccess{},
 }
 
 
