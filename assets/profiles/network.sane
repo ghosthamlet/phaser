@@ -8,5 +8,6 @@ modules = {
   "dns/missing_or_insufficient_spf_record" = {},
   "dns/zone_trasnfer_information_disclosure" = {},
   "http/atlassian/cve_2017_9506" = {},
-  "http/elasticsearch/unauthenticated_access" = {}
+  "http/elasticsearch/unauthenticated_access" = {},
+  "http/traefik/unauthenticated_access" = {}
 }
