@@ -13,19 +13,20 @@ jobs: # basic units of work in a run
       - run: make test
 
   build: # runs not using Workflows must have a `build` job as entry point
-    machine: true
+    machine:
+      docker_layer_caching: true
 
     steps: # steps that comprise the `build` job
       - checkout
       - run: make docker
 
   release: # runs not using Workflows must have a `build` job as entry point
-    machine: true
+    machine:
+      docker_layer_caching: true
 
     steps: # steps that comprise the `build` job
       - checkout
       - run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY
-      - run: make docker
       - run: make docker_release
 
 
