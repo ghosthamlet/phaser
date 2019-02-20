@@ -25,7 +25,10 @@ func toTargetErrors(module module.BaseModule, errs []error) []phaser.TargetError
 	moduleName := module.Name()
 
 	for i, err := range errs {
-		ret[i] = phaser.TargetError{moduleName, err.Error()}
+		ret[i] = phaser.TargetError{
+			Module: moduleName,
+			Error: err.Error(),
+		}
 	}
 	return ret
 }
