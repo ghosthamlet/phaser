@@ -12,6 +12,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/traefik"
 	"github.com/bloom42/phaser/scanner/module/http/cadvisor"
 	"github.com/bloom42/phaser/scanner/module/http/git"
+	"github.com/bloom42/phaser/scanner/module/http/prometheus"
 	"github.com/bloom42/phaser/scanner/module/http/etcd"
 	"github.com/bloom42/phaser/scanner/module/http/kibana"
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
@@ -58,6 +59,7 @@ var AllPortModules = []module.PortModule{
 	git.HeadFileDisclosure{},
 	git.DirectoryDisclosure{},
 	git.ConfigFileDisclosure{},
+	prometheus.UnauthenticatedAccess{},
 }
 
 // loadModules load all modules to unique maps

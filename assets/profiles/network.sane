@@ -16,5 +16,6 @@ modules = {
    "http/kibana/unauthenticated_access" = {},
    "http/git/head_file_disclosure" = {},
    "http/git/directory_disclosure" = {},
-   "http/git/config_file_disclosure" = {}
+   "http/git/config_file_disclosure" = {},
+   "http/prometheus/unauthenticated_access" = {}
 }
