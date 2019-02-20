@@ -5,10 +5,13 @@ import (
 )
 
 var Application = phaser.Profile{
-	UserAgent:  DefaultUserAgent,
+	HTTP: phaser.ProfileHTTPConfig{
+		UserAgent: DefaultUserAgent,
+	},
 	Subdomains: false,
-	Checks: phaser.Checks{
-		Ports: true,
-		CNAME: true,
+	Modules: phaser.ProfileModules{
+		"gitlab/open_registration": phaser.ProfileModuleOptions{},
+		"cname":                    phaser.ProfileModuleOptions{},
+		"whois":                    phaser.ProfileModuleOptions{},
 	},
 }

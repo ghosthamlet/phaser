@@ -49,7 +49,7 @@ func (OpenRegistration) Run(scan *phaser.Scan, target *phaser.Target, port phase
 		errs = append(errs, err)
 		return ret, errs
 	}
-	req.Header.Set("User-Agent", scan.Profile.UserAgent)
+	req.Header.Set("User-Agent", scan.Profile.HTTP.UserAgent)
 	res, err := scan.HTTPClient.Do(req)
 	if err != nil {
 		errs = append(errs, err)

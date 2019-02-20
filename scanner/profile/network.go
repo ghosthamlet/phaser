@@ -4,15 +4,14 @@ import (
 	"github.com/bloom42/phaser/common/phaser"
 )
 
-const (
-	NetworkName = "network"
-)
-
 var Network = phaser.Profile{
-	UserAgent:  DefaultUserAgent,
+	HTTP: phaser.ProfileHTTPConfig{
+		UserAgent: DefaultUserAgent,
+	},
 	Subdomains: true,
-	Checks: phaser.Checks{
-		Ports: true,
-		CNAME: true,
+	Modules: phaser.ProfileModules{
+		"gitlab/open_registration": phaser.ProfileModuleOptions{},
+		"cname":                    phaser.ProfileModuleOptions{},
+		"whois":                    phaser.ProfileModuleOptions{},
 	},
 }

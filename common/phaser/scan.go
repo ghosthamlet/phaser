@@ -21,12 +21,6 @@ type Scan struct {
 	Ctx            context.Context `json:"-"`
 }
 
-type Profile struct {
-	UserAgent  string `json:"user_agent" sane:"user_agent"` // default useragent to use
-	Subdomains bool   `json:"subdomains" sane:"subdomains"` // enable subdomains scan
-	Checks     Checks `json:"checks" sane:"checks"`
-}
-
 type Checks struct {
 	Ports bool `json:"ports" sane:"ports"`
 	CNAME bool `json:"cname" sane:"cname"`
