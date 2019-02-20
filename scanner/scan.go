@@ -95,8 +95,9 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 		Data:    portsData,
 	}
 	target.Findings = append(target.Findings, portsFinding)
-	target.Errors = append(target.Errors, toTargetErrors(portsModule, errs)...)
 	if len(target.Errors) != 0 {
+		logger.Error("", rz.Errors("errors", errs))
+		target.Errors = append(target.Errors, toTargetErrors(portsModule, errs)...)
 		return
 	}
 
