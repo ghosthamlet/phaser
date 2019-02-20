@@ -1,9 +1,9 @@
 package phaser
 
 type Profile struct {
-	HTTP       ProfileHTTPConfig `json:"http" sane:"http"`
-	Subdomains bool              `json:"subdomains" sane:"subdomains"` // enable subdomains scan
-	Modules    ProfileModules    `json:"modules" sane:"modules"`
+	HTTP           ProfileHTTPConfig `json:"http" sane:"http"`
+	ScanSubdomains bool              `json:"scan_subdomains" sane:"scan_subdomains"` // enable subdomains scan
+	Modules        ProfileModules    `json:"modules" sane:"modules"`
 }
 
 type ProfileModules = map[string]ProfileModuleOptions

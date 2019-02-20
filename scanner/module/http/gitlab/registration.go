@@ -13,7 +13,7 @@ import (
 type OpenRegistration struct{}
 
 func (OpenRegistration) Name() string {
-	return "gitlab/open_registration"
+	return "http/gitlab/open_registration"
 }
 
 func (OpenRegistration) Description() string {

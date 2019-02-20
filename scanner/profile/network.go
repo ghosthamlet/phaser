@@ -8,10 +8,10 @@ var Network = phaser.Profile{
 	HTTP: phaser.ProfileHTTPConfig{
 		UserAgent: DefaultUserAgent,
 	},
-	Subdomains: true,
+	ScanSubdomains: true,
 	Modules: phaser.ProfileModules{
-		"gitlab/open_registration": phaser.ProfileModuleOptions{},
-		"cname":                    phaser.ProfileModuleOptions{},
-		"whois":                    phaser.ProfileModuleOptions{},
+		"http/gitlab/open_registration": phaser.ProfileModuleOptions{},
+		"cname":                         phaser.ProfileModuleOptions{},
+		"whois":                         phaser.ProfileModuleOptions{},
 	},
 }
