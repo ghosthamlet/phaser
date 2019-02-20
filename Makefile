@@ -37,6 +37,6 @@ release:
 docker_push:
 	docker push $(DOCKER_IMAGE):latest
 
-docker_release: docker
+docker_release:
 	docker push $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):latest
