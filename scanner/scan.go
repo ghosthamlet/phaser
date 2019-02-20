@@ -82,7 +82,10 @@ func end(scan *phaser.Scan) error {
 
 func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	logger := rz.FromCtx(scan.Ctx)
-	hostModules, portModules := getEnbaledModules(&scan.Profile)
+	hostModules, portModules, err := getEnbaledModules(&scan.Profile)
+	if err != nil {
+		logger.Fatal(err.Error())
+	}
 
 	// start by scanning ports
 	logger.Info("starting ports scan")

@@ -3,7 +3,6 @@ package scanner
 import (
 	"fmt"
 
-	"github.com/bloom42/rz-go/v2/log"
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module"
 	"github.com/bloom42/phaser/scanner/module/cname"
@@ -12,6 +11,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/elasticsearch"
 	"github.com/bloom42/phaser/scanner/module/http/traefik"
 	"github.com/bloom42/phaser/scanner/module/http/cadvisor"
+	"github.com/bloom42/phaser/scanner/module/http/git"
 	"github.com/bloom42/phaser/scanner/module/http/etcd"
 	"github.com/bloom42/phaser/scanner/module/http/kibana"
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
@@ -55,32 +55,50 @@ var AllPortModules = []module.PortModule{
 	cadvisor.UnauthenticatedAccess{},
 	etcd.UnauthenticatedAccess{},
 	kibana.UnauthenticatedAccess{},
+	git.HeadFileDisclosure{},
+	git.DirectoryDisclosure{},
 }
 
-
-func getEnbaledModules(profile *phaser.Profile) ([]module.HostModule, []module.PortModule) {
-	hostModules := []module.HostModule{}
-	portModules := []module.PortModule{}
-
+func loadModules() (map[string]module.HostModule, map[string]module.PortModule, error) {
 	hostModulesMap := map[string]module.HostModule{}
+	portModulesMap := map[string]module.PortModule{}
+	var err error
+
 	for _, mod := range AllHostModules {
 		name := mod.Name()
 		if _, ok := hostModulesMap[name]; ok {
-			log.Fatal(fmt.Sprintf("host module %s declared multiple times", name))
+			err = fmt.Errorf("host module %s declared multiple times", name)
+			return hostModulesMap, portModulesMap, err
 		}
 		hostModulesMap[name] = mod
 	}
 
-	portModulesMap := map[string]module.PortModule{}
+
 	for _, mod := range AllPortModules {
 		name := mod.Name()
 		if _, ok := portModulesMap[name]; ok {
-			log.Fatal(fmt.Sprintf("port module %s declared multiple times", name))
+			err = fmt.Errorf("port module %s declared multiple times", name)
+			return hostModulesMap, portModulesMap, err
 		}
 		if _, ok := hostModulesMap[name]; ok {
-			log.Fatal(fmt.Sprintf("module %s declared both as host module and port module ", name))
+			err = fmt.Errorf("module %s declared both as host module and port module ", name)
+			return hostModulesMap, portModulesMap, err
 		}
 		portModulesMap[name] = mod
+	}
+
+	return hostModulesMap, portModulesMap, err
+}
+
+
+func getEnbaledModules(profile *phaser.Profile) ([]module.HostModule, []module.PortModule, error) {
+	hostModules := []module.HostModule{}
+	portModules := []module.PortModule{}
+	var err error
+
+	hostModulesMap, portModulesMap, err := loadModules();
+	if err != nil {
+		return hostModules, portModules, err
 	}
 
 	for name := range profile.Modules {
@@ -89,9 +107,10 @@ func getEnbaledModules(profile *phaser.Profile) ([]module.HostModule, []module.P
 		} else if module, isPortModule := portModulesMap[name]; isPortModule {
 			portModules = append(portModules, module)
 		} else {
-			log.Fatal(fmt.Sprintf("cannot find module: %s", name))
+			err = fmt.Errorf("cannot find module: %s", name)
+			return hostModules, portModules, err
 		}
 	}
 
-	return hostModules, portModules
+	return hostModules, portModules, err
 }
