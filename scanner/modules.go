@@ -12,6 +12,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/elasticsearch"
 	"github.com/bloom42/phaser/scanner/module/http/traefik"
 	"github.com/bloom42/phaser/scanner/module/http/cadvisor"
+	"github.com/bloom42/phaser/scanner/module/http/etcd"
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/dns"
@@ -48,6 +49,7 @@ var AllPortModules = []module.PortModule{
 	traefik.UnauthenticatedAccess{},
 	consul.UnauthenticatedAccess{},
 	cadvisor.UnauthenticatedAccess{},
+	etcd.UnauthenticatedAccess{},
 }
 
 

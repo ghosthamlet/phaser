@@ -11,5 +11,6 @@ modules = {
   "http/elasticsearch/unauthenticated_access" = {},
   "http/traefik/unauthenticated_access" = {},
   "http/hashicorp/consul/unauthenticated_access" = {},
-  "http/cadvisor/unauthenticated_access" = {}
+  "http/cadvisor/unauthenticated_access" = {},
+  "http/etcd/unauthenticated_access" = {}
 }
