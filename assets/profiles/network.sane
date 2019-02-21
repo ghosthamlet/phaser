@@ -28,5 +28,6 @@ modules = {
   "postgresql/unauthenticated_access" = {},
   "ssltls/cve_2014_0160" = {},
   "ssltls/robot" = {},
-   "ssltls/cve_2014_0224" = {}
+  "ssltls/cve_2014_0224" = {},
+  "http/takeover" = {}
 }

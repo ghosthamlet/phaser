@@ -24,6 +24,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/postgresql"
 	"github.com/bloom42/phaser/scanner/module/http/yaheiphp"
 	"github.com/bloom42/phaser/scanner/module/http/jetty"
+	"github.com/bloom42/phaser/scanner/module/http/takeover"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
 
@@ -78,6 +79,7 @@ var AllPortModules = []module.PortModule{
 	ssltls.CVE_2014_0160{},
 	ssltls.ROBOT{},
 	ssltls.CVE_2014_0224{},
+	takeover.Takeover{},
 }
 
 // loadModules load all modules to unique maps
