@@ -19,6 +19,8 @@ modules = {
   "http/git/config_file_disclosure" = {},
   "http/prometheus/unauthenticated_access" = {},
   "http/drupal/CVE_2018_7600" = {},
-  "http/dsstore/file_disclosure" = {},
+  "http/dsstore_file_disclosure" = {},
   "http/directory_listing_information_disclosure" = {},
+  "http/env_file_disclosure" = {},
+  "http/yaheiphp/information_disclosure" = {}
 }
