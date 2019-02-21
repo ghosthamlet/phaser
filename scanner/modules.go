@@ -19,6 +19,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/kibana"
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
 	"github.com/bloom42/phaser/scanner/module/whois"
+	"github.com/bloom42/phaser/scanner/module/http"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
 
@@ -64,6 +65,7 @@ var AllPortModules = []module.PortModule{
 	prometheus.UnauthenticatedAccess{},
 	drupal.CVE_2018_7600{},
 	dsstore.FileDisclosure{},
+	http.DirectoryListingInformationDisclosure{},
 }
 
 // loadModules load all modules to unique maps
