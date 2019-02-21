@@ -24,4 +24,5 @@ modules = {
   "http/env_file_disclosure" = {},
   "http/yaheiphp/information_disclosure" = {},
   "http/jetty/cve_2015_2080" = {},
+  "mysql/unauthenticated_access" = {},
 }

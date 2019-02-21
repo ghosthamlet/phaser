@@ -10,6 +10,7 @@ require (
 	github.com/bloom42/uuid-go v0.0.0-20190217115539-dc11954538a8
 	github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 // indirect
 	github.com/getsentry/raven-go v0.2.0
+	github.com/go-sql-driver/mysql v1.4.1
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/spf13/cobra v0.0.3
