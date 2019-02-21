@@ -2,8 +2,8 @@ scan_subdomains = true
 
 modules = {
   "http/gitlab/open_registration" = {},
-  cname = {},
-  whois = {},
+  "domain/cname" = {},
+  "domain/whois" = {},
   "dns/missing_or_insufficient_dmarc_record" = {},
   "dns/missing_or_insufficient_spf_record" = {},
   "dns/zone_trasnfer_information_disclosure" = {},
@@ -29,5 +29,5 @@ modules = {
   "ssltls/cve_2014_0160" = {},
   "ssltls/robot" = {},
   "ssltls/cve_2014_0224" = {},
-  "http/takeover" = {}
+  "domain/takeover" = {}
 }

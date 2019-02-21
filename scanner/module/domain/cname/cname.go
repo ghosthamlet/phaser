@@ -10,7 +10,7 @@ import (
 type CName struct{}
 
 func (CName) Name() string {
-	return "cname"
+	return "domain/cname"
 }
 
 func (CName) Description() string {

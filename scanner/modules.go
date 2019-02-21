@@ -5,7 +5,7 @@ import (
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module"
-	"github.com/bloom42/phaser/scanner/module/cname"
+	"github.com/bloom42/phaser/scanner/module/domain/cname"
 	"github.com/bloom42/phaser/scanner/module/http/gitlab"
 	"github.com/bloom42/phaser/scanner/module/http/atlassian"
 	"github.com/bloom42/phaser/scanner/module/http/elasticsearch"
@@ -17,14 +17,14 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/drupal"
 	"github.com/bloom42/phaser/scanner/module/http/kibana"
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
-	"github.com/bloom42/phaser/scanner/module/whois"
+	"github.com/bloom42/phaser/scanner/module/domain/whois"
 	"github.com/bloom42/phaser/scanner/module/http"
 	"github.com/bloom42/phaser/scanner/module/ssltls"
 	"github.com/bloom42/phaser/scanner/module/mysql"
 	"github.com/bloom42/phaser/scanner/module/postgresql"
 	"github.com/bloom42/phaser/scanner/module/http/yaheiphp"
 	"github.com/bloom42/phaser/scanner/module/http/jetty"
-	"github.com/bloom42/phaser/scanner/module/http/takeover"
+	"github.com/bloom42/phaser/scanner/module/domain/takeover"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
 
@@ -51,6 +51,7 @@ var AllHostModules = []module.HostModule{
 	dns.MissingOrInsufficientDMARCRecord{},
 	dns.MissingOrInsufficientSPFRecord{},
 	dns.ZoneTransferInformationDisclosure{},
+	takeover.Takeover{},
 }
 
 // AllPortModules contains all phaser's modules which will be run for each port for each host.
@@ -79,7 +80,6 @@ var AllPortModules = []module.PortModule{
 	ssltls.CVE_2014_0160{},
 	ssltls.ROBOT{},
 	ssltls.CVE_2014_0224{},
-	takeover.Takeover{},
 }
 
 // loadModules load all modules to unique maps

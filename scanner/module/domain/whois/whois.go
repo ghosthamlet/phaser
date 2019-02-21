@@ -12,7 +12,7 @@ import (
 type Whois struct{}
 
 func (Whois) Name() string {
-	return "whois"
+	return "domain/whois"
 }
 
 func (Whois) Description() string {

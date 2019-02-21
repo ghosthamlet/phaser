@@ -109,22 +109,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 		logger.Fatal(err.Error())
 	}
 
-	// start by scanning ports
-	logger.Info("starting ports scan")
-	portsModule := ports.Ports{}
-	portsData, errs := portsModule.Run(scan, target)
-	logger.Info("ports scan ended")
-	portsFinding := phaser.Finding{
-		Module:  portsModule.Name(),
-		Version: portsModule.Version(),
-		Data:    portsData,
-	}
-	target.Findings = append(target.Findings, portsFinding)
-	if len(errs) != 0 {
-		logger.Error("", rz.Errors("errors", errs))
-		target.Errors = append(target.Errors, toTargetErrors(portsModule, errs)...)
-		return
-	}
+	// TODO: check if host resolves ?
 
 	/////////////////////////////////////////////////////////////////////////////
 	// host modules
@@ -156,30 +141,50 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 	/////////////////////////////////////////////////////////////////////////////
 	// port modules
 	/////////////////////////////////////////////////////////////////////////////
-	scannedPorts := portsData.([]phaser.Port)
-	for _, port := range scannedPorts {
-		for _, module := range portModules {
-			moduleName := module.Name()
-			moduleVersion := module.Version()
-			logger := logger.With(rz.Fields(
-				rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
-				rz.Uint16("port", port.ID),
-			))
-			logger.Info("starting port module")
-			result, errs := module.Run(scan, target, port)
-			logger.Info("port module ended")
-			if result != nil {
-				logger.Warn("found something")
-				finding := phaser.Finding{
-					Module:  moduleName,
-					Version: moduleVersion,
-					Data:    result,
+
+	if len(portModules) != 0 {
+		// start by scanning ports
+		logger.Info("starting ports scan")
+		portsModule := ports.Ports{}
+		portsData, errs := portsModule.Run(scan, target)
+		logger.Info("ports scan ended")
+		portsFinding := phaser.Finding{
+			Module:  portsModule.Name(),
+			Version: portsModule.Version(),
+			Data:    portsData,
+		}
+		target.Findings = append(target.Findings, portsFinding)
+		if len(errs) != 0 {
+			logger.Error("", rz.Errors("errors", errs))
+			target.Errors = append(target.Errors, toTargetErrors(portsModule, errs)...)
+			return
+		}
+
+		scannedPorts := portsData.([]phaser.Port)
+		for _, port := range scannedPorts {
+			for _, module := range portModules {
+				moduleName := module.Name()
+				moduleVersion := module.Version()
+				logger := logger.With(rz.Fields(
+					rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
+					rz.Uint16("port", port.ID),
+				))
+				logger.Info("starting port module")
+				result, errs := module.Run(scan, target, port)
+				logger.Info("port module ended")
+				if result != nil {
+					logger.Warn("found something")
+					finding := phaser.Finding{
+						Module:  moduleName,
+						Version: moduleVersion,
+						Data:    result,
+					}
+					target.Findings = append(target.Findings, finding)
 				}
-				target.Findings = append(target.Findings, finding)
-			}
-			if len(errs) != 0 {
-				logger.Error("", rz.Errors("errors", errs))
-				target.Errors = append(target.Errors, toTargetErrors(module, errs)...)
+				if len(errs) != 0 {
+					logger.Error("", rz.Errors("errors", errs))
+					target.Errors = append(target.Errors, toTargetErrors(module, errs)...)
+				}
 			}
 		}
 	}
