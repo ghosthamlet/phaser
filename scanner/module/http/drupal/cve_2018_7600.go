@@ -82,7 +82,6 @@ func (CVE_2018_7600) Run(scan *phaser.Scan, target *phaser.Target, port phaser.P
 	matchs := re.FindStringSubmatch(string(body))
 
 	if len(matchs) > 1 {
-		// log.Println("FOUUUUUUUUUUUUUUUUNNNNNNNNNNNNNNNNNNNNNNDDDD")
 		formID := matchs[1]
 		// log.Println(formID)
 

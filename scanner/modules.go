@@ -15,6 +15,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/prometheus"
 	"github.com/bloom42/phaser/scanner/module/http/etcd"
 	"github.com/bloom42/phaser/scanner/module/http/drupal"
+	"github.com/bloom42/phaser/scanner/module/http/dsstore"
 	"github.com/bloom42/phaser/scanner/module/http/kibana"
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
 	"github.com/bloom42/phaser/scanner/module/whois"
@@ -62,6 +63,7 @@ var AllPortModules = []module.PortModule{
 	git.ConfigFileDisclosure{},
 	prometheus.UnauthenticatedAccess{},
 	drupal.CVE_2018_7600{},
+	dsstore.FileDisclosure{},
 }
 
 // loadModules load all modules to unique maps

@@ -18,5 +18,6 @@ modules = {
    "http/git/directory_disclosure" = {},
    "http/git/config_file_disclosure" = {},
    "http/prometheus/unauthenticated_access" = {},
-   "http/drupal/CVE_2018_7600" = {}
+   "http/drupal/CVE_2018_7600" = {},
+   "http/dsstore/file_disclosure" = {},
 }
