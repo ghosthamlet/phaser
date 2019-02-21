@@ -1,9 +1,9 @@
-.PHONY: build clean re dev test static docker docker_release release docker_push
+.PHONY: build clean re dev test static docker docker_release release docker_push docker_dev
 
 NAME = $(shell cat version/version.go| grep "\sName" | cut -d '"' -f2)
 DIST_DIR = dist
 VERSION := $(shell cat version/version.go| grep "\sVersion" | cut -d '"' -f2)
-DOCKER_IMAGE = "quay.io/bloom42/$(NAME)"
+DOCKER_IMAGE = quay.io/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 
 
@@ -40,3 +40,6 @@ docker_push:
 docker_release:
 	docker push $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):latest
+
+docker_dev:
+	docker build -t $(DOCKER_IMAGE)_dev:latest -f dev.Dockerfile .
