@@ -66,8 +66,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 	bodyStr := string(body)
 
 	if strings.Contains(bodyStr, "<title>Prometheus Time Series Collection and Processing Server</title>") {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

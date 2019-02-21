@@ -67,8 +67,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 
 	if strings.Contains(bodyStr, `Please enable JavaScript in your web browser to use Consul UI.`) &&
 		strings.Contains(bodyStr, `the UI on the same host as a consul instance.`) {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

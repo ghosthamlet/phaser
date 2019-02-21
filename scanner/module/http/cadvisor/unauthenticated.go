@@ -67,8 +67,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 
 	if strings.Contains(bodyStr, `"cpu_frequency_khz"`) &&
 		strings.Contains(bodyStr, `"system_uuid"`) {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

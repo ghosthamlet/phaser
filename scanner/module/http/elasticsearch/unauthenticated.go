@@ -76,8 +76,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 	err = json.Unmarshal(body, &info)
 	if err == nil &&
 		strings.Contains(strings.ToLower(strings.TrimSpace(info.Tagline)), "you know, for search") {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

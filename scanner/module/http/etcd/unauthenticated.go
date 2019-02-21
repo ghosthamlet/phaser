@@ -75,8 +75,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 	if strings.Contains(bodyStr, "\"etcdserver\"") &&
 		strings.Contains(bodyStr, "\"etcdcluster\"") &&
 		len(bodyStr) < 130 {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

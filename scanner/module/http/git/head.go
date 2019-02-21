@@ -29,7 +29,7 @@ func (HeadFileDisclosure) Version() string {
 }
 
 type gitHeadData struct {
-	URL string `json:"url"`
+	URL      string `json:"url"`
 	Response string `json:"response"`
 }
 
@@ -66,12 +66,11 @@ func (HeadFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port pha
 	res.Body.Close()
 	bodyStr := string(body)
 
-	if  strings.Index(strings.ToLower(strings.TrimSpace(bodyStr)), "ref:") == 0 {
-		ret := gitHeadData{
-			URL: URL,
+	if strings.Index(strings.ToLower(strings.TrimSpace(bodyStr)), "ref:") == 0 {
+		ret = gitHeadData{
+			URL:      URL,
 			Response: bodyStr,
 		}
-		return ret, errs
 	}
 
 	return ret, errs

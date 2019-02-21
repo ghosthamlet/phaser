@@ -70,10 +70,9 @@ func (DirectoryDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port ph
 		strings.Contains(bodyStr, "config") == true &&
 		strings.Contains(bodyStr, "index") == true &&
 		strings.Contains(bodyStr, "objects") == true {
-		ret := gitDirectoryData{
+		ret = gitDirectoryData{
 			URL: URL,
 		}
-		return ret, errs
 	}
 
 	return ret, errs

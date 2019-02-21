@@ -69,8 +69,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 		strings.Contains(bodyStr, `<div class="ui-app-loading"><h1><strong>Kibana</strong><small>&nbsp;is loading.`) ||
 		strings.Index(bodyStr, `<script>var hashRoute = '/app/kibana';`) == 0 ||
 		strings.Contains(bodyStr, "<div class=\"kibanaWelcomeLogo\"></div></div></div><div class=\"kibanaWelcomeText\">Loading Kibana</div></div>") {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

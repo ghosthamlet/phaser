@@ -46,7 +46,7 @@ func (DirectoryListingInformationDisclosure) Run(scan *phaser.Scan, target *phas
 		protocol = "https"
 	}
 
-	URL := fmt.Sprintf("%s://%s:%d", protocol, target.Host, port.ID)
+	URL := fmt.Sprintf("%s://%s:%d/", protocol, target.Host, port.ID)
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		errs = append(errs, err)
@@ -74,8 +74,7 @@ func (DirectoryListingInformationDisclosure) Run(scan *phaser.Scan, target *phas
 	}
 
 	if matched {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs

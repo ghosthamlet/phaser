@@ -74,11 +74,10 @@ func (ConfigFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port p
 	}
 
 	if matched {
-		ret := gitConfigData{
+		ret = gitConfigData{
 			URL:      URL,
 			Response: bodyStr,
 		}
-		return ret, errs
 	}
 
 	return ret, errs

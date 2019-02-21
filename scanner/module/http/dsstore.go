@@ -1,4 +1,4 @@
-package dsstore
+package http
 
 import (
 	"bytes"
@@ -10,29 +10,29 @@ import (
 	"github.com/bloom42/phaser/scanner/module"
 )
 
-type FileDisclosure struct{}
+type DSStoreFileDisclosure struct{}
 
-func (FileDisclosure) Name() string {
-	return "http/dsstore/file_disclosure"
+func (DSStoreFileDisclosure) Name() string {
+	return "http/dsstore_file_disclosure"
 }
 
-func (FileDisclosure) Description() string {
+func (DSStoreFileDisclosure) Description() string {
 	return "Check for .DS_Store file disclosure"
 }
 
-func (FileDisclosure) Author() string {
+func (DSStoreFileDisclosure) Author() string {
 	return "Sylvain Kerkour <sylvain@kerkour.com>"
 }
 
-func (FileDisclosure) Version() string {
+func (DSStoreFileDisclosure) Version() string {
 	return "0.1.0"
 }
 
-type VulnerableURL struct {
+type dsStoreFileDisclosureData struct {
 	URL string `json:"url"`
 }
 
-func (FileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
+func (DSStoreFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
 	errs := []error{}
 	var ret module.Result
 	protocol := "http"
@@ -65,8 +65,7 @@ func (FileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.
 	res.Body.Close()
 
 	if bytes.Equal(body[0:8], []byte{0x0, 0x0, 0x0, 0x1, 0x42, 0x75, 0x64, 0x31}) {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = dsStoreFileDisclosureData{URL}
 	}
 
 	return ret, errs

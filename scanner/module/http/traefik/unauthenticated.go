@@ -70,8 +70,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 		strings.Contains(bodyStr, "href=\"https://docs.traefik.io\"") &&
 		strings.Contains(bodyStr, "href=\"https://traefik.io\"")) ||
 		strings.Contains(bodyStr, `fixed-top"><head><meta charset="utf-8"><title>Traefik</title><base`) {
-		ret := VulnerableURL{URL}
-		return ret, errs
+		ret = VulnerableURL{URL}
 	}
 
 	return ret, errs
