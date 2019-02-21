@@ -20,6 +20,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/http"
 	"github.com/bloom42/phaser/scanner/module/http/yaheiphp"
+	"github.com/bloom42/phaser/scanner/module/http/jetty"
 	"github.com/bloom42/phaser/scanner/module/dns"
 )
 
@@ -68,6 +69,7 @@ var AllPortModules = []module.PortModule{
 	http.DirectoryListingInformationDisclosure{},
 	http.EnvFileDisclosure{},
 	yaheiphp.InformationDisclosure{},
+	jetty.CVE_2015_2080{},
 }
 
 // loadModules load all modules to unique maps

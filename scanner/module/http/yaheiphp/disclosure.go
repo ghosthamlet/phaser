@@ -44,6 +44,7 @@ func (InformationDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port 
 		protocol = "https"
 	}
 
+	// TODO: also check tz_e.php
 	URL := fmt.Sprintf("%s://%s:%d/proberv.php", protocol, target.Host, port.ID)
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
