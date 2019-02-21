@@ -20,9 +20,10 @@ func parseTargets(targets []string) []phaser.Target {
 
 func parseTarget(target string) phaser.Target {
 	ret := phaser.Target{
-		Host:     target,
-		Errors:   []phaser.TargetError{},
-		Findings: phaser.Findings{},
+		Host:       target,
+		Errors:     []phaser.TargetError{},
+		Findings:   phaser.Findings{},
+		Subdomains: []phaser.Target{},
 	}
 
 	if govalidator.IsDNSName(target) == true && strings.Contains(target, ".") {

@@ -1,10 +1,13 @@
 package ports
 
 import (
+	"crypto/tls"
 	"fmt"
+	"net/http"
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module"
@@ -161,14 +164,24 @@ func (ports Ports) Run(scan *phaser.Scan, target *phaser.Target) (module.Result,
 			if port.State.State != "closed" && port.State.State != "filtered" {
 				isHTTP := false
 				isHTTPS := false
-				res, err := scan.HTTPClient.Get(fmt.Sprintf("https://%s:%d", target.Host, port.PortId))
-				if err != nil {
-					errStr := err.Error()
-					if strings.Contains(errStr, "HTTP response to HTTPS") {
-						isHTTP = true
-					}
-				} else if err == nil {
+				tr := &http.Transport{
+					TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+				}
+				client := http.Client{
+					Timeout:   time.Second * 10,
+					Transport: tr,
+					CheckRedirect: func(req *http.Request, via []*http.Request) error {
+						return http.ErrUseLastResponse
+					},
+				}
+				res, err := client.Get(fmt.Sprintf("https://%s:%d", target.Host, port.PortId))
+				if err == nil {
 					isHTTPS = true
+					res.Body.Close()
+				}
+				res, err = client.Get(fmt.Sprintf("http://%s:%d", target.Host, port.PortId))
+				if err == nil {
+					isHTTP = true
 					res.Body.Close()
 				}
 				port := phaser.Port{

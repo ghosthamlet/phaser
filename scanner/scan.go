@@ -7,6 +7,7 @@ import (
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module/ports"
+	"github.com/bloom42/phaser/scanner/module/subdomains"
 	"github.com/bloom42/phaser/version"
 	"github.com/bloom42/rz-go/v2"
 )
@@ -42,14 +43,35 @@ func Run(ctx context.Context, config phaser.Config) *phaser.Scan {
 }
 
 func RunScan(scan *phaser.Scan) {
-	for i, target := range scan.Targets {
+	logger := rz.FromCtx(scan.Ctx)
+
+	for i := range scan.Targets {
+		target := &scan.Targets[i]
 		if len(target.Errors) != 0 { // error during initialisation
 			continue
 		}
 		scanTarget(scan, &scan.Targets[i])
-	}
 
-	logger := rz.FromCtx(scan.Ctx)
+		// scan subdomains foreach target if enabled
+		if scan.Profile.ScanSubdomains {
+			subdomainsModule := subdomains.Subdomains{}
+			subdomainsFound, errs := subdomainsModule.Run(scan, target)
+			if len(errs) != 0 {
+				logger.Error("", rz.Errors("errors", errs))
+			}
+			if subdomainsFound != nil {
+				subdomainTargets := parseTargets(subdomainsFound.([]string))
+				for j := range subdomainTargets {
+					subdomainTarget := &subdomainTargets[j]
+					if len(subdomainTarget.Errors) != 0 { // error during initialisation
+						continue
+					}
+					scanTarget(scan, subdomainTarget)
+				}
+				target.Subdomains = subdomainTargets
+			}
+		}
+	}
 
 	err := end(scan)
 	if err != nil {
@@ -81,7 +103,7 @@ func end(scan *phaser.Scan) error {
 }
 
 func scanTarget(scan *phaser.Scan, target *phaser.Target) {
-	logger := rz.FromCtx(scan.Ctx)
+	logger := rz.FromCtx(scan.Ctx).With(rz.Fields(rz.String("target", target.Host)))
 	hostModules, portModules, err := getEnbaledModules(&scan.Profile)
 	if err != nil {
 		logger.Fatal(err.Error())
@@ -98,7 +120,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 		Data:    portsData,
 	}
 	target.Findings = append(target.Findings, portsFinding)
-	if len(target.Errors) != 0 {
+	if len(errs) != 0 {
 		logger.Error("", rz.Errors("errors", errs))
 		target.Errors = append(target.Errors, toTargetErrors(portsModule, errs)...)
 		return
@@ -112,7 +134,6 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 		moduleVersion := module.Version()
 		logger := logger.With(rz.Fields(
 			rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
-			rz.String("target", target.Host),
 		))
 		logger.Info("starting host module")
 		result, errs := module.Run(scan, target)
@@ -141,7 +162,6 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 			moduleName := module.Name()
 			moduleVersion := module.Version()
 			logger := logger.With(rz.Fields(
-				rz.String("target", target.Host),
 				rz.Dict("module", logger.NewDict(rz.String("module", moduleName), rz.String("version", moduleVersion))),
 				rz.Uint16("port", port.ID),
 			))

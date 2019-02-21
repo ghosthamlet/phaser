@@ -16,9 +16,10 @@ type TargetError struct {
 }
 
 type Target struct {
-	Host      string        `json:"host"`
-	Type      TargetType    `json:"type"` // "domain" or "ip"
-	IPVersion IPVersion     `json:"ip_version,omitempty"`
-	Findings  Findings      `json:"findings"`
-	Errors    []TargetError `json:"errors"`
+	Host       string        `json:"host"`
+	Type       TargetType    `json:"type"` // "domain" or "ip"
+	IPVersion  IPVersion     `json:"ip_version,omitempty"`
+	Findings   Findings      `json:"findings"`
+	Errors     []TargetError `json:"errors"`
+	Subdomains []Target      `json:"subdomains"`
 }
