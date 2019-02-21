@@ -26,4 +26,7 @@ modules = {
   "http/jetty/cve_2015_2080" = {},
   "mysql/unauthenticated_access" = {},
   "postgresql/unauthenticated_access" = {},
+  "ssltls/cve_2014_0160" = {},
+  "ssltls/robot" = {},
+   "ssltls/cve_2014_0224" = {},
 }

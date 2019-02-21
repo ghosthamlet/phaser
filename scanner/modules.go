@@ -19,6 +19,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/http"
+	"github.com/bloom42/phaser/scanner/module/ssltls"
 	"github.com/bloom42/phaser/scanner/module/mysql"
 	"github.com/bloom42/phaser/scanner/module/postgresql"
 	"github.com/bloom42/phaser/scanner/module/http/yaheiphp"
@@ -74,6 +75,9 @@ var AllPortModules = []module.PortModule{
 	jetty.CVE_2015_2080{},
 	mysql.UnauthenticatedAccess{},
 	postgresql.UnauthenticatedAccess{},
+	ssltls.CVE_2014_0160{},
+	ssltls.ROBOT{},
+	ssltls.CVE_2014_0224{},
 }
 
 // loadModules load all modules to unique maps
