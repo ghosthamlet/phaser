@@ -1,4 +1,4 @@
-package mysql
+package postgresql
 
 import (
 	"database/sql"
@@ -7,17 +7,17 @@ import (
 
 	"github.com/bloom42/phaser/common/phaser"
 	"github.com/bloom42/phaser/scanner/module"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 type UnauthenticatedAccess struct{}
 
 func (UnauthenticatedAccess) Name() string {
-	return "mysql/unauthenticated_access"
+	return "postgresql/unauthenticated_access"
 }
 
 func (UnauthenticatedAccess) Description() string {
-	return "Check for mysql Unauthenticated Access"
+	return "Check for PostgreSQL Unauthenticated Access"
 }
 
 func (UnauthenticatedAccess) Author() string {
@@ -46,8 +46,8 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 		return ret, errs
 	}
 
-	URL := fmt.Sprintf("root@tcp(%s:%d)/?timeout=8s", target.Host, port.ID)
-	db, err := sql.Open("mysql", URL)
+	URL := fmt.Sprintf("host=%s port=%d user=postgres sslmode=disable", target.Host, port.ID)
+	db, err := sql.Open("postgres", URL)
 	if err != nil {
 		return ret, errs
 	}
@@ -60,7 +60,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 
 	// ping passed so we are connected
 	creds := credentials{
-		Username: "root",
+		Username: "postgres",
 	}
 	ret = unauthenticatedAccessData{
 		URL:         URL,

@@ -10,21 +10,21 @@ import (
 	"github.com/bloom42/phaser/scanner/module"
 )
 
-type UnauthenticatedAccess struct{}
+type DashboardUnauthenticatedAccess struct{}
 
-func (UnauthenticatedAccess) Name() string {
-	return "http/prometheus/unauthenticated_access"
+func (DashboardUnauthenticatedAccess) Name() string {
+	return "http/prometheus/dashboard_unauthenticated_access"
 }
 
-func (UnauthenticatedAccess) Description() string {
+func (DashboardUnauthenticatedAccess) Description() string {
 	return "Check for prometheus Unauthenticated Access"
 }
 
-func (UnauthenticatedAccess) Author() string {
+func (DashboardUnauthenticatedAccess) Author() string {
 	return "Sylvain Kerkour <sylvain@kerkour.com>"
 }
 
-func (UnauthenticatedAccess) Version() string {
+func (DashboardUnauthenticatedAccess) Version() string {
 	return "0.1.0"
 }
 
@@ -32,7 +32,7 @@ type VulnerableURL struct {
 	URL string `json:"url"`
 }
 
-func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
+func (DashboardUnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
 	errs := []error{}
 	var ret module.Result
 	protocol := "http"

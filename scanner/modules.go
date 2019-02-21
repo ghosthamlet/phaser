@@ -20,6 +20,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/whois"
 	"github.com/bloom42/phaser/scanner/module/http"
 	"github.com/bloom42/phaser/scanner/module/mysql"
+	"github.com/bloom42/phaser/scanner/module/postgresql"
 	"github.com/bloom42/phaser/scanner/module/http/yaheiphp"
 	"github.com/bloom42/phaser/scanner/module/http/jetty"
 	"github.com/bloom42/phaser/scanner/module/dns"
@@ -64,7 +65,7 @@ var AllPortModules = []module.PortModule{
 	git.HeadFileDisclosure{},
 	git.DirectoryDisclosure{},
 	git.ConfigFileDisclosure{},
-	prometheus.UnauthenticatedAccess{},
+	prometheus.DashboardUnauthenticatedAccess{},
 	drupal.CVE_2018_7600{},
 	http.DSStoreFileDisclosure{},
 	http.DirectoryListingInformationDisclosure{},
@@ -72,6 +73,7 @@ var AllPortModules = []module.PortModule{
 	yaheiphp.InformationDisclosure{},
 	jetty.CVE_2015_2080{},
 	mysql.UnauthenticatedAccess{},
+	postgresql.UnauthenticatedAccess{},
 }
 
 // loadModules load all modules to unique maps
