@@ -3,7 +3,7 @@ package ports
 import (
 	"testing"
 
-	"github.com/bloom42/phaser/common/test"
+	"github.com/bloom42/phaser/util/test"
 )
 
 func TestPorts(t *testing.T) {
