@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -29,10 +30,6 @@ func (CVE_2018_7600) Author() string {
 
 func (CVE_2018_7600) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (CVE_2018_7600) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -126,7 +123,7 @@ func (CVE_2018_7600) Run(scan *phaser.Scan, target *phaser.Target, port phaser.P
 		res2.Body.Close()
 
 		if strings.Contains(string(body2), token) {
-			ret = VulnerableURL{URL}
+			ret = findings.URL{URL: URL}
 		}
 
 		// fmt.Println("Body: ", string(body2))

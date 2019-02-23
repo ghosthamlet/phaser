@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (InformationDisclosure) Author() string {
 
 func (InformationDisclosure) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (InformationDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -67,7 +64,7 @@ func (InformationDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port 
 	bodyStr := string(body)
 
 	if strings.Contains(bodyStr, "<title>Yahei-PHP") {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

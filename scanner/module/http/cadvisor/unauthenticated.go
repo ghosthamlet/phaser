@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (UnauthenticatedAccess) Author() string {
 
 func (UnauthenticatedAccess) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -67,7 +64,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 
 	if strings.Contains(bodyStr, `"cpu_frequency_khz"`) &&
 		strings.Contains(bodyStr, `"system_uuid"`) {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

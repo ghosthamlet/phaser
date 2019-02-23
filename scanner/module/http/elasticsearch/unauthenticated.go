@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -27,10 +28,6 @@ func (UnauthenticatedAccess) Author() string {
 
 func (UnauthenticatedAccess) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 type ElasticsearchInfo struct {
@@ -76,7 +73,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 	err = json.Unmarshal(body, &info)
 	if err == nil &&
 		strings.Contains(strings.ToLower(strings.TrimSpace(info.Tagline)), "you know, for search") {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

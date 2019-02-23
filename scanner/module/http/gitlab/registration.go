@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (OpenRegistration) Author() string {
 
 func (OpenRegistration) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (OpenRegistration) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -67,9 +64,7 @@ func (OpenRegistration) Run(scan *phaser.Scan, target *phaser.Target, port phase
 	bodyStrLower := strings.ToLower(string(body))
 
 	if strings.Contains(bodyStrLower, "gitlab") && strings.Contains(string(body), "Register") {
-		ret = VulnerableURL{
-			URL: URL,
-		}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

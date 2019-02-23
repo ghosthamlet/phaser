@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (UnauthenticatedAccess) Author() string {
 
 func (UnauthenticatedAccess) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -70,7 +67,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 		strings.Contains(bodyStr, "href=\"https://docs.traefik.io\"") &&
 		strings.Contains(bodyStr, "href=\"https://traefik.io\"")) ||
 		strings.Contains(bodyStr, `fixed-top"><head><meta charset="utf-8"><title>Traefik</title><base`) {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

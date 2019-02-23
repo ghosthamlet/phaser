@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (CVE_2017_9506) Author() string {
 
 func (CVE_2017_9506) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (CVE_2017_9506) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -68,7 +65,7 @@ func (CVE_2017_9506) Run(scan *phaser.Scan, target *phaser.Target, port phaser.P
 
 	if strings.Contains(bodyStrLower, "user-agent: *") &&
 		strings.Contains(bodyStrLower, "disallow") {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

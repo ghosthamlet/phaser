@@ -7,6 +7,7 @@ import (
 	"regexp"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -29,10 +30,6 @@ func (DirectoryListingInformationDisclosure) Version() string {
 }
 
 const DIRECTORY_LISTING_REGEXP = "<title>Index of .*<\\/title>"
-
-type VulnerableURL struct {
-	URL string `json:"url"`
-}
 
 func (DirectoryListingInformationDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
 	errs := []error{}
@@ -74,7 +71,7 @@ func (DirectoryListingInformationDisclosure) Run(scan *phaser.Scan, target *phas
 	}
 
 	if matched {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

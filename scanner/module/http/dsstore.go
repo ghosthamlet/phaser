@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (DSStoreFileDisclosure) Author() string {
 
 func (DSStoreFileDisclosure) Version() string {
 	return "0.1.0"
-}
-
-type dsStoreFileDisclosureData struct {
-	URL string `json:"url"`
 }
 
 func (DSStoreFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -65,7 +62,7 @@ func (DSStoreFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port 
 	res.Body.Close()
 
 	if bytes.Equal(body[0:8], []byte{0x0, 0x0, 0x0, 0x1, 0x42, 0x75, 0x64, 0x31}) {
-		ret = dsStoreFileDisclosureData{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

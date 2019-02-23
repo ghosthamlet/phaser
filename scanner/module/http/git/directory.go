@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (DirectoryDisclosure) Author() string {
 
 func (DirectoryDisclosure) Version() string {
 	return "0.1.0"
-}
-
-type gitDirectoryData struct {
-	URL string `json:"url"`
 }
 
 func (DirectoryDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -70,9 +67,7 @@ func (DirectoryDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port ph
 		strings.Contains(bodyStr, "config") == true &&
 		strings.Contains(bodyStr, "index") == true &&
 		strings.Contains(bodyStr, "objects") == true {
-		ret = gitDirectoryData{
-			URL: URL,
-		}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

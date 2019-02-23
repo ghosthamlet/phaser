@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (DashboardUnauthenticatedAccess) Author() string {
 
 func (DashboardUnauthenticatedAccess) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 func (DashboardUnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -66,7 +63,7 @@ func (DashboardUnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Targ
 	bodyStr := string(body)
 
 	if strings.Contains(bodyStr, "<title>Prometheus Time Series Collection and Processing Server</title>") {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

@@ -16,7 +16,7 @@ import (
 	"github.com/bloom42/phaser/scanner/module/http/etcd"
 	"github.com/bloom42/phaser/scanner/module/http/drupal"
 	"github.com/bloom42/phaser/scanner/module/http/kibana"
-	"github.com/bloom42/phaser/scanner/module/http/hashicorp/consul"
+	"github.com/bloom42/phaser/scanner/module/http/consul"
 	"github.com/bloom42/phaser/scanner/module/domain/whois"
 	"github.com/bloom42/phaser/scanner/module/http"
 	"github.com/bloom42/phaser/scanner/module/ssltls"

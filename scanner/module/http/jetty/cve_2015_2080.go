@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (CVE_2015_2080) Author() string {
 
 func (CVE_2015_2080) Version() string {
 	return "0.1.0"
-}
-
-type VulnerableURL struct {
-	URL string `json:"url"`
 }
 
 const JETLEAK_REGEXP = "^jetty\\(9\\.2\\.(3|4|5|6|7|8).*\\)$|^jetty\\(9\\.3\\.0\\.(m0|m1).*\\)$"
@@ -68,7 +65,7 @@ func (CVE_2015_2080) Run(scan *phaser.Scan, target *phaser.Target, port phaser.P
 	}
 
 	if matched {
-		ret = VulnerableURL{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs

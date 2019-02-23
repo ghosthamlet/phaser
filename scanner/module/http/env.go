@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,10 +27,6 @@ func (EnvFileDisclosure) Author() string {
 
 func (EnvFileDisclosure) Version() string {
 	return "0.1.0"
-}
-
-type envFileDisclosureData struct {
-	URL string `json:"url"`
 }
 
 func (EnvFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -101,7 +98,7 @@ func (EnvFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phas
 	}
 
 	if count >= 1 {
-		ret = envFileDisclosureData{URL}
+		ret = findings.URL{URL: URL}
 	}
 
 	return ret, errs
