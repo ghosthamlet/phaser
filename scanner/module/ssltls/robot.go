@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 	"github.com/bloom42/phaser/scanner/module/ssltls/sslyze"
 )
@@ -26,10 +27,6 @@ func (ROBOT) Author() string {
 
 func (ROBOT) Version() string {
 	return "0.1.0"
-}
-
-type ROBOTData struct {
-	Host string `json:"host"`
 }
 
 // TODO: better sslyze target handling
@@ -62,7 +59,7 @@ func (ROBOT) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (mo
 	}
 
 	if !strings.Contains(sslyzeResult.AcceptedTargets[0].CommandsResults.Robot.RobotResultEnum, "NOT_VULNERABLE") {
-		ret = ROBOTData{host}
+		ret = findings.URL{URL: "https://" + host}
 	}
 
 	return ret, errs

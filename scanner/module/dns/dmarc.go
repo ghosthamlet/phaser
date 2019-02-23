@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -25,12 +26,6 @@ func (MissingOrInsufficientDMARCRecord) Author() string {
 
 func (MissingOrInsufficientDMARCRecord) Version() string {
 	return "0.1.0"
-}
-
-type dmarcData struct {
-	Domain    string   `json:"domain"`
-	IsMIssing bool     `json:"is_missing"`
-	Records   []string `json:"records"`
 }
 
 func (MissingOrInsufficientDMARCRecord) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []error) {
@@ -63,10 +58,10 @@ func (MissingOrInsufficientDMARCRecord) Run(scan *phaser.Scan, target *phaser.Ta
 	}
 
 	if isDMARCRecordMissing {
-		data := dmarcData{
-			Domain:    location,
-			Records:   records,
-			IsMIssing: isDMARCRecordMissing,
+		data := findings.DMARC{
+			Domain:   location,
+			Records:  records,
+			Resolves: !isDMARCRecordMissing,
 		}
 		ret = data
 	}

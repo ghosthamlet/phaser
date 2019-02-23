@@ -36,7 +36,7 @@ func reverseStr(s string) string {
 	return string(r)
 }
 
-type CrtshDomain struct {
+type crtshDomain struct {
 	Domain string `db:"domain"`
 }
 
@@ -53,7 +53,7 @@ func (ports Subdomains) Run(scan *phaser.Scan, target *phaser.Target) (module.Re
 	}
 
 	subdomainsPattern := "%." + target.Host
-	crtshDomains := []CrtshDomain{}
+	crtshDomains := []crtshDomain{}
 	idx := strings.Index(subdomainsPattern, "%")
 	idxrev := strings.Index(reverseStr(subdomainsPattern), "%")
 	if idx != -1 && idx < idxrev {

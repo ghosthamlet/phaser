@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -26,16 +27,6 @@ func (UnauthenticatedAccess) Author() string {
 
 func (UnauthenticatedAccess) Version() string {
 	return "0.1.0"
-}
-
-type credentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type unauthenticatedAccessData struct {
-	URL         string      `json:"url"`
-	Credentials credentials `json:"credentials"`
 }
 
 func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -59,13 +50,7 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 	}
 
 	// ping passed so we are connected
-	creds := credentials{
-		Username: "root",
-	}
-	ret = unauthenticatedAccessData{
-		URL:         URL,
-		Credentials: creds,
-	}
+	ret = findings.URL{URL: URL}
 
 	return ret, errs
 }

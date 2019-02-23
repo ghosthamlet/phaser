@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -26,11 +27,6 @@ func (HeadFileDisclosure) Author() string {
 
 func (HeadFileDisclosure) Version() string {
 	return "0.1.0"
-}
-
-type gitHeadData struct {
-	URL      string `json:"url"`
-	Response string `json:"response"`
 }
 
 func (HeadFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -67,7 +63,7 @@ func (HeadFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port pha
 	bodyStr := string(body)
 
 	if strings.Index(strings.ToLower(strings.TrimSpace(bodyStr)), "ref:") == 0 {
-		ret = gitHeadData{
+		ret = findings.URLResponse{
 			URL:      URL,
 			Response: bodyStr,
 		}

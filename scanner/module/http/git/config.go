@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -27,11 +28,6 @@ func (ConfigFileDisclosure) Author() string {
 
 func (ConfigFileDisclosure) Version() string {
 	return "0.1.0"
-}
-
-type gitConfigData struct {
-	URL      string `json:"url"`
-	Response string `json:"response"`
 }
 
 func (ConfigFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
@@ -74,7 +70,7 @@ func (ConfigFileDisclosure) Run(scan *phaser.Scan, target *phaser.Target, port p
 	}
 
 	if matched {
-		ret = gitConfigData{
+		ret = findings.URLResponse{
 			URL:      URL,
 			Response: bodyStr,
 		}

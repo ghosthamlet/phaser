@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 	_ "github.com/lib/pq"
 )
@@ -28,16 +29,6 @@ func (UnauthenticatedAccess) Version() string {
 	return "0.1.0"
 }
 
-type credentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type unauthenticatedAccessData struct {
-	URL         string      `json:"url"`
-	Credentials credentials `json:"credentials"`
-}
-
 func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
 	errs := []error{}
 	var ret module.Result
@@ -58,14 +49,8 @@ func (UnauthenticatedAccess) Run(scan *phaser.Scan, target *phaser.Target, port 
 		return ret, errs
 	}
 
-	// ping passed so we are connected
-	creds := credentials{
-		Username: "postgres",
-	}
-	ret = unauthenticatedAccessData{
-		URL:         URL,
-		Credentials: creds,
-	}
+	// ping passed, so we are connected
+	ret = findings.URL{URL: URL}
 
 	return ret, errs
 }

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -24,12 +25,6 @@ func (MissingOrInsufficientSPFRecord) Author() string {
 
 func (MissingOrInsufficientSPFRecord) Version() string {
 	return "0.1.0"
-}
-
-type spfData struct {
-	Domain    string   `json:"domain"`
-	IsMissing bool     `json:"is_missing"`
-	Records   []string `json:"records"`
 }
 
 func (MissingOrInsufficientSPFRecord) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []error) {
@@ -61,10 +56,10 @@ func (MissingOrInsufficientSPFRecord) Run(scan *phaser.Scan, target *phaser.Targ
 	}
 
 	if isSPFRecordMissing {
-		data := spfData{
-			Domain:    target.Host,
-			Records:   records,
-			IsMissing: isSPFRecordMissing,
+		data := findings.SPF{
+			Domain:   target.Host,
+			Records:  records,
+			Resolves: !isSPFRecordMissing,
 		}
 		ret = data
 	}

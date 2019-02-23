@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -51,7 +52,7 @@ func (Whois) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []err
 		errs = append(errs, err)
 		return ret, errs
 	}
-	ret = phaser.File{
+	ret = findings.File{
 		Path: fileName,
 	}
 	return ret, errs

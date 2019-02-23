@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 )
 
@@ -27,14 +28,9 @@ func (ZoneTransferInformationDisclosure) Version() string {
 	return "0.1.0"
 }
 
-type axfrData struct {
-	Domain   string `json:"domain"`
-	Response string `json:"response"`
-}
-
 func (ZoneTransferInformationDisclosure) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []error) {
 	errs := []error{}
-	badServers := []axfrData{}
+	badServers := []findings.AXFR{}
 	var ret module.Result
 
 	nservers, err := net.LookupNS(target.Host)
@@ -63,7 +59,7 @@ func (ZoneTransferInformationDisclosure) Run(scan *phaser.Scan, target *phaser.T
 		outStr := string(out)
 		outStrLower := strings.ToLower(outStr)
 		if strings.Contains(outStr, "XFR") && strings.Contains(outStrLower, "transfer failed") == false {
-			badServer := axfrData{
+			badServer := findings.AXFR{
 				Domain:   ns.Host,
 				Response: outStr,
 			}

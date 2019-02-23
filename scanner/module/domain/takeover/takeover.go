@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 	"github.com/bloom42/phaser/scanner/module/domain/takeover/subjack"
 )
@@ -28,11 +29,6 @@ func (Takeover) Version() string {
 	return "0.1.0"
 }
 
-type VulnerableDomain struct {
-	Domain  string `json:"domain"`
-	Service string `json:"service"`
-}
-
 func (Takeover) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []error) {
 	errs := []error{}
 	var ret module.Result
@@ -45,7 +41,7 @@ func (Takeover) Run(scan *phaser.Scan, target *phaser.Target) (module.Result, []
 	service := subjack.Identify(target.Host, false, false, 10, fingerprints)
 
 	if service != "" {
-		ret = VulnerableDomain{
+		ret = findings.Takeover{
 			Domain:  target.Host,
 			Service: service,
 		}

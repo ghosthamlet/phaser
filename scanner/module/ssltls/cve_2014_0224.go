@@ -5,6 +5,7 @@ import (
 	"os/exec"
 
 	"github.com/bloom42/phaser/common/phaser"
+	"github.com/bloom42/phaser/common/phaser/findings"
 	"github.com/bloom42/phaser/scanner/module"
 	"github.com/bloom42/phaser/scanner/module/ssltls/sslyze"
 )
@@ -25,10 +26,6 @@ func (CVE_2014_0224) Author() string {
 
 func (CVE_2014_0224) Version() string {
 	return "0.1.0"
-}
-
-type CVE_2014_0224Data struct {
-	Host string `json:"host"`
 }
 
 // TODO: better sslyze target handling
@@ -61,7 +58,7 @@ func (CVE_2014_0224) Run(scan *phaser.Scan, target *phaser.Target, port phaser.P
 	}
 
 	if sslyzeResult.AcceptedTargets[0].CommandsResults.OpenSSLCCS.IsVulnerableToCcsInjection {
-		ret = CVE_2014_0224Data{host}
+		ret = findings.URL{URL: "https://" + host}
 	}
 
 	return ret, errs
