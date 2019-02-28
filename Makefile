@@ -43,7 +43,10 @@ release:
 	git tag v$(VERSION)
 	git push origin v$(VERSION)
 
-publish:
+crates_login:
+	cargo login ${CRATES_TOKEN}
+
+crates_publish:
 	cargo publish
 
 docker_build:
