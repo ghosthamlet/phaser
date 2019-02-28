@@ -10,3 +10,5 @@ keywords = ["security", "bloom", "phaser", "scanner"]
 license-file = "LICENSE.txt"
 
 [dependencies]
+# cli args && options parsing
+clap = "2.32"
