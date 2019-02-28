@@ -1,18 +1,28 @@
-.PHONY: build clean re dev test static docker docker_release release docker_push docker_dev
+.PHONY: build clean re dev test build_static release
+.PHONY: docker_build docker_release docker_push docker_dev
 
-NAME = $(shell cat version/version.go| grep "\sName" | cut -d '"' -f2)
 DIST_DIR = dist
-VERSION := $(shell cat version/version.go| grep "\sVersion" | cut -d '"' -f2)
+NAME := $(shell cat Cargo.toml | grep "name\s=" | cut -d '"' -f2)
+VERSION := $(shell cat Cargo.toml | grep "version\s=" | cut -d '"' -f2)
 DOCKER_IMAGE = quay.io/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 
+all: build
 
 build:
-	go build -o $(DIST_DIR)/$(NAME)
+	mkdir -p $(DIST_DIR)
+	cargo build --release
+	cp target/release/$(NAME) $(DIST_DIR)/$(NAME)
+	cp -r assets $(DIST_DIR)/
+
+build_static:
+	mkdir -p $(DIST_DIR)
+	cargo build --release --target=x86_64-unknown-linux-musl
+	cp target/release/x86_64-unknown-linux-musl/$(NAME) $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 dev:
-	go run main.go worker
+	cargo watch -x 'run -- worker'
 
 clean:
 	rm -rf $(DIST_DIR)
@@ -20,19 +30,25 @@ clean:
 re: clean build
 
 test:
-	go vet  -all -shadowstrict ./...
-	go test -v -race -covermode=atomic ./...
+	cargo test
 
-static:
-	CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags="-w -s" -o $(DIST_DIR)/$(NAME)
+lint:
+	cargo +nightly fmt
+	cargo clippy
 
-docker:
-	docker build -t $(DOCKER_IMAGE):latest .
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
+audit:
+	cargo audit
 
 release:
 	git tag v$(VERSION)
 	git push origin v$(VERSION)
+
+publish:
+	cargo publish
+
+docker_build:
+	docker build -t $(DOCKER_IMAGE):latest .
+	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
 
 docker_push:
 	docker push $(DOCKER_IMAGE):latest

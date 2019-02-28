@@ -1,11 +1,12 @@
-FROM rust:1.32-stretch AS builder
+FROM golang:1.11-alpine AS builder
 
-RUN apt update && apt install -y make
-RUN rustup target install x86_64-unknown-linux-musl
+ARG CI_JOB_TOKEN
+
+RUN apk update && apk add git ca-certificates make
 
 WORKDIR /phaser
-COPY ./ ./
-RUN make build_static
+COPY . ./
+RUN make static
 
 ####################################################################################################
 ## Image
