@@ -18,7 +18,7 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true # Important, otherwise the build output would be purged.
-    script: make crates_login && crates_publish
+    script: make crates_login && make crates_publish
     on:
       tags: true
   - provider: releases
