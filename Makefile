@@ -25,7 +25,7 @@ dev:
 	cargo watch -x 'run -- worker'
 
 clean:
-	rm -rf $(DIST_DIR)
+	rm -rf $(DIST_DIR) target/
 
 re: clean build
 

@@ -6,10 +6,10 @@
 
 --------
 
-[![GoDoc](https://godoc.org/github.com/bloom42/phaser?status.svg)](https://godoc.org/github.com/bloom42/phaser)
+[![Build Status](https://travis-ci.org/bloom42/phaser.svg?branch=master)](https://travis-ci.org/bloom42/phaser)
 [![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
-[![CircleCI](https://circleci.com/gh/bloom42/phaser.svg?style=svg)](https://circleci.com/gh/bloom42/phaser)
-
+[![phaser crate](https://img.shields.io/crates/v/phaser.svg)](https://crates.io/crates/phaser)
+[![phaser documentation](https://docs.rs/phaser/badge.svg)](https://docs.rs/phaser)
 
 `phaser` is an automated security scanner for both networks and web applications.
 It can be used both from CLI and as a worker waiting for messages from a message queue.
