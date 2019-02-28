@@ -15,11 +15,6 @@ script:
   - make build
   - make docker_build
 
-
-before_deploy:
-  - export VERSION=$(cat Cargo.toml | grep "version\s=" | cut -d '"' -f2) # for docker provider
-  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY
-
 deploy:
   - provider: script
     skip_cleanup: true # Important, otherwise the build output would be purged.
@@ -31,7 +26,7 @@ deploy:
     on:
       tags: true
   - provider: script
-    script: make docker_release
+    script: make docker_login && make docker_release
     on:
       tags: true
 

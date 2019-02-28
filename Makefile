@@ -1,5 +1,5 @@
 .PHONY: build clean re dev test build_static release
-.PHONY: docker_build docker_release docker_push docker_dev
+.PHONY: docker_login docker_build docker_release docker_push docker_dev
 
 DIST_DIR = dist
 NAME := $(shell cat Cargo.toml | grep "name\s=" | cut -d '"' -f2)
@@ -18,7 +18,7 @@ build:
 build_static:
 	mkdir -p $(DIST_DIR)
 	cargo build --release --target=x86_64-unknown-linux-musl
-	cp target/release/x86_64-unknown-linux-musl/$(NAME) $(DIST_DIR)/$(NAME)
+	cp target/x86_64-unknown-linux-musl/release/$(NAME) $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 dev:
@@ -49,6 +49,9 @@ publish:
 docker_build:
 	docker build -t $(DOCKER_IMAGE):latest .
 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
+
+docker_login:
+	echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY}
 
 docker_push:
 	docker push $(DOCKER_IMAGE):latest
