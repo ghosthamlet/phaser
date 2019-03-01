@@ -1,5 +1,5 @@
 use clap::{ArgMatches};
-use crate::scanner::scan::Scan;
+use crate::scanner::Scan;
 
 // TODO
 pub fn run(_matches: &ArgMatches) -> Result<(), String> {

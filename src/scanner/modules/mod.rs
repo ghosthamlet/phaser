@@ -1,9 +1,17 @@
-pub mod ports;
+mod ports;
 
+use crate::scanner::{PortModule, HostModule};
 
-// TODO: declare all ports and hosts modules
-// use lazy_static;
+pub use ports::Ports;
 
-// lazy_static::lazy_static! {
-//   pub static ref ALL:
-// }
+pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
+    return vec!(
+
+    );
+}
+
+pub fn get_host_modules() -> Vec<Box<dyn HostModule>> {
+    return vec!(
+
+    );
+}

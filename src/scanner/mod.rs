@@ -1,4 +1,7 @@
-pub mod module;
+mod module;
 pub mod modules;
-pub mod scan;
+mod scan;
 pub mod findings;
+
+pub use module::{BaseModule, HostModule, PortModule};
+pub use scan::Scan;

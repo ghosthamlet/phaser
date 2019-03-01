@@ -1,10 +1,11 @@
 mod nmap;
 
+use crate::scanner::{
+    module,
+    findings,
+    Scan,
+};
 
-use crate::scanner::module;
-use crate::scanner::findings;
-use crate::scanner::scan::Scan;
-use crate::scanner::module::FindingData;
 use std::process::{Command};
 use serde_xml_rs::from_reader;
 use nmap::{Run, Port, PortStatus};
@@ -13,25 +14,25 @@ use nmap::{Run, Port, PortStatus};
 pub struct Ports{}
 
 impl module::BaseModule for Ports {
-    fn name() -> String {
+    fn name(&self) -> String {
         return String::from("ports");
     }
 
-    fn description() -> String {
+    fn description(&self) -> String {
         return String::from("scan ports");
     }
 
-    fn author() -> String {
+    fn author(&self) -> String {
         return String::from("Sylvain Kerkour <sylvain@kerkour.com>")
     }
 
-    fn version() -> String {
+    fn version(&self) -> String {
         return String::from("0.1.0");
     }
 }
 
 impl module::HostModule for Ports {
-    fn run(&self, scan: &Scan) -> (Option<module::FindingData>, Vec<String>) {
+    fn run(&self, scan: &Scan) -> (Option<findings::Data>, Vec<String>) {
         let mut errs = vec!();
         let mut output = String::new();
         let mut ret = None;
@@ -67,7 +68,7 @@ impl module::HostModule for Ports {
                                 https: false,
                             });
                         }
-                        ret = Some(FindingData::Ports(ports));
+                        ret = Some(findings::Data::Ports(ports));
                     } else {
                         errs.push(format!("wrong number of nmap hosts: expected 1, got: {}", run.hosts.len()))
                     }
