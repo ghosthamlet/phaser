@@ -1,4 +1,4 @@
-FROM rust:1.32-stretch AS builder
+FROM rust:1.33-stretch AS builder
 
 RUN apt update && apt install -y make
 RUN rustup target install x86_64-unknown-linux-musl
