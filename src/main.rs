@@ -2,6 +2,7 @@ mod log;
 mod cli;
 mod worker;
 mod info;
+mod phaser;
 
 use clap::{App, Arg, ArgMatches, SubCommand, AppSettings};
 // use slog_scope;
@@ -21,6 +22,9 @@ fn main() {
         .version(info::VERSION)
         .about(info::DESCRPITION)
         .setting(AppSettings::ArgRequiredElseHelp) // display help when no subcommand provided
+        .subcommand(SubCommand::with_name("scan")
+            .about("Run the scanner from CLI. Configuration is done with flags")
+        )
         .subcommand(SubCommand::with_name("worker")
             .about("Run the scanner as a worker. Wait for messages from remote sources. Configuration is done with environment variable")
         )
