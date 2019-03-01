@@ -1,4 +1,7 @@
 use serde::{Deserialize, Serialize};
+use crate::scanner::findings::Port;
+use crate::scanner::scan::Scan;
+
 
 // type BaseModule interface {
 // 	Name() string
@@ -9,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum FindingData {
-    Lol,
+    Ports(Vec<Port>),
 }
 
 // BaseModule must be implemented by all modules, whether it be HostModules or PortModule
@@ -23,11 +26,11 @@ pub trait BaseModule {
 // HostModule must be implemented by all modules to be used by the phaser scan engine.
 // They will be run at most once per host.
 pub trait HostModule: BaseModule {
-    fn run(&self) -> (FindingData, Vec<String>);
+    fn run(&self, scan: &Scan) -> (Option<FindingData>, Vec<String>);
 }
 
 // PortModule must be implemented by all modules to be used by the phaser scanner engine.
 // They will be run at most once per port per host.
 pub trait PortModule: BaseModule {
-    fn run(&self) -> (FindingData, Vec<String>);
+    fn run(&self, scan: &Scan) -> (Option<FindingData>, Vec<String>);
 }

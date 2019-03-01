@@ -2,7 +2,7 @@ mod log;
 mod cli;
 mod worker;
 mod info;
-mod phaser;
+mod scanner;
 
 use clap::{App, Arg, ArgMatches, SubCommand, AppSettings};
 // use slog_scope;
