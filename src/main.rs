@@ -1,8 +1,9 @@
 mod log;
 mod cli;
 mod worker;
+mod info;
 
-use clap::{App, ArgMatches, SubCommand, AppSettings};
+use clap::{App, Arg, ArgMatches, SubCommand, AppSettings};
 // use slog_scope;
 use std::process;
 use serde::{Deserialize, Serialize};
@@ -15,13 +16,22 @@ struct User {
 }
 
 fn main() {
-    let matches = App::new(clap::crate_name!())
-        .author(clap::crate_authors!())
-        .version(clap::crate_version!())
-        .about(clap::crate_description!())
+    let matches = App::new(info::NAME)
+        .author(info::AUTHOR)
+        .version(info::VERSION)
+        .about(info::DESCRPITION)
         .setting(AppSettings::ArgRequiredElseHelp) // display help when no subcommand provided
         .subcommand(SubCommand::with_name("worker")
             .about("Run the scanner as a worker. Wait for messages from remote sources. Configuration is done with environment variable")
+        )
+        .subcommand(SubCommand::with_name("version")
+            .about("Display the version and build information")
+            .arg(Arg::with_name("format")
+                .short("f")
+                .default_value("text")
+                .value_name("FORMAT")
+                .help("The ouput format. Valid values are [text, json]")
+            )
         )
         .get_matches();
 
@@ -36,6 +46,8 @@ fn main() {
 fn run(matches: &ArgMatches) -> Result<(), String> {
     match matches.subcommand() {
         ("worker", Some(m)) => cli::worker::run(m),
+        ("version", Some(m)) => cli::version::run(m),
+        ("scan", Some(m)) => cli::scan::run(m),
          _ => Ok(()),
     }
 }

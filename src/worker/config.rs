@@ -1,6 +1,4 @@
-use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
-use sentry;
 use std::env;
 
 
@@ -26,10 +24,6 @@ fn get_env(var: &str) -> String {
 
 impl Config {
     pub fn new() -> Config {
-        env::set_var("RUST_BACKTRACE", "1");
-        dotenv().expect("failed to read .env file");
-        let _guard = sentry::init(get_env("SENTRY_URL"));
-        sentry::integrations::panic::register_panic_handler();
         return Config{
             environment: get_env("ENVIRONMENT"),
             aws_access_key_id: get_env("AWS_ACCESS_KEY_ID"),
