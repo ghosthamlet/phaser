@@ -57,7 +57,7 @@ pub struct Port {
     pub protocol: String,
     #[serde(rename = "portid", default)]
     pub id: u16,
-    pub service: PortService,
+    pub service: Option<PortService>,
 
     pub state: PortState,
 }
