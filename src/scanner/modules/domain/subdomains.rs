@@ -32,8 +32,6 @@ impl module::HostModule for Subdomains {
         let mut errs = vec!();
         let mut ret = None;
         let mut domains = vec!();
-        let mut index = 0;
-        let mut index_reverse = 0;
 
         match target.kind {
             TargetKind::Ip => { return (ret, errs); },
@@ -44,12 +42,14 @@ impl module::HostModule for Subdomains {
 
         let subdomains_pattern = format!("%.{}", &target.host);
 
-        if let Some(i) = subdomains_pattern.find('%') {
-            index = i;
-        }
-        if let Some(i) = subdomains_pattern.chars().rev().collect::<String>().find('%') {
-            index_reverse = i;
-        }
+        let index = match subdomains_pattern.find('%') {
+            Some(i) => i,
+            None => 0,
+        };
+        let index_reverse = match subdomains_pattern.chars().rev().collect::<String>().find('%') {
+            Some(i) => i,
+            None => 0,
+        };
 
         let query = if index < index_reverse {
             "SELECT DISTINCT ci.NAME_VALUE as domain
