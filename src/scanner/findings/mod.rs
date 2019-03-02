@@ -1,17 +1,19 @@
 mod ports;
+mod file;
 
 use serde::{Serialize, Deserialize};
 use crate::scanner::BaseModule;
 
 pub use ports::{Port, PortState};
+pub use file::File;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Finding {
     pub module: Module,
     pub data: Data,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Module {
     pub name: String,
     pub version: String,
@@ -27,7 +29,8 @@ impl From<&BaseModule> for Module {
 }
 
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum Data {
     Ports(Vec<Port>),
+    File(File),
 }

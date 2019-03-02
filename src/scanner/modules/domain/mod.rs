@@ -1,1 +1,1 @@
-mod whois;
+pub mod whois;

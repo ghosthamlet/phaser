@@ -7,7 +7,7 @@
 // }
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Port {
     pub id: u16,
     pub state: PortState,
@@ -17,7 +17,7 @@ pub struct Port {
     pub https: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum PortState {
     Open,
     Closed,

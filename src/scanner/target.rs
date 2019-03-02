@@ -4,7 +4,7 @@ use std::net::{IpAddr};
 use url::Host;
 use std::str::FromStr;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Target {
     pub host: String,
     pub kind: TargetKind,
@@ -14,20 +14,20 @@ pub struct Target {
     pub subdomains: Vec<Target>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum TargetKind{
     Domain,
     Ip,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum IpVersion{
     V4,
     V6,
     None,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct TargetError {
     pub module: Module,
     pub error: String,

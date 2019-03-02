@@ -12,7 +12,7 @@ use serde::{Serialize, Deserialize};
 
 
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Scan {
     pub targets: Vec<Target>,
 }
@@ -25,28 +25,28 @@ impl Scan {
     }
 
     pub fn run(&mut self) {
-        let ports_module = modules::Ports{};
-        let (module_findings, errs) = ports_module.run(self, &self.targets[0]);
-        match module_findings {
-            Some(finding_data) => self.targets[0].findings.push(data_to_finding(&ports_module, finding_data)),
-            _ => {},
-        }
-        self.targets[0].errors.append(&mut errs_to_modules_errs(&ports_module, &errs));
+        let targets = self.targets.clone();
+        for (i, target) in targets.iter().enumerate() {
+            let ports_module = modules::Ports{};
+            let (module_findings, errs) = ports_module.run(self, &target);
+            match module_findings {
+                Some(finding_data) => self.targets[i].findings.push(ports_module.findings(finding_data)),
+                _ => {},
+            }
+            self.targets[i].errors.append(&mut ports_module.errs(&errs));
+
+            let host_modules = modules::get_host_modules();
+            host_modules.iter().for_each(|module| {
+                let (module_findings, errs) = module.run(self, &target);
+                match module_findings {
+                    Some(finding_data) => self.targets[i].findings.push(module.findings(finding_data)),
+                    _ => {},
+                }
+                self.targets[i].errors.append(&mut module.errs(&errs));
+            });
+        };
+
 
         println!("{:?}", self);
     }
-}
-
-fn data_to_finding(module: &BaseModule, data: findings::Data) -> findings::Finding {
-    return findings::Finding{
-        module: findings::Module::from(module),
-        data,
-    };
-}
-
-fn errs_to_modules_errs(module: &BaseModule, errs: &[String]) -> Vec<TargetError> {
-    return errs.iter().map(|err| TargetError{
-        module: findings::Module::from(module),
-        error: err.clone(),
-    }).collect();
 }
