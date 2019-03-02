@@ -34,4 +34,5 @@ pub enum Data {
     Ports(Vec<Port>),
     File(File),
     Domain(String),
+    Domains(Vec<String>),
 }

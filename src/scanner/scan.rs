@@ -2,7 +2,6 @@ use crate::scanner::{
     HostModule,
     modules,
     Target,
-    IpVersion,
     BaseModule,
     Config,
 };
@@ -44,6 +43,8 @@ impl Scan {
                 }
                 self.targets[i].errors.append(&mut module.errs(&errs));
             });
+
+            let _ = modules::get_port_modules();
         };
 
 

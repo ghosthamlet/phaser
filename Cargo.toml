@@ -29,7 +29,8 @@ failure = "0.1"
 serde-xml-rs = "0.3"
 reqwest = "0.9"
 url = "1.7"
-trust-dns = "0.15"
+# trust-dns = "0.15" -> use dig instead
+postgres = "0.15"
 
 # to use datetime types
 chrono = "0.4"
