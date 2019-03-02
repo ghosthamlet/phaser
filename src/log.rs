@@ -2,7 +2,7 @@ use log; // see https://github.com/rust-lang/rust/issues/56398
 use slog;
 use slog_json;
 use slog_scope;
-use lazy_static;
+// use lazy_static;
 
 use std::sync::Mutex;
 
