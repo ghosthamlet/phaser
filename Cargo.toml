@@ -28,6 +28,7 @@ dotenv = "0.13"
 failure = "0.1"
 serde-xml-rs = "0.3"
 reqwest = "0.9"
+url = "1.7"
 
 # to use datetime types
 chrono = "0.4"

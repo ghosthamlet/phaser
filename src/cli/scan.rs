@@ -1,17 +1,26 @@
 use clap::{ArgMatches};
-use crate::scanner::Scan;
+use crate::scanner::{Scan, Target};
+use std::process;
+use std::str::FromStr;
 
 // TODO
 pub fn run(matches: &ArgMatches) -> Result<(), String> {
     if let Some(targets) = matches.values_of("targets") {
-        targets.for_each(|target| println!("{}", target));
+        let targets = targets.map(|target| {
+            Target::from_str(target)
+        })
+        .collect();
+
+        match targets {
+            Ok(targets) => {
+                let mut scan = Scan::new(targets);
+                scan.run();
+            },
+            Err(err) => {
+                println!("{:?}", err);
+                process::exit(1);
+            }
+        }
     }
-    // if let Some(matches) = matches.subcommand_matches("targets") {
-    //     let files: Vec<_> = matches.values_of("targets").unwrap().collect();
-    //     println!("{}", files[0]);
-    //     println!("{}", files[1]);
-    // }
-    // let mut scan = Scan::new();
-    // scan.run();
     Ok(())
 }

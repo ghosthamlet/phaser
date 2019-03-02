@@ -18,16 +18,9 @@ pub struct Scan {
 }
 
 impl Scan {
-    pub fn new() -> Scan {
+    pub fn new(targets: Vec<Target>) -> Scan {
         return Scan{
-            targets: vec!(Target{
-                host: String::from("127.0.0.1"),
-                kind: TargetKind::Ip,
-                ip_version: IpVersion::V4,
-                findings:  vec!(),
-                errors: vec!(),
-                subdomains: vec!(),
-            }),
+            targets,
         };
     }
 
