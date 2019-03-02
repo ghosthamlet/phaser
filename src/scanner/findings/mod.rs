@@ -33,4 +33,5 @@ impl From<&BaseModule> for Module {
 pub enum Data {
     Ports(Vec<Port>),
     File(File),
+    Domain(String),
 }

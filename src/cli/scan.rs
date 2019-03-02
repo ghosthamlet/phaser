@@ -1,5 +1,5 @@
 use clap::{ArgMatches};
-use crate::scanner::{Scan, Target};
+use crate::scanner::{Scan, Target, Config};
 use std::process;
 use std::str::FromStr;
 
@@ -13,7 +13,11 @@ pub fn run(matches: &ArgMatches) -> Result<(), String> {
 
         match targets {
             Ok(targets) => {
-                let mut scan = Scan::new(targets);
+                let config = Config{
+                    data_folder: "scans".to_owned(),
+                    ..Default::default()
+                };
+                let mut scan = Scan::new(config, targets);
                 scan.run();
             },
             Err(err) => {

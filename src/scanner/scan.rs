@@ -1,12 +1,10 @@
 use crate::scanner::{
     HostModule,
     modules,
-    findings,
     Target,
     IpVersion,
-    TargetKind,
-    TargetError,
     BaseModule,
+    Config,
 };
 use serde::{Serialize, Deserialize};
 
@@ -14,13 +12,15 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Scan {
+    pub config: Config,
     pub targets: Vec<Target>,
 }
 
 impl Scan {
-    pub fn new(targets: Vec<Target>) -> Scan {
+    pub fn new(config: Config, targets: Vec<Target>) -> Scan {
         return Scan{
             targets,
+            config,
         };
     }
 

@@ -1,6 +1,6 @@
 FROM rust:1.33-stretch AS builder
 
-RUN apt update && apt install -y make libssl-dev pkg-config
+RUN apt update && apt install -y make openssl libssl-dev pkg-config
 
 WORKDIR /phaser
 COPY ./ ./
@@ -27,7 +27,7 @@ COPY assets /phaser/assets
 RUN echo "deb http://deb.debian.org/debian unstable main" >> /etc/apt/sources.list
 RUN apt update -y && apt dist-upgrade -y && apt upgrade -y
 # we install again libs because executable is not static
-RUN apt install -y pkg-config libssl-dev ca-certificates
+RUN apt install -y pkg-config openssl libssl-dev ca-certificates
 
 # pahser's dependencies
 RUN apt install -y  python3 python3-pip \

@@ -29,7 +29,7 @@ impl module::BaseModule for Whois {
 }
 
 impl module::HostModule for Whois {
-    fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, scan: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
         let mut errs = vec!();
         let mut output = String::new();
         let mut ret = None;
@@ -48,12 +48,15 @@ impl module::HostModule for Whois {
         };
 
         if !output.is_empty() {
-            let path = String::from("scans/whois.txt");
+            let relative_path = "whois.txt";
+            let path = format!("{}/{}", scan.config.data_folder, relative_path);
+
             match fs::write(&path, output) {
-                Ok(_) => { ret = Some(findings::Data::File(findings::File{path})); },
+                Ok(_) => {
+                    ret = Some(findings::Data::File(findings::File{path: relative_path.to_owned()}));
+                },
                 Err(err) => errs.push(format!("creating whois.txt: {}", err)),
             };
-
         }
 
         return (ret, errs);
