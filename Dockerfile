@@ -1,6 +1,6 @@
 FROM rust:1.33-stretch AS builder
 
-RUN apt update && apt install -y make
+RUN apt update && apt install -y make libssl-dev pkg-config
 RUN rustup target install x86_64-unknown-linux-musl
 
 WORKDIR /phaser
@@ -29,7 +29,8 @@ RUN echo "deb http://deb.debian.org/debian unstable main" >> /etc/apt/sources.li
 RUN apt update -y && apt dist-upgrade -y && apt upgrade -y
 RUN apt install -y  python3 python3-pip \
     dnsutils whois \
-    ca-certificates libssl-dev nmap
+    ca-certificates nmap \
+    pkg-config libssl-dev
 RUN apt -t unstable install -y sqlmap
 
 
