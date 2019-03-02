@@ -22,8 +22,15 @@ fn main() {
         .version(info::VERSION)
         .about(info::DESCRPITION)
         .setting(AppSettings::ArgRequiredElseHelp) // display help when no subcommand provided
-        .subcommand(SubCommand::with_name("scan")
+        .subcommand(
+            SubCommand::with_name("scan")
             .about("Run the scanner from CLI. Configuration is done with flags")
+            .arg(
+                Arg::with_name("targets")
+                    .required(true)
+                    .multiple(true)
+                    .min_values(1)
+            )
         )
         .subcommand(SubCommand::with_name("worker")
             .about("Run the scanner as a worker. Wait for messages from remote sources. Configuration is done with environment variable")
