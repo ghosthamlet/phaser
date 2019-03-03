@@ -10,6 +10,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
     return vec!(
         Box::new(http::DirectoryListing{}),
         Box::new(http::DsStore{}),
+        Box::new(http::Dotenv{}),
     );
 }
 

@@ -12,19 +12,19 @@ pub struct DirectoryListing{}
 
 impl module::BaseModule for DirectoryListing {
     fn name(&self) -> String {
-        return String::from("http/directory-listing");
+        return "http/directory-listing".to_string();
     }
 
     fn description(&self) -> String {
-        return String::from("Check for enabled direstory listing, which often leak informationr");
+        return "Check for enabled directory listing, which often leak informationr".to_string();
     }
 
     fn author(&self) -> String {
-        return String::from("Sylvain Kerkour <sylvain@kerkour.com>")
+        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
     }
 
     fn version(&self) -> String {
-        return String::from("0.1.0");
+        return "0.1.0".to_string();
     }
 }
 

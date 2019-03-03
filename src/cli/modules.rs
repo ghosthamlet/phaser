@@ -5,7 +5,6 @@ use crate::scanner::{
 };
 
 
-// TODO
 pub fn run(_: &ArgMatches) -> Result<(), String> {
 
     println!("{}", modules::Ports{}.name());
