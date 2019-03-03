@@ -10,3 +10,4 @@ pub mod cadvisor;
 pub mod consul;
 pub mod drupal;
 pub mod elasticsearch;
+pub mod etcd;

@@ -20,6 +20,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::consul::UnauthenticatedAccess{}),
         Box::new(http::drupal::Cve_2018_7600{}),
         Box::new(http::elasticsearch::UnauthenticatedAccess{}),
+        Box::new(http::etcd::UnauthenticatedAccess{}),
     );
 }
 
