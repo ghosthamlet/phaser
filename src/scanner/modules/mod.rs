@@ -3,11 +3,12 @@ mod ports;
 use crate::scanner::{PortModule, HostModule};
 
 pub mod domain;
+pub mod http;
 pub use ports::Ports;
 
 pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
     return vec!(
-
+        Box::new(http::DirectoryListing{}),
     );
 }
 
@@ -19,6 +20,6 @@ pub fn get_host_modules() -> Vec<Box<dyn HostModule>> {
         Box::new(domain::Axfr{}),
         Box::new(domain::Dmarc{}),
         Box::new(domain::Spf{}),
-         Box::new(domain::Takeover{}),
+        Box::new(domain::Takeover{}),
     );
 }

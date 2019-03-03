@@ -31,6 +31,7 @@ reqwest = "0.9"
 url = "1.7"
 # trust-dns = "0.15" -> use dig instead
 postgres = "0.15"
+regex = "1"
 
 # to use datetime types
 chrono = "0.4"

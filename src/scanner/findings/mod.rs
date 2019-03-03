@@ -1,5 +1,6 @@
 mod ports;
 mod file;
+mod url;
 
 
 use serde::{Serialize, Deserialize};
@@ -7,6 +8,7 @@ use crate::scanner::BaseModule;
 
 pub use ports::{Port, PortState};
 pub use file::File;
+pub use self::url::Url;
 pub mod domain;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -41,4 +43,5 @@ pub enum Data {
     Dmarc(domain::Dmarc),
     Spf(domain::Spf),
     Takeover(domain::Takeover),
+    Url(Url),
 }

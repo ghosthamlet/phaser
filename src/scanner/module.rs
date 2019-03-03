@@ -42,5 +42,5 @@ pub trait HostModule: BaseModule {
 // PortModule must be implemented by all modules to be used by the phaser scanner engine.
 // They will be run at most once per port per host.
 pub trait PortModule: BaseModule {
-    fn run(&self, scan: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>);
+    fn run(&self, scan: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>);
 }
