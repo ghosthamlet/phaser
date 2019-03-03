@@ -1,11 +1,13 @@
 mod ports;
 mod file;
+mod axfr;
 
 use serde::{Serialize, Deserialize};
 use crate::scanner::BaseModule;
 
 pub use ports::{Port, PortState};
 pub use file::File;
+pub use axfr::Axfr;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Finding {
@@ -35,4 +37,5 @@ pub enum Data {
     File(File),
     Domain(String),
     Domains(Vec<String>),
+    Axfr(Vec<Axfr>),
 }

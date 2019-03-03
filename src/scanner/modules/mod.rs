@@ -8,6 +8,7 @@ pub use domain::{
     whois::Whois,
     cname::CNAME,
     subdomains::Subdomains,
+    axfr::Axfr,
 };
 
 pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
@@ -21,5 +22,6 @@ pub fn get_host_modules() -> Vec<Box<dyn HostModule>> {
         Box::new(Whois{}),
         Box::new(CNAME{}),
         Box::new(Subdomains{}),
+        Box::new(Axfr{}),
     );
 }
