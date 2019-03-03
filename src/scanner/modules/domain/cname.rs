@@ -13,9 +13,9 @@ use crate::scanner::{
 };
 use std::process::{Command};
 
-pub struct CNAME{}
+pub struct Cname{}
 
-impl module::BaseModule for CNAME {
+impl module::BaseModule for Cname {
     fn name(&self) -> String {
         return String::from("domain/cname");
     }
@@ -34,7 +34,7 @@ impl module::BaseModule for CNAME {
 }
 
 // TODO: remove unwraps
-impl module::HostModule for CNAME {
+impl module::HostModule for Cname {
     fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
         let mut errs = vec!();
         let mut output = String::new();
