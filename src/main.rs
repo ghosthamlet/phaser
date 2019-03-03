@@ -36,6 +36,10 @@ fn main() {
             SubCommand::with_name("worker")
             .about("Run the scanner as a worker. Wait for messages from remote sources. Configuration is done with environment variable")
         )
+        .subcommand( // modules
+            SubCommand::with_name("modules")
+            .about("List all available modules")
+        )
         .subcommand( // version
             SubCommand::with_name("version")
             .about("Display the version and build information")
@@ -61,6 +65,7 @@ fn run(matches: &ArgMatches) -> Result<(), String> {
         ("worker", Some(m)) => cli::worker::run(m),
         ("version", Some(m)) => cli::version::run(m),
         ("scan", Some(m)) => cli::scan::run(m),
+        ("modules", Some(m)) => cli::modules::run(m),
          _ => Ok(()),
     }
 }
