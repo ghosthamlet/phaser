@@ -8,3 +8,4 @@ pub use ds_store::DsStore;
 pub use self::dotenv::Dotenv;
 pub mod cadvisor;
 pub mod consul;
+pub mod drupal;

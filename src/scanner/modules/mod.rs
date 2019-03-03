@@ -18,6 +18,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::atlassian::Cve2017_95_06{}),
         Box::new(http::cadvisor::UnauthenticatedAccess{}),
         Box::new(http::consul::UnauthenticatedAccess{}),
+        Box::new(http::drupal::Cve_2018_7600{}),
     );
 }
 
