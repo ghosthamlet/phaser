@@ -34,6 +34,7 @@ impl module::BaseModule for UnauthenticatedAccess {
 // 	Tagline     string `json:"tagline"`
 // }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
 struct ElasticsearchInfo {
     pub name: String,
     pub cluster_name: String,
