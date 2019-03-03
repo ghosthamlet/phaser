@@ -9,6 +9,8 @@ pub use domain::{
     cname::CNAME,
     subdomains::Subdomains,
     axfr::Axfr,
+    dmarc::Dmarc,
+    spf::Spf,
 };
 
 pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
@@ -23,5 +25,7 @@ pub fn get_host_modules() -> Vec<Box<dyn HostModule>> {
         Box::new(CNAME{}),
         Box::new(Subdomains{}),
         Box::new(Axfr{}),
+        Box::new(Dmarc{}),
+        Box::new(Spf{}),
     );
 }

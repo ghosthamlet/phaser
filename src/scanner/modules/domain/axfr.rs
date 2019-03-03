@@ -54,7 +54,7 @@ impl module::HostModule for Axfr {
             return (ret, errs);
         }
 
-        let ns_servers: Vec<&str> = ns_output.split(",").collect();
+        let ns_servers: Vec<&str> = ns_output.split(',').collect();
 
         // for each server, try AXFR DNS query
         for ns_server in ns_servers {
