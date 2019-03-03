@@ -7,3 +7,4 @@ pub use directory::DirectoryListing;
 pub use ds_store::DsStore;
 pub use self::dotenv::Dotenv;
 pub mod cadvisor;
+pub mod consul;
