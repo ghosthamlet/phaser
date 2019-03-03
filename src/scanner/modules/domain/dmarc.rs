@@ -54,7 +54,7 @@ impl module::HostModule for Dmarc {
 
         let records: Vec<String> = txt_output.split('\n')
             .map(|record| record.trim().to_string())
-            .filter(|record| record.is_empty())
+            .filter(|record| !record.is_empty())
             .collect();
 
         let resolves = if records.len() != 0 { true } else { false };

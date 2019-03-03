@@ -14,7 +14,8 @@ pub fn run(matches: &ArgMatches) -> Result<(), String> {
         match targets {
             Ok(targets) => {
                 let config = Config{
-                    data_folder: "scans".to_owned(),
+                    data_folder: "scans".to_string(),
+                    assets_folder: "assets".to_string(),
                     ..Default::default()
                 };
                 let mut scan = Scan::new(config, targets);

@@ -11,6 +11,7 @@ pub use domain::{
     axfr::Axfr,
     dmarc::Dmarc,
     spf::Spf,
+    takeover::Takeover,
 };
 
 pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
@@ -27,5 +28,6 @@ pub fn get_host_modules() -> Vec<Box<dyn HostModule>> {
         Box::new(Axfr{}),
         Box::new(Dmarc{}),
         Box::new(Spf{}),
+         Box::new(Takeover{}),
     );
 }

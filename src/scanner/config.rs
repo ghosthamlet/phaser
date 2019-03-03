@@ -5,4 +5,5 @@ pub struct Config {
     pub id: Option<String>,
     pub report_id: Option<String>,
     pub data_folder: String,
+    pub assets_folder: String,
 }

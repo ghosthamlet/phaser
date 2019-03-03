@@ -55,8 +55,9 @@ impl module::HostModule for CNAME {
             Err(err)  => errs.push(format!("executing dig: {}", err)),
         };
 
+        output = output.trim().to_string();
         if !output.is_empty() {
-            ret = Some(findings::Data::Domain(output.trim().to_owned()));
+            ret = Some(findings::Data::Domain(output));
         }
 
         return (ret, errs);

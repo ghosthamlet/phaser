@@ -4,3 +4,4 @@ pub mod subdomains;
 pub mod axfr;
 pub mod dmarc;
 pub mod spf;
+pub mod takeover;
