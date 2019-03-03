@@ -67,7 +67,7 @@ impl module::HostModule for Spf {
         }
 
         if is_spf_record_missing {
-            ret = Some(findings::Data::Dmarc(findings::Dmarc{
+            ret = Some(findings::Data::Spf(findings::domain::Spf{
                 domain: target.host.clone(),
                 records,
                 resolves,

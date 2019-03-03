@@ -1,17 +1,13 @@
 mod ports;
 mod file;
-mod axfr;
-mod dmarc;
-mod takeover;
+
 
 use serde::{Serialize, Deserialize};
 use crate::scanner::BaseModule;
 
 pub use ports::{Port, PortState};
 pub use file::File;
-pub use axfr::Axfr;
-pub use dmarc::Dmarc;
-pub use takeover::Takeover;
+pub mod domain;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Finding {
@@ -41,7 +37,8 @@ pub enum Data {
     File(File),
     Domain(String),
     Domains(Vec<String>),
-    Axfr(Vec<Axfr>),
-    Dmarc(Dmarc),
-    Takeover(Takeover),
+    Axfr(Vec<domain::Axfr>),
+    Dmarc(domain::Dmarc),
+    Spf(domain::Spf),
+    Takeover(domain::Takeover),
 }

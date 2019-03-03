@@ -69,7 +69,7 @@ impl module::HostModule for Takeover {
         'outer: for provider in &providers {
             for fingerprint in &provider.fingerprints {
                 if body.contains(fingerprint) {
-                    ret = Some(findings::Data::Takeover(findings::Takeover{
+                    ret = Some(findings::Data::Takeover(findings::domain::Takeover{
                         service: provider.service.to_string(),
                     }));
                     break 'outer;

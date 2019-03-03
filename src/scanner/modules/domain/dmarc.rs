@@ -68,7 +68,7 @@ impl module::HostModule for Dmarc {
         }
 
         if is_dmarc_record_missing {
-            ret = Some(findings::Data::Dmarc(findings::Dmarc{
+            ret = Some(findings::Data::Dmarc(findings::domain::Dmarc{
                 domain: dmarc_domain,
                 records,
                 resolves,

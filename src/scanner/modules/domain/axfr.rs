@@ -69,7 +69,7 @@ impl module::HostModule for Axfr {
                 Err(err)  => errs.push(format!("executing dig: {}", err)),
             };
             if output.contains("XFR") && !output.contains("transfer failed") {
-                data.push(findings::Axfr{
+                data.push(findings::domain::Axfr{
                     server: ns_server.to_string(),
                     response: output,
                 });
