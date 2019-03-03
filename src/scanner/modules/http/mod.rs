@@ -9,3 +9,4 @@ pub use self::dotenv::Dotenv;
 pub mod cadvisor;
 pub mod consul;
 pub mod drupal;
+pub mod elasticsearch;
