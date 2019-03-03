@@ -4,6 +4,8 @@ use crate::scanner::{PortModule, HostModule};
 
 pub mod domain;
 pub mod http;
+pub mod postgresql;
+pub mod mysql;
 pub use ports::Ports;
 
 pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
@@ -11,6 +13,8 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::DirectoryListing{}),
         Box::new(http::DsStore{}),
         Box::new(http::Dotenv{}),
+        Box::new(postgresql::UnauthenticatedAccess{}),
+        Box::new(mysql::UnauthenticatedAccess{}),
     );
 }
 
