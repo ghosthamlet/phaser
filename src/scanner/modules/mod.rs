@@ -15,6 +15,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::Dotenv{}),
         Box::new(postgresql::UnauthenticatedAccess{}),
         Box::new(mysql::UnauthenticatedAccess{}),
+        Box::new(http::atlassian::Cve2017_95_06{}),
     );
 }
 
