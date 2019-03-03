@@ -7,6 +7,7 @@ use crate::scanner::{
 };
 use std::process::{Command};
 use std::fs;
+use std::path::{Path};
 
 pub struct Whois{}
 
@@ -49,7 +50,7 @@ impl module::HostModule for Whois {
 
         if !output.is_empty() {
             let relative_path = "whois.txt";
-            let path = format!("{}/{}", scan.config.data_folder, relative_path);
+            let path = Path::new(&scan.config.data_folder).join(relative_path);
 
             match fs::write(&path, output) {
                 Ok(_) => {
