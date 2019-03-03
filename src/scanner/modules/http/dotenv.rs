@@ -51,7 +51,6 @@ impl module::PortModule for Dotenv {
             .text()
             .expect("error getting body to txt");
 
-        let mut count = 0;
         let clues = vec!(
             "APP_ENV=",
             "DB_CONNECTION=",
