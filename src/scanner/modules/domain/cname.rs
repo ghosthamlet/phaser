@@ -40,10 +40,9 @@ impl module::HostModule for Cname {
         let mut output = String::new();
         let mut ret = None;
 
-        match target.kind {
-            TargetKind::Ip => { return (ret, errs); },
-            _ => {}, // if domain, continue
-        }
+        if let TargetKind::Ip = target.kind {
+            return (ret, errs);
+        };
 
         match Command::new("dig")
             .arg("+short")

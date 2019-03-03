@@ -35,10 +35,9 @@ impl module::HostModule for Dmarc {
         let mut txt_output = String::new();
         let mut is_dmarc_record_missing = true;
 
-        match target.kind {
-            TargetKind::Ip => { return (ret, errs); },
-            _ => {}, // if domain, continue
-        }
+        if let TargetKind::Ip = target.kind {
+            return (ret, errs);
+        };
 
         // first retrieve TXT records
         let dmarc_domain = format!("_dmarc.{}", &target.host);

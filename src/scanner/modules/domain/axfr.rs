@@ -34,10 +34,9 @@ impl module::HostModule for Axfr {
         let mut ns_output = String::new();
         let mut data = vec!();
 
-        match target.kind {
-            TargetKind::Ip => { return (ret, errs); },
-            _ => {}, // if domain, continue
-        }
+        if let TargetKind::Ip = target.kind {
+            return (ret, errs);
+        };
 
         // first retrieve NS servers
         match Command::new("dig")

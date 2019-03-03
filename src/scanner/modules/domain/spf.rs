@@ -35,10 +35,9 @@ impl module::HostModule for Spf {
         let mut txt_output = String::new();
         let mut is_spf_record_missing = true;
 
-        match target.kind {
-            TargetKind::Ip => { return (ret, errs); },
-            _ => {}, // if domain, continue
-        }
+        if let TargetKind::Ip = target.kind {
+            return (ret, errs);
+        };
 
         // first retrieve TXT records
         match Command::new("dig")

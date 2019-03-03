@@ -47,10 +47,9 @@ impl module::HostModule for Takeover {
         let mut errs = vec!();
         let mut ret = None;
 
-        match target.kind {
-            TargetKind::Ip => { return (ret, errs); },
-            _ => {}, // if domain, continue
-        }
+        if let TargetKind::Ip = target.kind {
+            return (ret, errs);
+        };
 
         // parse fingerprints
         let fingerprints_path = format!("{}/takeover_fingerprints.json", &scan.config.assets_folder);

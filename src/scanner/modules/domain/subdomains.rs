@@ -33,10 +33,9 @@ impl module::HostModule for Subdomains {
         let mut ret = None;
         let mut domains = vec!();
 
-        match target.kind {
-            TargetKind::Ip => { return (ret, errs); },
-            _ => {}, // if domain, continue
-        }
+        if let TargetKind::Ip = target.kind {
+            return (ret, errs);
+        };
 
         let conn = Connection::connect("postgres://guest@crt.sh:5432/certwatch", TlsMode::None).unwrap();
 
