@@ -8,9 +8,9 @@ use crate::scanner::{
 use regex::Regex;
 
 
-pub struct Cve_2018_7600{}
+pub struct Cve2018_7600{}
 
-impl module::BaseModule for Cve_2018_7600 {
+impl module::BaseModule for Cve2018_7600 {
     fn name(&self) -> String {
         return "http/drupal/cve-2018-7600".to_string();
     }
@@ -28,7 +28,7 @@ impl module::BaseModule for Cve_2018_7600 {
     }
 }
 
-impl module::PortModule for Cve_2018_7600 {
+impl module::PortModule for Cve2018_7600 {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
         let mut errs = vec!();
         let mut ret = None;

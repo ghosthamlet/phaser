@@ -8,9 +8,9 @@ use crate::scanner::{
 use std::process::{Command};
 use regex::Regex;
 
-pub struct Cve2017_95_06{}
+pub struct Cve2017_9506{}
 
-impl module::BaseModule for Cve2017_95_06 {
+impl module::BaseModule for Cve2017_9506 {
     fn name(&self) -> String {
         return "http/atlassian/cve-2017-9506".to_string();
     }
@@ -28,7 +28,7 @@ impl module::BaseModule for Cve2017_95_06 {
     }
 }
 
-impl module::PortModule for Cve2017_95_06 {
+impl module::PortModule for Cve2017_9506 {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
         let mut errs = vec!();
         let mut ret = None;

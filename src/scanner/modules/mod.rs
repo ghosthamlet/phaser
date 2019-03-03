@@ -15,12 +15,13 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::Dotenv{}),
         Box::new(postgresql::UnauthenticatedAccess{}),
         Box::new(mysql::UnauthenticatedAccess{}),
-        Box::new(http::atlassian::Cve2017_95_06{}),
+        Box::new(http::atlassian::Cve2017_9506{}),
         Box::new(http::cadvisor::UnauthenticatedAccess{}),
         Box::new(http::consul::UnauthenticatedAccess{}),
-        Box::new(http::drupal::Cve_2018_7600{}),
+        Box::new(http::drupal::Cve2018_7600{}),
         Box::new(http::elasticsearch::UnauthenticatedAccess{}),
         Box::new(http::etcd::UnauthenticatedAccess{}),
+        Box::new(http::git::ConfigDisclosure{}),
     );
 }
 
