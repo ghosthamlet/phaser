@@ -29,7 +29,7 @@ impl module::BaseModule for Subdomains {
 
 impl module::HostModule for Subdomains {
     fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
         let mut domains = vec!();
 

@@ -3,7 +3,6 @@ use crate::scanner::{
     findings,
     Scan,
     Target,
-    TargetKind,
 };
 
 
@@ -29,7 +28,7 @@ impl module::BaseModule for DashboardUnauthenticatedAccess {
 
 impl module::PortModule for DashboardUnauthenticatedAccess {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         let protocol = if port.http {

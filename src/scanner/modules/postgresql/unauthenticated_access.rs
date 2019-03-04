@@ -28,7 +28,7 @@ impl module::BaseModule for UnauthenticatedAccess {
 
 impl module::PortModule for UnauthenticatedAccess {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         if port.http || port.https {

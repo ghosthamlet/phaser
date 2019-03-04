@@ -68,45 +68,45 @@ pub fn setup_slog() -> (slog_scope::GlobalLoggerGuard, slog::Logger) {
 struct SlogStdLogger(slog::Logger);
 
 impl SlogStdLogger {
-    pub fn new() -> slog::Logger {
-            use slog::*;
+    // pub fn new() -> slog::Logger {
+    //         use slog::*;
 
-    // let decorator = slog_term::TermDecorator::new().force_color().build();
-    // let _term_drain = slog_term::FullFormat::new(decorator).build();
+    // // let decorator = slog_term::TermDecorator::new().force_color().build();
+    // // let _term_drain = slog_term::FullFormat::new(decorator).build();
 
-    let json_drain = slog_json::Json::default(std::io::stdout());
+    // let json_drain = slog_json::Json::default(std::io::stdout());
 
-    // // Pick your format
-    // //let drain = term_drain;
-    let drain = json_drain;
+    // // // Pick your format
+    // // //let drain = term_drain;
+    // let drain = json_drain;
 
-    // // Display only info+
-    let drain = drain.filter_level(Level::Info);
+    // // // Display only info+
+    // let drain = drain.filter_level(Level::Info);
 
-    // let drain = slog_async::Async::new(drain.fuse()).build().fuse();
+    // // let drain = slog_async::Async::new(drain.fuse()).build().fuse();
 
-    // let logger = slog::Logger::root(
-    //     // slog_json::Json::default(std::io::stdout()),
-    //     o!("version" => env!("CARGO_PKG_VERSION"))
+    // // let logger = slog::Logger::root(
+    // //     // slog_json::Json::default(std::io::stdout()),
+    // //     o!("version" => env!("CARGO_PKG_VERSION"))
+    // // );
+    // let logger = Logger::root(
+    //     Mutex::new(drain.fuse()).map(Fuse),
+    //     slog_o!(
+    //         // "location" => FnValue(|info : &Record| {
+    //         //     format!("{}:{}", info.module(), info.line())
+    //         // })
+    //     ),
     // );
-    let logger = Logger::root(
-        Mutex::new(drain.fuse()).map(Fuse),
-        slog_o!(
-            // "location" => FnValue(|info : &Record| {
-            //     format!("{}:{}", info.module(), info.line())
-            // })
-        ),
-    );
 
-    // Bridge std log
-    log::set_boxed_logger(Box::new(SlogStdLogger(logger.clone()))).unwrap();
-    log::set_max_level(log::LevelFilter::max());
+    // // Bridge std log
+    // log::set_boxed_logger(Box::new(SlogStdLogger(logger.clone()))).unwrap();
+    // log::set_max_level(log::LevelFilter::max());
 
-    // Set slog default logger
-    let _guard = slog_scope::set_global_logger(logger.clone());
+    // // Set slog default logger
+    // let _guard = slog_scope::set_global_logger(logger.clone());
 
-        logger
-    }
+    //     logger
+    // }
 
     #[inline]
     pub fn log_to_slog_level(level: log::Level) -> slog::Level {

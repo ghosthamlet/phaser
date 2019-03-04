@@ -3,7 +3,6 @@ use crate::scanner::{
     findings,
     Scan,
     Target,
-    TargetKind,
 };
 use serde::{Deserialize, Serialize};
 
@@ -43,7 +42,7 @@ struct ElasticsearchInfo {
 
 impl module::PortModule for UnauthenticatedAccess {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         let protocol = if port.http {

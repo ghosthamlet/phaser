@@ -3,10 +3,8 @@ use crate::scanner::{
     findings,
     Scan,
     Target,
-    TargetKind,
 };
-use std::process::{Command};
-use regex::Regex;
+
 
 pub struct Cve2017_9506{}
 
@@ -30,7 +28,7 @@ impl module::BaseModule for Cve2017_9506 {
 
 impl module::PortModule for Cve2017_9506 {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         let protocol = if port.http {

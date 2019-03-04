@@ -3,7 +3,6 @@ use crate::scanner::{
     findings,
     Scan,
     Target,
-    TargetKind,
 };
 use regex::Regex;
 
@@ -31,7 +30,7 @@ impl module::BaseModule for ConfigDisclosure {
 
 impl module::PortModule for ConfigDisclosure {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         let protocol = if port.http {

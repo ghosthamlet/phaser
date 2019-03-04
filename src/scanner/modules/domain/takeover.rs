@@ -5,10 +5,8 @@ use crate::scanner::{
     Target,
     TargetKind,
 };
-use std::process::{Command};
 use serde::{Deserialize, Serialize};
 use std::fs;
-use serde_json::Result;
 
 
 pub struct Takeover{}
@@ -44,7 +42,7 @@ struct Provider {
 
 impl module::HostModule for Takeover {
     fn run(&self, scan: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         if let TargetKind::Ip = target.kind {

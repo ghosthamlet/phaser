@@ -151,18 +151,17 @@ impl module::HostModule for Ports {
 fn check_http_s(target: &Target, port: u16) -> (bool, bool) {
     let mut is_http = false;
     let mut is_https = false;
-    let mut client = reqwest::Client::new();
 
-    match reqwest::Client::builder()
+    let client = match reqwest::Client::builder()
         .gzip(true)
         .timeout(Duration::from_secs(10))
         .redirect(reqwest::RedirectPolicy::none())
         .danger_accept_invalid_certs(true)
         .danger_accept_invalid_hostnames(true)
         .build() {
-        Ok(cl) => client = cl,
+        Ok(cl) => cl,
         Err(_) => return (is_http, is_https),
-    }
+    };
 
    if let Ok(_) = client.get(&format!("https://{}:{}", target.host, port)).send() {
         is_https = true;

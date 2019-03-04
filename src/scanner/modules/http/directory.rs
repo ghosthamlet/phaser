@@ -3,9 +3,7 @@ use crate::scanner::{
     findings,
     Scan,
     Target,
-    TargetKind,
 };
-use std::process::{Command};
 use regex::Regex;
 
 pub struct DirectoryListing{}
@@ -30,7 +28,7 @@ impl module::BaseModule for DirectoryListing {
 
 impl module::PortModule for DirectoryListing {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         let protocol = if port.http {

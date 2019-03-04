@@ -78,6 +78,7 @@ impl Scan {
         let relative_path = "scan.json";
         let path = Path::new(&self.config.data_folder).join(relative_path);
         // TODO: handle error
-        fs::write(path, serde_json::to_string_pretty(&self).expect("serializing scan to json"));
+        fs::write(path, serde_json::to_string_pretty(&self).expect("serializing scan to json"))
+            .expect("error saving scan.json");
     }
 }

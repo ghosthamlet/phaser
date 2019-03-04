@@ -3,10 +3,8 @@ use crate::scanner::{
     findings,
     Scan,
     Target,
-    TargetKind,
 };
-use std::process::{Command};
-use std::io;
+
 
 pub struct DsStore{}
 
@@ -31,7 +29,7 @@ impl module::BaseModule for DsStore {
 // TODO: handle error
 impl module::PortModule for DsStore {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+        let errs = vec!();
         let mut ret = None;
 
         let protocol = if port.http {
@@ -51,7 +49,7 @@ impl module::PortModule for DsStore {
             .expect("error fetching url for direcotry listing");
 
         let mut buf: Vec<u8> = vec!();
-        body.copy_to(&mut buf);
+        body.copy_to(&mut buf).expect("reading http response to buffer");
         let signature = [0x0, 0x0, 0x0, 0x1, 0x42, 0x75, 0x64, 0x31];
 
         if &buf[0..8] == &signature {
