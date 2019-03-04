@@ -17,3 +17,4 @@ pub mod jetty;
 pub mod kibana;
 pub mod prometheus;
 pub mod traefik;
+pub mod yaheiphp;

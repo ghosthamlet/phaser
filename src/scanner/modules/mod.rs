@@ -29,6 +29,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::kibana::UnauthenticatedAccess{}),
         Box::new(http::prometheus::DashboardUnauthenticatedAccess{}),
         Box::new(http::traefik::DashboardUnauthenticatedAccess{}),
+        Box::new(http::yaheiphp::UnauthenticatedAccess{}),
     );
 }
 
