@@ -71,3 +71,14 @@ impl module::PortModule for Cve2014_0160 {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Cve2014_0160{};
+        assert_eq!("ssltls/cve-2014-0160", module.name());
+    }
+}

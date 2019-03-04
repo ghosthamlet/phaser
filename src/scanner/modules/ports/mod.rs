@@ -17,19 +17,19 @@ pub struct Ports{}
 
 impl module::BaseModule for Ports {
     fn name(&self) -> String {
-        return String::from("ports");
+        return "ports".to_string();
     }
 
     fn description(&self) -> String {
-        return String::from("scan ports");
+        return "Scan ports".to_string();
     }
 
     fn author(&self) -> String {
-        return String::from("Sylvain Kerkour <sylvain@kerkour.com>")
+        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
     }
 
     fn version(&self) -> String {
-        return String::from("0.1.0");
+        return "0.1.0".to_string();
     }
 }
 
@@ -171,4 +171,17 @@ fn check_http_s(target: &Target, port: u16) -> (bool, bool) {
    }
 
     return (is_http, is_https);
+}
+
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Ports{};
+        assert_eq!("ports", module.name());
+    }
 }

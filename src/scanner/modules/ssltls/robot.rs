@@ -71,3 +71,15 @@ impl module::PortModule for Robot {
         return (ret, errs);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Robot{};
+        assert_eq!("ssltls/robot", module.name());
+    }
+}
