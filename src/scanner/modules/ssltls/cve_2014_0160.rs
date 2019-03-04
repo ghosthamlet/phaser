@@ -5,8 +5,6 @@ use crate::scanner::{
     Target,
 };
 use std::process::{Command};
-use serde_xml_rs::from_reader;
-use std::time::Duration;
 use crate::scanner::modules::ssltls::sslyze;
 
 
@@ -48,7 +46,7 @@ impl module::PortModule for Cve2014_0160 {
         };
 
         if !output.trim().is_empty() {
-            match from_reader::<_, sslyze::Scan>(output.as_bytes()) {
+            match serde_json::from_str::<sslyze::Scan>(&output) {
                 Ok(sslyze_scan) => {
                     if sslyze_scan.accepted_targets.len() != 1 {
                         errs.push(
