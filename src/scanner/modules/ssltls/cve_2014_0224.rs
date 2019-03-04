@@ -34,6 +34,10 @@ impl module::PortModule for Cve2014_0224 {
         let mut output = String::new();
         let mut ret = None;
 
+        if !port.https {
+            return (ret, errs);
+        }
+
         let url = format!("{}:{}", &target.host, port.id);
         match Command::new("sslyze")
             .arg("--openssl_ccs")
