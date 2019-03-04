@@ -88,5 +88,5 @@ pub struct ResultReneg {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ResultRobot {
-    pub accepts_client_renegotiation: String,
+    pub robot_result_enum: String,
 }

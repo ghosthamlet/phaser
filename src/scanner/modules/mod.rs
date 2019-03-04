@@ -33,6 +33,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::yaheiphp::UnauthenticatedAccess{}),
         Box::new(ssltls::Cve2014_0160{}),
         Box::new(ssltls::Cve2014_0224{}),
+        Box::new(ssltls::Robot{}),
     );
 }
 
