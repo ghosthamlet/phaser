@@ -27,6 +27,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::gitlab::OpenRegistration{}),
         Box::new(http::jetty::Cve2015_2080{}),
         Box::new(http::kibana::UnauthenticatedAccess{}),
+        Box::new(http::prometheus::DashboardUnauthenticatedAccess{}),
     );
 }
 

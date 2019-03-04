@@ -7,15 +7,15 @@ use crate::scanner::{
 };
 
 
-pub struct UnauthenticatedAccess{}
+pub struct DashboardUnauthenticatedAccess{}
 
-impl module::BaseModule for UnauthenticatedAccess {
+impl module::BaseModule for DashboardUnauthenticatedAccess {
     fn name(&self) -> String {
-        return "http/kibana/unauthenticated-access".to_string();
+        return "http/prometheus/dashboard-unauthenticated-access".to_string();
     }
 
     fn description(&self) -> String {
-        return "Check for Elastic Kibana Unauthenticated Access".to_string();
+        return "Check for Prometheus Dashboard Unauthenticated Access".to_string();
     }
 
     fn author(&self) -> String {
@@ -27,7 +27,7 @@ impl module::BaseModule for UnauthenticatedAccess {
     }
 }
 
-impl module::PortModule for UnauthenticatedAccess {
+impl module::PortModule for DashboardUnauthenticatedAccess {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
         let mut errs = vec!();
         let mut ret = None;
@@ -46,16 +46,13 @@ impl module::PortModule for UnauthenticatedAccess {
 
         let url = format!("{}://{}:{}", &protocol, &target.host, &port.id);
         let body = reqwest::get(&url)
-            .expect("error fetching url for http/kibana/unauthenticated-access")
+            .expect("error fetching url for http/prometheus/dashboard-unauthenticated-access")
             .text()
             .expect("error getting body to txt");
 
 
 
-        if body.contains(r#"</head><body kbn-chrome id="kibana-body"><kbn-initial-state"#)
-            || body.contains(r#"<div class="ui-app-loading"><h1><strong>Kibana</strong><small>&nbsp;is loading."#)
-            || Some(0) == body.find(r#"|| body.contains("#)
-            || body.contains(r#"<div class="kibanaWelcomeLogo"></div></div></div><div class="kibanaWelcomeText">Loading Kibana</div></div>"#) {
+        if body.contains(r#"<title>Prometheus Time Series Collection and Processing Server</title>"#) {
             ret = Some(findings::Data::Url(findings::Url{
                 url,
             }));
