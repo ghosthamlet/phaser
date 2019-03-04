@@ -3,11 +3,11 @@ use crate::scanner::{
     modules,
     Target,
     BaseModule,
-    Config,
     findings,
 };
 use serde::{Serialize, Deserialize};
 use crate::log::macros::*;
+use crate::info;
 use std::path::{Path};
 use std::fs;
 
@@ -17,13 +17,24 @@ use std::fs;
 pub struct Scan {
     pub config: Config,
     pub targets: Vec<Target>,
+    pub version: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct Config {
+    pub scan_id: String,
+    pub report_id: Option<String>,
+    pub data_folder: String,
+    pub assets_folder: String,
 }
 
 impl Scan {
     pub fn new(config: Config, targets: Vec<Target>) -> Scan {
+        fs::create_dir_all(&config.data_folder).expect("error creating scan's data folder");
         return Scan{
             targets,
             config,
+            version: info::VERSION.to_string(),
         };
     }
 

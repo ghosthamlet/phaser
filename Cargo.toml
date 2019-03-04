@@ -1,6 +1,6 @@
 [package]
 name = "phaser"
-version = "0.5.4"
+version = "0.5.5"
 authors = ["z0mbie42 <sylvain@kerkour.com>"]
 edition = "2018"
 homepage = "https://opensource.bloom.sh/phaser"
@@ -33,6 +33,7 @@ url = "1.7"
 postgres = "0.15"
 regex = "1"
 mysql = "15.1"
+uuid = { version = "0.7", features = ["v4"] }
 
 # to use datetime types
 chrono = "0.4"

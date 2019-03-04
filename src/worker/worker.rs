@@ -51,9 +51,9 @@ impl Worker {
     }
 
     fn process_queue_message(&self, message: Message) {
-
         // let m: messages::AsyncIn = serde_json::from_str(&message.body.unwrap()).unwrap();
         info!("message received: {:?}", message);
+        // TODO: run scan
         let delete_req = DeleteMessageRequest{
             queue_url: self.config.aws_sqs_queue_api_to_phaser.clone(),
             receipt_handle: message.receipt_handle.unwrap(),
