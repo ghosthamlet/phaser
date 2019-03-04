@@ -31,7 +31,8 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::prometheus::DashboardUnauthenticatedAccess{}),
         Box::new(http::traefik::DashboardUnauthenticatedAccess{}),
         Box::new(http::yaheiphp::UnauthenticatedAccess{}),
-         Box::new(ssltls::Cve2014_0160{}),
+        Box::new(ssltls::Cve2014_0160{}),
+        Box::new(ssltls::Cve2014_0224{}),
     );
 }
 
