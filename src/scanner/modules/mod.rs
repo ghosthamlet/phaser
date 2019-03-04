@@ -7,6 +7,7 @@ pub mod http;
 pub mod postgresql;
 pub mod mysql;
 pub use ports::Ports;
+pub mod ssltls;
 
 pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
     return vec!(
@@ -30,6 +31,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::prometheus::DashboardUnauthenticatedAccess{}),
         Box::new(http::traefik::DashboardUnauthenticatedAccess{}),
         Box::new(http::yaheiphp::UnauthenticatedAccess{}),
+         Box::new(ssltls::Cve2014_0160{}),
     );
 }
 
