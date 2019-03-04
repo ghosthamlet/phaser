@@ -76,3 +76,14 @@ impl module::HostModule for Spf {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Spf{};
+        assert_eq!("domain/spf", module.name());
+    }
+}

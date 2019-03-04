@@ -97,3 +97,15 @@ impl module::HostModule for Cname {
         // }
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Cname{};
+        assert_eq!("domain/cname", module.name());
+    }
+}

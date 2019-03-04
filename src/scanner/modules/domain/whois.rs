@@ -63,3 +63,14 @@ impl module::HostModule for Whois {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Whois{};
+        assert_eq!("domain/whois", module.name());
+    }
+}

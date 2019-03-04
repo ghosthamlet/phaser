@@ -77,3 +77,14 @@ impl module::HostModule for Dmarc {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Dmarc{};
+        assert_eq!("domain/dmarc", module.name());
+    }
+}

@@ -76,3 +76,14 @@ impl module::HostModule for Takeover {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Takeover{};
+        assert_eq!("domain/takeover", module.name());
+    }
+}

@@ -69,3 +69,14 @@ impl module::HostModule for Subdomains {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Subdomains{};
+        assert_eq!("domain/subdomains", module.name());
+    }
+}

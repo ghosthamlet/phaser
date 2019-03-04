@@ -51,9 +51,8 @@ impl module::PortModule for ConfigDisclosure {
             .text()
             .expect("error getting body to txt");
 
-        let re = Regex::new(r#"\[branch "[^"]*"\]"#).expect("compiling regexp");
 
-        if re.is_match(&(body.trim().to_string().to_lowercase())) {
+        if is_config_file(&(body.trim().to_string().to_lowercase())) {
             ret = Some(findings::Data::Url(findings::Url{
                 url,
             }));
@@ -63,15 +62,24 @@ impl module::PortModule for ConfigDisclosure {
     }
 }
 
+fn is_config_file(file_content: &str) -> bool {
+    let re = Regex::new(r#"\[branch "[^"]*"\]"#).expect("compiling http/git/config-disclosure regexp");
+    return re.is_match(file_content);
+}
+
 
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use super::*;
+    use crate::scanner::module::BaseModule;
 
     #[test]
-    fn test_regexp() {
-        let re = Regex::new(r#"\[branch "[^"]*"\]"#).expect("compiling regexp");
+    fn module_name() {
+        let module = super::ConfigDisclosure{};
+        assert_eq!("http/git/config-disclosure", module.name());
+    }
+
+    #[test]
+    fn is_config_file() {
         let body = r#"[core]
         repositoryformatversion = 0
         filemode = true
@@ -84,9 +92,11 @@ mod tests {
         fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "master"]
         remote = origin
-        merge = refs/heads/master"#.to_string();
-        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds".to_string();
-        assert_eq!(true, re.is_match(&body));
-        assert_eq!(false, re.is_match(&body2));
+        merge = refs/heads/master"#;
+
+        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+
+        assert_eq!(true, super::is_config_file(body));
+        assert_eq!(false, super::is_config_file(body2));
     }
 }

@@ -82,3 +82,15 @@ impl module::HostModule for Axfr {
         return (ret, errs);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Axfr{};
+        assert_eq!("domain/axfr", module.name());
+    }
+}
