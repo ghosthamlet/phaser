@@ -1,7 +1,6 @@
 use config::Config;
 use crate::log::macros::*;
-use std::{thread, time};
-use rusoto_sqs::{SqsClient};
+use rusoto_sqs::{SqsClient, ReceiveMessageRequest, Sqs, Message, DeleteMessageRequest};
 use rusoto_core::credential::{EnvironmentProvider};
 use rusoto_core::request::HttpClient;
 use rusoto_core::Region;
@@ -29,10 +28,40 @@ impl Worker {
      }
 
     pub fn run(&self) {
-        info!("worker started");
+        info!("listenning queue for async messages: {}", self.config.aws_sqs_queue_api_to_phaser);
+
         loop {
-            thread::sleep(time::Duration::from_secs(1));
-            info!("worker waiting");
+            let mut req = ReceiveMessageRequest::default();
+            req.queue_url = self.config.aws_sqs_queue_api_to_phaser.clone();
+            req.max_number_of_messages = Some(1);
+            match self.sqs_client.receive_message(req).sync() {
+                Ok(received) => {
+                    match received.messages {
+                        Some(messages) => {
+                            info!("{} sqs messages received", messages.len());
+                            messages.iter()
+                            .for_each(|message| self.process_queue_message(message.clone()));
+                        },
+                        _ => info!("0 sqs messages received"),
+                    }
+                },
+                Err(err) => error!("error receiving sqs message: {:?}", err),
+            }
         }
     }
+
+    fn process_queue_message(&self, message: Message) {
+
+        // let m: messages::AsyncIn = serde_json::from_str(&message.body.unwrap()).unwrap();
+        info!("message received: {:?}", message);
+        let delete_req = DeleteMessageRequest{
+            queue_url: self.config.aws_sqs_queue_api_to_phaser.clone(),
+            receipt_handle: message.receipt_handle.unwrap(),
+        };
+        match self.sqs_client.delete_message(delete_req).sync() {
+            Ok(_) => info!("sqs message successfully deleted"),
+            Err(err) => error!("error deleting sqs message: {:?}", err),
+        }
+    }
+
 }
