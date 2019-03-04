@@ -14,3 +14,4 @@ pub mod etcd;
 pub mod git;
 pub mod gitlab;
 pub mod jetty;
+pub mod kibana;
