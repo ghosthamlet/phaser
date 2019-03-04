@@ -12,3 +12,4 @@ pub mod drupal;
 pub mod elasticsearch;
 pub mod etcd;
 pub mod git;
+pub mod gitlab;
