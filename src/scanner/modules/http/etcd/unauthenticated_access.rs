@@ -60,3 +60,15 @@ impl module::PortModule for UnauthenticatedAccess {
         return (ret, errs);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::UnauthenticatedAccess{};
+        assert_eq!("http/etcd/unauthenticated-access", module.name());
+    }
+}

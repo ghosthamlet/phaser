@@ -62,3 +62,15 @@ impl module::PortModule for DashboardUnauthenticatedAccess {
         return (ret, errs);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::DashboardUnauthenticatedAccess{};
+        assert_eq!("http/traefik/dashboard-unauthenticated-access", module.name());
+    }
+}

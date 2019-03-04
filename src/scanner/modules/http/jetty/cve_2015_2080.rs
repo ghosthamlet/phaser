@@ -64,3 +64,15 @@ impl module::PortModule for Cve2015_2080 {
         return (ret, errs);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Cve2015_2080{};
+        assert_eq!("http/jetty/cve-2015-2080", module.name());
+    }
+}

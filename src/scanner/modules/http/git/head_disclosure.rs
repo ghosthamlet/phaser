@@ -50,12 +50,38 @@ impl module::PortModule for HeadDisclosure {
             .expect("error getting body to txt");
 
 
-        if let Some(0) = body.to_lowercase().trim().find("ref:") {
+        if is_head_file(&body) {
             ret = Some(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
         return (ret, errs);
+    }
+}
+
+fn is_head_file(content: &str) -> bool {
+    return Some(0) == content.to_lowercase().trim().find("ref:");
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::HeadDisclosure{};
+        assert_eq!("http/git/head-disclosure", module.name());
+    }
+
+    #[test]
+    fn is_head_file() {
+        let body = r#"ref: refs/heads/master"#;
+        let body2 = r#"ref: refs/heads/heroku"#;
+        let body3 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+
+        assert_eq!(true, super::is_head_file(body));
+        assert_eq!(true, super::is_head_file(body2));
+        assert_eq!(false, super::is_head_file(body3));
     }
 }

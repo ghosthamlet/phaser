@@ -58,3 +58,15 @@ impl module::PortModule for Cve2017_9506 {
         return (ret, errs);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Cve2017_9506{};
+        assert_eq!("http/atlassian/cve-2017-9506", module.name());
+    }
+}

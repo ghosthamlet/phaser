@@ -59,3 +59,14 @@ impl module::PortModule for OpenRegistration {
         return (ret, errs);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::OpenRegistration{};
+        assert_eq!("http/gitlab/open-registration", module.name());
+    }
+}

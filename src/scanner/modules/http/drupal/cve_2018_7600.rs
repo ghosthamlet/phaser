@@ -95,6 +95,18 @@ impl module::PortModule for Cve2018_7600 {
     }
 }
 
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::Cve2018_7600{};
+        assert_eq!("http/drupal/cve-2018-7600", module.name());
+    }
+}
+
 // package drupal
 
 // import (

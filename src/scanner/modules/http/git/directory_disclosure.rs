@@ -50,16 +50,53 @@ impl module::PortModule for DirectoryDisclosure {
             .expect("error getting body to txt");
 
 
-        if body.contains("HEAD")
-            && body.contains("refs")
-            && body.contains("config")
-            && body.contains("index")
-            && body.contains("objects") {
+        if is_git_directory_listing(&body) {
             ret = Some(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
         return (ret, errs);
+    }
+}
+
+
+fn is_git_directory_listing(file_content: &str) -> bool {
+    return file_content.contains("HEAD")
+        && file_content.contains("refs")
+        && file_content.contains("config")
+        && file_content.contains("index")
+        && file_content.contains("objects");
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::DirectoryDisclosure{};
+        assert_eq!("http/git/directory-disclosure", module.name());
+    }
+
+    #[test]
+    fn is_git_directory_listing() {
+        let body = r#"COMMIT_EDITMSG
+FETCH_HEAD
+HEAD
+ORIG_HEAD
+config
+description
+hooks
+index
+info
+logs
+objects
+refs"#;
+
+        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+
+        assert_eq!(true, super::is_git_directory_listing(body));
+        assert_eq!(false, super::is_git_directory_listing(body2));
     }
 }
