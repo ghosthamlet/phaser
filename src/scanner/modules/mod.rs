@@ -25,6 +25,7 @@ pub fn get_port_modules() -> Vec<Box<dyn PortModule>> {
         Box::new(http::git::DirectoryDisclosure{}),
         Box::new(http::git::HeadDisclosure{}),
         Box::new(http::gitlab::OpenRegistration{}),
+        Box::new(http::jetty::Cve2015_2080{}),
     );
 }
 
