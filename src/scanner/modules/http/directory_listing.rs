@@ -49,9 +49,7 @@ impl module::PortModule for DirectoryListing {
             .text()
             .expect("error getting body to txt");
 
-        let re = Regex::new(r"<title>Index of .*</title>").expect("compiling regexp");
-
-        if re.is_match(&body) {
+        if is_directory_listing(&body) {
             ret = Some(findings::Data::Url(findings::Url{
                 url,
             }));
@@ -61,22 +59,32 @@ impl module::PortModule for DirectoryListing {
     }
 }
 
+fn is_directory_listing(file_content: &str) -> bool {
+    let re = Regex::new(r"<title>Index of .*</title>").expect("compiling http/directory-listing regexp");
+    return re.is_match(file_content);
+}
+
 
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use super::*;
+    use crate::scanner::module::BaseModule;
 
     #[test]
-    fn test_regexp() {
-        let re = Regex::new(r"<title>Index of .*</title>").expect("compiling regexp");
-        let body = "lol lol lol ol ol< LO> OL  <title>Index of kerkour.com</title> sdsds".to_string();
-        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds".to_string();
-        let body3 = "".to_string();
-        let body4 = "lol lol lol ol ol< LO> OL  <title>Index</title> sdsds".to_string();
-        assert_eq!(true, re.is_match(&body));
-        assert_eq!(false, re.is_match(&body2));
-        assert_eq!(false, re.is_match(&body3));
-        assert_eq!(false, re.is_match(&body4));
+    fn module_name() {
+        let module = super::DirectoryListing{};
+        assert_eq!("http/directory-listing", module.name());
+    }
+
+    #[test]
+    fn is_directory_listing() {
+        let body = "lol lol lol ol ol< LO> OL  <title>Index of kerkour.com</title> sdsds";
+        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+        let body3 = "";
+        let body4 = "lol lol lol ol ol< LO> OL  <title>Index</title> sdsds";
+
+        assert_eq!(true, super::is_directory_listing(&body));
+        assert_eq!(false, super::is_directory_listing(&body2));
+        assert_eq!(false, super::is_directory_listing(&body3));
+        assert_eq!(false, super::is_directory_listing(&body4));
     }
 }

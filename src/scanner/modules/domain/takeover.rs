@@ -13,7 +13,7 @@ pub struct Takeover{}
 
 impl module::BaseModule for Takeover {
     fn name(&self) -> String {
-        return "domain/dmarc".to_string();
+        return "domain/takeover".to_string();
     }
 
     fn description(&self) -> String {

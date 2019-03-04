@@ -50,9 +50,9 @@ impl module::PortModule for DsStore {
 
         let mut buf: Vec<u8> = vec!();
         body.copy_to(&mut buf).expect("reading http response to buffer");
-        let signature = [0x0, 0x0, 0x0, 0x1, 0x42, 0x75, 0x64, 0x31];
 
-        if &buf[0..8] == &signature {
+
+        if is_ds_store(&buf) {
             ret = Some(findings::Data::Url(findings::Url{
                 url,
             }));
@@ -60,4 +60,36 @@ impl module::PortModule for DsStore {
 
         return (ret, errs);
     }
+}
+
+fn is_ds_store(content: &[u8]) -> bool {
+    if content.len() < 8 {
+        return false;
+    }
+
+    let signature = [0x0, 0x0, 0x0, 0x1, 0x42, 0x75, 0x64, 0x31];
+
+    return &content[0..8] == &signature;
+}
+
+
+#[cfg(test)]
+mod tests {
+    use crate::scanner::module::BaseModule;
+
+    #[test]
+    fn module_name() {
+        let module = super::DsStore{};
+        assert_eq!("http/ds-store", module.name());
+    }
+
+    #[test]
+    fn is_dotenv() {
+        let body = "Aswswswsw";
+        let body2 = [0x00, 0x00, 0x00, 0x01, 0x42, 0x75, 0x64, 0x31, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x08, 0x0];
+
+        assert_eq!(false, super::is_ds_store(body.as_bytes()));
+        assert_eq!(true, super::is_ds_store(&body2));
+    }
+
 }

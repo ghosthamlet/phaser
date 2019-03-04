@@ -1,9 +1,9 @@
-mod directory;
+mod directory_listing;
 mod ds_store;
 mod dotenv;
 
 pub mod atlassian;
-pub use directory::DirectoryListing;
+pub use directory_listing::DirectoryListing;
 pub use ds_store::DsStore;
 pub use self::dotenv::Dotenv;
 pub mod cadvisor;
