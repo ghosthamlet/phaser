@@ -51,7 +51,7 @@ impl Worker {
     }
 
     fn process_queue_message(&self, message: Message) {
-        let m: messages::Message = serde_json::from_str(&message.body.unwrap()).unwrap();
+        let m: messages::In = serde_json::from_str(&message.body.unwrap()).unwrap();
         info!("message received: {:?}", m);
         // TODO: run scan
         let delete_req = DeleteMessageRequest{
