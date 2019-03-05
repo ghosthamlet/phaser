@@ -1,12 +1,20 @@
 use serde::{Serialize, Deserialize};
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ScanQueued {
+    pub scan_id: String,
+    pub targets: Vec<String>,
+    pub profile: String,
+    pub report_id: String
+}
+
 // Message is used to send and receive messages between services
 // kernel -> phaser
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "data")]
 pub enum In {
     #[serde(rename = "scan_queued")]
-    ScanQueued{ scan_id: String, targets: Vec<String>, profile: String, report_id: String },
+    ScanQueued(ScanQueued),
 }
 
 // MessageOut is used to send and receive messages between services

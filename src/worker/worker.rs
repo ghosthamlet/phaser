@@ -6,6 +6,8 @@ use rusoto_core::request::HttpClient;
 use rusoto_core::Region;
 use std::str::FromStr;
 use crate::worker::{config, messages};
+use crate::scanner;
+use std::path::{Path};
 
 pub struct Worker {
     config: config::Config,
@@ -53,7 +55,23 @@ impl Worker {
     fn process_queue_message(&self, message: Message) {
         let m: messages::In = serde_json::from_str(&message.body.unwrap()).unwrap();
         info!("message received: {:?}", m);
-        // TODO: run scan
+        // run scan
+        match m {
+            messages::In::ScanQueued(ref request) => {
+                let targets = request.targets.iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
+                let data_folder = Path::new("scans").join(&request.scan_id).to_str().expect("error creating data folder").to_string();
+                let config = scanner::Config{
+                    scan_id: request.scan_id.clone(),
+                    data_folder,
+                    assets_folder: "assets".to_string(),
+                    ..Default::default()
+                };
+                let mut scan = scanner::Scan::new(config, targets);
+                scan.run();
+            }
+        }
+
+
         let delete_req = DeleteMessageRequest{
             queue_url: self.config.aws_sqs_queue_api_to_phaser.clone(),
             receipt_handle: message.receipt_handle.unwrap(),
