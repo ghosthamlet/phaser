@@ -8,7 +8,7 @@ use std::str::FromStr;
 pub struct Target {
     pub host: String,
     pub kind: TargetKind,
-    pub ip_version: IpVersion,
+    pub ip_version: Option<IpVersion>,
     pub findings:  Vec<Finding>,
     pub errors: Vec<TargetError>,
     pub subdomains: Vec<Target>,
@@ -24,7 +24,6 @@ pub enum TargetKind{
 pub enum IpVersion{
     V4,
     V6,
-    None,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -41,7 +40,7 @@ impl FromStr for Target {
         // target is IP
         if let Ok(host) = Host::parse(target) {
             let mut kind = TargetKind::Domain;
-            let mut ip_version = IpVersion::None;
+            let mut ip_version = None;
             match host {
                 Host::Domain(_) => {
                     if target.find('.') == None  {
@@ -50,11 +49,11 @@ impl FromStr for Target {
                 },
                 Host::Ipv4(_) => {
                     kind = TargetKind::Ip;
-                    ip_version = IpVersion::V4;
+                    ip_version = Some(IpVersion::V4);
                 },
                 Host::Ipv6(_) => {
                     kind = TargetKind::Ip;
-                    ip_version = IpVersion::V6;
+                    ip_version = Some(IpVersion::V6);
                 },
             }
 

@@ -44,6 +44,7 @@ testdata/**/*.tar.gz
 testdata/**/*.zip
 _docs/site/
 scans/
+reports/
 
 /target
 **/*.rs.bk

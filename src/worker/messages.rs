@@ -10,6 +10,21 @@ pub enum In {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ApiResponse {
+    pub error: Option<String>,
+    pub data: Option<ApiData>,
+    pub status: u32,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(tag = "type", content = "data")]
+pub enum ApiData {
+    #[serde(rename = "scan_queued")]
+    ScanQueued(ScanQueued),
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ScanQueued {
     pub scan_id: String,
     pub targets: Vec<String>,
@@ -22,8 +37,6 @@ pub struct ScanQueued {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "data")]
 pub enum Out {
-    #[serde(rename = "scan_started")]
-    ScanStarted(ScanStarted),
     #[serde(rename = "scan_completed")]
     ScanCompleted(ScanCompleted),
 }
@@ -37,7 +50,7 @@ pub struct ScanStarted {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ScanCompleted {
     pub report_id: String,
-    pub file: File,
+    // pub sah512: S,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

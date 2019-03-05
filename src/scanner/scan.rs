@@ -10,6 +10,8 @@ use crate::log::macros::*;
 use crate::info;
 use std::path::{Path};
 use std::fs;
+use rusoto_s3::{S3Client};
+
 
 
 
@@ -23,9 +25,10 @@ pub struct Scan {
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Config {
     pub scan_id: String,
-    pub report_id: Option<String>,
+    pub report_id: String,
     pub data_folder: String,
     pub assets_folder: String,
+    // pub s3_client: S3Client,
 }
 
 impl Scan {

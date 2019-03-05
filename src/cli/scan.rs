@@ -16,12 +16,12 @@ pub fn run(matches: &ArgMatches) -> Result<(), String> {
         match targets {
             Ok(targets) => {
                 let uuid = Uuid::new_v4().to_hyphenated().to_string();
-                let data_folder = Path::new("scans").join(&uuid).to_str().expect("error creating data folder").to_string();
+                let data_folder = Path::new("reports").join(&uuid).to_str().expect("error creating data folder").to_string();
                 let config = Config{
+                    report_id: uuid.clone(),
                     scan_id: uuid,
                     data_folder,
                     assets_folder: "assets".to_string(),
-                    ..Default::default()
                 };
                 let mut scan = Scan::new(config, targets);
                 scan.run();
