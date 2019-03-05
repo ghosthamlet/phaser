@@ -59,12 +59,10 @@ impl Worker {
                         let targets = payload.targets.iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
                         let data_folder = Path::new(&self.config.data_folder).join(&payload.report_id).to_str().expect("error creating data folder").to_string();
                         let config = scanner::Config{
-                            scan_id: payload.scan_id.clone(),
-                            report_id: payload.report_id.clone(),
                             data_folder,
                             assets_folder: self.config.assets_folder.clone(),
                         };
-                        let mut scan = scanner::Scan::new(config, targets);
+                        let mut scan = scanner::Scan::new(config, &payload.scan_id, &payload.report_id, targets);
                         scan.run();
 
                         let mut f = fs::File::open(&format!("{}/{}/scan.json", &self.config.data_folder, &payload.report_id)).unwrap();
@@ -96,3 +94,4 @@ impl Worker {
         }
     }
 }
+

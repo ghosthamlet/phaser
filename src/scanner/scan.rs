@@ -10,13 +10,11 @@ use crate::log::macros::*;
 use crate::info;
 use std::path::{Path};
 use std::fs;
-use rusoto_s3::{S3Client};
-
-
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Scan {
+    pub id: String,
+    pub report_id: String,
     pub config: Config,
     pub targets: Vec<Target>,
     pub version: String,
@@ -24,17 +22,18 @@ pub struct Scan {
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Config {
-    pub scan_id: String,
-    pub report_id: String,
     pub data_folder: String,
     pub assets_folder: String,
     // pub s3_client: S3Client,
 }
 
+
 impl Scan {
-    pub fn new(config: Config, targets: Vec<Target>) -> Scan {
-        fs::create_dir_all(&config.data_folder).expect("error creating scan's data folder");
+    pub fn new(config: Config, id: &str, report_id: &str, targets: Vec<Target>) -> Scan {
+        // fs::create_dir_all(&config.data_folder).expect("error creating scan's data folder");
         return Scan{
+            id: id.to_string(),
+            report_id: report_id.to_string(),
             targets,
             config,
             version: info::VERSION.to_string(),
