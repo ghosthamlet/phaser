@@ -5,7 +5,7 @@ use rusoto_core::credential::{EnvironmentProvider};
 use rusoto_core::request::HttpClient;
 use rusoto_core::Region;
 use std::str::FromStr;
-use crate::worker::config;
+use crate::worker::{config, messages};
 
 pub struct Worker {
     config: config::Config,
@@ -51,8 +51,8 @@ impl Worker {
     }
 
     fn process_queue_message(&self, message: Message) {
-        // let m: messages::AsyncIn = serde_json::from_str(&message.body.unwrap()).unwrap();
-        info!("message received: {:?}", message);
+        let m: messages::Message = serde_json::from_str(&message.body.unwrap()).unwrap();
+        info!("message received: {:?}", m);
         // TODO: run scan
         let delete_req = DeleteMessageRequest{
             queue_url: self.config.aws_sqs_queue_api_to_phaser.clone(),

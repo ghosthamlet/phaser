@@ -5,6 +5,7 @@ use serde::{Serialize, Deserialize};
 #[serde(tag = "type", content = "data")]
 pub enum Message {
     // kernel -> phaser
+    #[serde(rename = "scan_queued")]
     ScanQueued{ scan_id: String, targets: Vec<String>, profile: String, report_id: String },
     // phaser -> kernel
     ScanStarted{ report_id: String, started_at: String },
