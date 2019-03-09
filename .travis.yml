@@ -6,7 +6,7 @@ services:
 rust:
   - 1.33.0
 
-# Need to cache the whole `.cargo` directory to keep .crates.toml for
+# Need to cache the whole .cargo directory to keep .crates.toml for
 # cargo-update to work
 cache:
   directories:
