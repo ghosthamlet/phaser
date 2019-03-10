@@ -1,50 +1,47 @@
-# Specifies intentionally untracked files to ignore when using Git
-# http://git-scm.com/docs/gitignore
-
+# editors / OS
 *~
 *.sw[mnpcod]
 *.log
 *.tmp
 *.tmp.*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 log.txt
 *.sublime-project
 *.sublime-workspace
 .vscode/
-npm-debug.log*
-
-.env
-.env.*
 .idea/
-.sourcemaps/
-.sass-cache/
-.tmp/
-.versions/
-coverage/
-node_modules/
-tmp/
-temp/
-hooks/
-platforms/
-plugins/
-plugins/android.json
-plugins/ios.json
-www/
-$RECYCLE.BIN/
-
 .DS_Store
 Thumbs.db
-UserInterfaceState.xcuserstate
 
-.env
-vendor/
-dist/
-flint
-testdata/**/.rocket.*
-testdata/**/*.tar.gz
-testdata/**/*.zip
-_docs/site/
-scans/
-reports/
 
+# rust
 /target
 **/*.rs.bk
+
+
+# js / ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.sourcemaps/
+.sass-cache/
+node_modules/
+
+
+
+# project
+tmp/
+.tmp/
+dist/
+.env
+.env.local
+.env.*.local
+.firebase/
+firebase-debug.log
+
+
+scans/
+reports
