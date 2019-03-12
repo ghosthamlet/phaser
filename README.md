@@ -41,8 +41,8 @@ See [https://opensource.bloom.sh/phaser](https://opensource.bloom.sh/phaser)
 
 ## Contributing
 
-See [https://opensource.bloom.sh/contributing](https://opensource.bloom.sh/contributing)
-
+Thank you for your interest in contributing! Please refer to
+[https://opensource.bloom.sh/contributing](https://opensource.bloom.sh/contributing) for guidance.
 
 ## License
 

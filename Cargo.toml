@@ -7,7 +7,7 @@ homepage = "https://opensource.bloom.sh/phaser"
 repository = "https://github.com/bloom42/phaser.git"
 description = "The cloud native security scanner ☁️"
 keywords = ["security", "bloom", "phaser", "scanner"]
-license-file = "LICENSE.txt"
+license = "MPL-2.0"
 
 [dependencies]
 # cli args && options parsing
