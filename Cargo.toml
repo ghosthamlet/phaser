@@ -18,8 +18,8 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 
 # to use AWS
-rusoto_core = "0.36"
-rusoto_s3 = "0.36"
+rusoto_core = "0.37"
+rusoto_s3 = "0.37"
 # rusoto_core =  { git = "https://github.com/rusoto/rusoto" }
 # rusoto_s3 = { git = "https://github.com/rusoto/rusoto" }
 

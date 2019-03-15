@@ -13,6 +13,7 @@ use std::{thread, time};
 use std::fs;
 use std::io::Read;
 
+#[derive(Clone)]
 pub struct Worker {
     config: config::Config,
     api_client: reqwest::Client,

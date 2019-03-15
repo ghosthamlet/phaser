@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::env;
 
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Config {
     pub environment: String,
     pub aws_access_key_id: String,
