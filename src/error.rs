@@ -1,5 +1,8 @@
 use failure::Fail;
+use std::io;
 
-#[derive(Clone, Debug, Fail)]
+#[derive(Debug, Fail)]
 pub enum PhaserError {
+    #[fail(display="{:?}", 0)]
+    Io(io::Error),
 }
