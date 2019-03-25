@@ -3,6 +3,7 @@ mod cli;
 mod worker;
 mod info;
 mod scanner;
+mod error;
 
 use clap::{App, Arg, ArgMatches, SubCommand, AppSettings};
 // use slog_scope;
