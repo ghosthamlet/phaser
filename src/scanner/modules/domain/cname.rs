@@ -50,7 +50,7 @@ impl module::HostModule for Cname {
             .output()?;
         let output = String::from_utf8_lossy(&dig_output.stdout).to_string();
 
-        output = output.trim().to_string();
+        let output = output.trim().to_string();
         if !output.is_empty() {
             return Ok(findings::Data::Domain(output));
         }

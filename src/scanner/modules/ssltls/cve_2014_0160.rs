@@ -33,9 +33,6 @@ impl module::BaseModule for Cve2014_0160 {
 
 impl module::PortModule for Cve2014_0160 {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut ret = findings::Data::None;
-
         if !port.https {
             return Ok(findings::Data::None);
         }
@@ -54,13 +51,13 @@ impl module::PortModule for Cve2014_0160 {
                 return Err(PhaserError::Sslyze(format!("wrong number of sslyze accepted_targets: expected 1, got: {}", sslyze_scan.accepted_targets.len())));
             }
             if sslyze_scan.accepted_targets[0].commands_results.heartbleed.is_vulnerable_to_heartbleed {
-                ret = findings::Data::Url(findings::Url{
+                return Ok(findings::Data::Url(findings::Url{
                     url: format!("https://{}", url),
-                });
+                }));
             }
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 

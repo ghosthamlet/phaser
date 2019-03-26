@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 
 
@@ -26,11 +29,9 @@ impl module::BaseModule for DirectoryDisclosure {
     }
 }
 
+// TODO: error handling not found
 impl module::PortModule for DirectoryDisclosure {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -39,24 +40,21 @@ impl module::PortModule for DirectoryDisclosure {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}/.git/config", &protocol, &target.host, &port.id);
-        let body = reqwest::get(&url)
-            .expect("error fetching url for http/git/directory-disclosure")
-            .text()
-            .expect("error getting body to txt");
-
+        let body = reqwest::get(&url)?
+            .text()?;
 
         if is_git_directory_listing(&body) {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return return Ok(findings::Data::None);
     }
 }
 

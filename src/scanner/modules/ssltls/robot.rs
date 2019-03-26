@@ -33,10 +33,6 @@ impl module::BaseModule for Robot {
 
 impl module::PortModule for Robot {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut output = String::new();
-        let mut ret = findings::Data::None;
-
         if !port.https {
             return Ok(findings::Data::None);
         }
@@ -55,13 +51,13 @@ impl module::PortModule for Robot {
                 return Err(PhaserError::Sslyze(format!("wrong number of sslyze accepted_targets: expected 1, got: {}", sslyze_scan.accepted_targets.len())));
             }
             if !sslyze_scan.accepted_targets[0].commands_results.robot.robot_result_enum.contains("NOT_VULNERABLE") {
-                ret = findings::Data::Url(findings::Url{
+                return Ok(findings::Data::Url(findings::Url{
                     url: format!("https://{}", url),
-                });
+                }));
             }
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 
