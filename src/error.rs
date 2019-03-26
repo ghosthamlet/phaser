@@ -24,6 +24,9 @@ pub enum PhaserError {
 
     #[fail(display="SerdeXml: {}", 0)]
     SerdeXml(String), // TODO: improve
+
+    #[fail(display="MySql: {}", 0)]
+    MySql(mysql::Error),
 }
 
 
@@ -58,3 +61,8 @@ impl From<reqwest::Error> for PhaserError {
 }
 
 
+impl From<mysql::Error> for PhaserError {
+    fn from(err: mysql::Error) -> Self {
+        return PhaserError::MySql(err);
+    }
+}
