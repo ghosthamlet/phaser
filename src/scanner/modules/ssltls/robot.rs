@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 use std::process::{Command};
 use crate::scanner::modules::ssltls::sslyze;
@@ -29,46 +32,36 @@ impl module::BaseModule for Robot {
 }
 
 impl module::PortModule for Robot {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let mut errs = vec!();
         let mut output = String::new();
-        let mut ret = None;
+        let mut ret = findings::Data::None;
 
         if !port.https {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}:{}", &target.host, port.id);
-        match Command::new("sslyze")
+        let sslyze_output = Command::new("sslyze")
             .arg("--robot")
             .arg("--json_out=-")
             .arg(&url)
-            .output()
-            {
-            Ok(sslyze_output) => output = String::from_utf8_lossy(&sslyze_output.stdout).to_string(),
-            Err(err)  => errs.push(format!("error executing sslyze: {}", err)),
-        };
+            .output()?;
+        let output = String::from_utf8_lossy(&sslyze_output.stdout).to_string();
 
         if !output.trim().is_empty() {
-            match serde_json::from_str::<sslyze::Scan>(&output) {
-                Ok(sslyze_scan) => {
-                    if sslyze_scan.accepted_targets.len() != 1 {
-                        errs.push(
-                            format!("wrong number of sslyze accepted_targets: expected 1, got: {}", sslyze_scan.accepted_targets.len())
-                        );
-                        return (ret, errs);
-                    }
-                    if !sslyze_scan.accepted_targets[0].commands_results.robot.robot_result_enum.contains("NOT_VULNERABLE") {
-                        ret = Some(findings::Data::Url(findings::Url{
-                            url: format!("https://{}", url),
-                        }));
-                    }
-                },
-                Err(err) =>  errs.push(format!("error parsing sslyze result: {}", err)),
+            let sslyze_scan =  serde_json::from_str::<sslyze::Scan>(&output)?;
+            if sslyze_scan.accepted_targets.len() != 1 {
+                return Err(PhaserError::Sslyze(format!("wrong number of sslyze accepted_targets: expected 1, got: {}", sslyze_scan.accepted_targets.len())));
+            }
+            if !sslyze_scan.accepted_targets[0].commands_results.robot.robot_result_enum.contains("NOT_VULNERABLE") {
+                ret = findings::Data::Url(findings::Url{
+                    url: format!("https://{}", url),
+                });
             }
         }
 
-        return (ret, errs);
+        return Ok(ret);
     }
 }
 
