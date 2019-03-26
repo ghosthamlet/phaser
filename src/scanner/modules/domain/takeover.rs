@@ -1,9 +1,12 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
-    TargetKind,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+        TargetKind,
+    },
+    error::PhaserError,
 };
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -41,12 +44,12 @@ struct Provider {
 
 
 impl module::HostModule for Takeover {
-    fn run(&self, scan: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, scan: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
         let errs = vec!();
-        let mut ret = None;
+        let mut ret = findings::Data::None;
 
         if let TargetKind::Ip = target.kind {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         };
 
         // parse fingerprints
@@ -66,14 +69,14 @@ impl module::HostModule for Takeover {
         'outer: for provider in &providers {
             for fingerprint in &provider.fingerprints {
                 if body.contains(fingerprint) {
-                    ret = Some(findings::Data::Takeover(findings::domain::Takeover{
+                    ret = findings::Data::Takeover(findings::domain::Takeover{
                         service: provider.service.to_string(),
-                    }));
+                    });
                     break 'outer;
                 }
             }
         }
-        return (ret, errs);
+        return Ok(ret);
     }
 }
 
