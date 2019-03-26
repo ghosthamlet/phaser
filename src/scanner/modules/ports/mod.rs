@@ -1,10 +1,13 @@
 mod nmap;
 
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 use std::process::{Command};
 use serde_xml_rs::from_reader;
@@ -34,10 +37,8 @@ impl module::BaseModule for Ports {
 }
 
 impl module::HostModule for Ports {
-    fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
-        let mut errs = vec!();
+    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut output = String::new();
-        let mut ret = None;
 
         let ports = [
             1,
@@ -103,7 +104,7 @@ impl module::HostModule for Ports {
         // converts ports to Vec<String> and then join with "," to be consumed by nmap
         let ports = ports.iter().map(|port| port.to_string()).collect::<Vec<String>>().join(",");
 
-        match Command::new("nmap")
+        let nmap_output = Command::new("nmap")
             .arg("-p")
             .arg(ports)
             .arg("-oX")
@@ -112,38 +113,33 @@ impl module::HostModule for Ports {
             .arg("-dd")
             .arg("--host-timeout")
             .arg("2m")
-            .output()
-            {
-            Ok(nmap_output) => output = String::from_utf8_lossy(&nmap_output.stdout).to_string(),
-            Err(err)  => errs.push(format!("error executing nmap: {}", err)),
-        };
+            .output()?;
+        let output = String::from_utf8_lossy(&nmap_output.stdout).to_string();
+
 
         if !output.is_empty() {
-            match from_reader::<_, Run>(output.as_bytes()) {
-                Ok(run) => {
-                    let mut ports = vec!();
-                    if run.hosts.len() == 1 {
-                        let nmap_ports = run.hosts[0].ports.ports.iter()
-                            .filter(|port| port.state.state == PortStatus::Open).collect::<Vec<&Port>>();
-                        for nmap_port in &nmap_ports {
-                            let (http, https) = check_http_s(target, nmap_port.id);
-                            ports.push(findings::Port{
-                                id: nmap_port.id,
-                                state: findings::PortState::Open,
-                                http,
-                                https,
-                            });
-                        }
-                        ret = Some(findings::Data::Ports(ports));
-                    } else {
-                        errs.push(format!("wrong number of nmap hosts: expected 1, got: {}", run.hosts.len()))
-                    }
-                },
-                Err(err) =>  errs.push(format!("error executing nmap: {}", err)),
+            let run = from_reader::<_, Run>(output.as_bytes())?;
+            let mut ports = vec!();
+            if run.hosts.len() == 1 {
+                let nmap_ports = run.hosts[0].ports.ports.iter()
+                    .filter(|port| port.state.state == PortStatus::Open).collect::<Vec<&Port>>();
+                for nmap_port in &nmap_ports {
+                    let (http, https) = check_http_s(target, nmap_port.id);
+                    ports.push(findings::Port{
+                        id: nmap_port.id,
+                        state: findings::PortState::Open,
+                        http,
+                        https,
+                    });
+                }
+                return Ok(findings::Data::Ports(ports));
+            } else {
+                return Err(PhaserError::Sslyze(format!("wrong number of nmap hosts: expected 1, got: {}", run.hosts.len())));
             }
+
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 

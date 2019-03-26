@@ -18,6 +18,12 @@ pub enum PhaserError {
 
     #[fail(display="Reqwest: {}", 0)]
     Reqwest(reqwest::Error),
+
+    #[fail(display="Nmap: {}", 0)]
+    Nmap(String),
+
+    #[fail(display="SerdeXml: {}", 0)]
+    SerdeXml(String), // TODO: improve
 }
 
 
@@ -36,6 +42,12 @@ impl From<postgres::Error> for PhaserError {
 impl From<serde_json::Error> for PhaserError {
     fn from(err: serde_json::Error) -> Self {
         return PhaserError::SerdeJson(err);
+    }
+}
+
+impl From<serde_xml_rs::Error> for PhaserError {
+    fn from(err: serde_xml_rs::Error) -> Self {
+        return PhaserError::SerdeXml(err.description().to_string());
     }
 }
 

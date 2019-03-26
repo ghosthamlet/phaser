@@ -4,7 +4,6 @@ use crate::{
         findings,
         Scan,
         Target,
-        TargetKind,
     },
     error::PhaserError,
 };
@@ -31,7 +30,7 @@ impl module::BaseModule for UnauthenticatedAccess {
 }
 
 impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) ->  Result<findings::Data, PhaserError> {
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         if port.http || port.https {
             return Ok(findings::Data::None);
         }
