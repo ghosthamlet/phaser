@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 use regex::Regex;
 
@@ -27,11 +30,9 @@ impl module::BaseModule for Cve2018_7600 {
     }
 }
 
+// TODO: error handling not found
 impl module::PortModule for Cve2018_7600 {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -40,8 +41,8 @@ impl module::PortModule for Cve2018_7600 {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         let token = "08d15a4aef553492d8971cdd5198f31408d15a4aef553492d8971cdd5198f314";
@@ -60,10 +61,8 @@ impl module::PortModule for Cve2018_7600 {
         let body = client.post(&url)
             .query(&query_params)
             .form(&form)
-            .send()
-            .expect("error fetching url for http/drupal/cve-2018-7600")
-            .text()
-            .expect("error getting body to txt");
+            .send()?
+            .text()?;
 
         let re = Regex::new(r#"<input type="hidden" name="form_build_id" value="([^"]+)" />"#).expect("compiling regexp");
 
@@ -78,20 +77,18 @@ impl module::PortModule for Cve2018_7600 {
                 let body = client.post(&url)
                     .query(&query_params)
                     .form(&form)
-                    .send()
-                    .expect("error fetching url for http/drupal/cve-2018-7600")
-                    .text()
-                    .expect("error getting body to txt");
+                    .send()?
+                    .text()?;
 
                 if body.contains(&token) {
-                    ret = Some(findings::Data::Url(findings::Url{
+                    return Ok(findings::Data::Url(findings::Url{
                         url,
                     }));
                 }
             }
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 

@@ -40,7 +40,7 @@ impl module::PortModule for UnauthenticatedAccess {
             ""
         };
 
-        if protocol == "" {
+        if protocol.is_empty() {
             return Ok(findings::Data::None);
         }
 
