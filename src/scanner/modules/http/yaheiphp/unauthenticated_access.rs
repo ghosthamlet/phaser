@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 
 
@@ -26,11 +29,10 @@ impl module::BaseModule for UnauthenticatedAccess {
     }
 }
 
-impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
 
+// TODO: error handling not found
+impl module::PortModule for UnauthenticatedAccess {
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -39,24 +41,22 @@ impl module::PortModule for UnauthenticatedAccess {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         // TODO: also check tz_e.php
         let url = format!("{}://{}:{}/proberv.php", &protocol, &target.host, &port.id);
-        let body = reqwest::get(&url)
-            .expect("error fetching url for http/yaheiphp/unauthenticated-access")
-            .text()
-            .expect("error getting body to txt");
+        let body = reqwest::get(&url)?
+            .text()?;
 
         if body.contains(r#"<title>Yahei-PHP"#) {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 

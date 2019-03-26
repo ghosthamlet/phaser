@@ -50,7 +50,7 @@ impl module::PortModule for Robot {
         let output = String::from_utf8_lossy(&sslyze_output.stdout).to_string();
 
         if !output.trim().is_empty() {
-            let sslyze_scan =  serde_json::from_str::<sslyze::Scan>(&output)?;
+            let sslyze_scan = serde_json::from_str::<sslyze::Scan>(&output)?;
             if sslyze_scan.accepted_targets.len() != 1 {
                 return Err(PhaserError::Sslyze(format!("wrong number of sslyze accepted_targets: expected 1, got: {}", sslyze_scan.accepted_targets.len())));
             }

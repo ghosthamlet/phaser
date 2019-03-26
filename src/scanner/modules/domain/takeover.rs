@@ -45,7 +45,6 @@ struct Provider {
 
 impl module::HostModule for Takeover {
     fn run(&self, scan: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-
         if let TargetKind::Ip = target.kind {
             return Ok(findings::Data::None);
         };
