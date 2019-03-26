@@ -35,6 +35,7 @@ impl From<&BaseModule> for Module {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum Data {
+    None,
     Ports(Vec<Port>),
     File(File),
     Domain(String),

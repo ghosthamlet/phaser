@@ -15,14 +15,14 @@ pub trait BaseModule {
     fn author(&self) -> String;
     fn version(&self) -> String;
 
-    fn errs(&self, errs: &[String]) -> Vec<TargetError> {
-        return errs.iter().map(|err| TargetError{
+    fn err(&self, err: PhaserError) -> TargetError {
+        return TargetError{
             module: findings::Module{
                 name: self.name(),
                 version: self.version(),
             },
-            error: err.clone(),
-        }).collect();
+            error: err.to_string(),
+        };
     }
 
     fn findings(&self, data: findings::Data) -> findings::Finding {

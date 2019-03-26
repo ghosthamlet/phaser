@@ -1,9 +1,12 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
-    TargetKind,
+use crate::{
+    error::PhaserError,
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+        TargetKind,
+    },
 };
 use std::process::{Command};
 
@@ -28,29 +31,25 @@ impl module::BaseModule for Axfr {
 }
 
 impl module::HostModule for Axfr {
-    fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut errs = vec!();
-        let mut ret = None;
-        let mut ns_output = String::new();
+        let mut ret = findings::Data::None;
         let mut data = vec!();
 
         if let TargetKind::Ip = target.kind {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         };
 
         // first retrieve NS servers
-        match Command::new("dig")
+        let dig_output = Command::new("dig")
             .arg("+short")
             .arg("NS")
             .arg(&target.host)
-            .output()
-            {
-            Ok(dig_output) => ns_output = String::from_utf8_lossy(&dig_output.stdout).to_string(),
-            Err(err)  => errs.push(format!("executing dig: {}", err)),
-        };
+            .output()?;
+        let ns_output = String::from_utf8_lossy(&dig_output.stdout).to_string();
 
         if ns_output.is_empty() {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         }
 
         let ns_servers: Vec<&str> = ns_output.split(',').collect();
@@ -65,7 +64,7 @@ impl module::HostModule for Axfr {
                 .output()
                 {
                 Ok(dig_output) => output = String::from_utf8_lossy(&dig_output.stdout).to_string(),
-                Err(err)  => errs.push(format!("executing dig: {}", err)),
+                Err(_) => {},
             };
             if output.contains("XFR") && !output.contains("transfer failed") {
                 data.push(findings::domain::Axfr{
@@ -76,10 +75,10 @@ impl module::HostModule for Axfr {
         }
 
         if data.len() != 0 {
-            ret = Some(findings::Data::Axfr(data));
+            ret = findings::Data::Axfr(data);
         }
 
-        return (ret, errs);
+        return Ok(ret);
     }
 }
 
