@@ -1,9 +1,12 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
-    TargetKind,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+        TargetKind,
+    },
+    error::PhaserError,
 };
 use postgres::{Connection, TlsMode};
 
@@ -28,16 +31,16 @@ impl module::BaseModule for Subdomains {
 }
 
 impl module::HostModule for Subdomains {
-    fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
         let errs = vec!();
-        let mut ret = None;
+        let mut ret = findings::Data::None;
         let mut domains = vec!();
 
         if let TargetKind::Ip = target.kind {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         };
 
-        let conn = Connection::connect("postgres://guest@crt.sh:5432/certwatch", TlsMode::None).unwrap();
+        let conn = Connection::connect("postgres://guest@crt.sh:5432/certwatch", TlsMode::None)?;
 
         let subdomains_pattern = format!("%.{}", &target.host);
 
@@ -60,13 +63,13 @@ impl module::HostModule for Subdomains {
             WHERE lower(ci.NAME_VALUE) LIKE lower($1)"
         };
 
-        let rows = conn.query(query, &[&subdomains_pattern]).unwrap();
+        let rows = conn.query(query, &[&subdomains_pattern])?;
         for row in &rows {
             domains.push(row.get(0));
         }
-        ret = Some(findings::Data::Domains(domains));
+        ret = findings::Data::Domains(domains);
 
-        return (ret, errs);
+        return Ok(ret);
     }
 }
 
