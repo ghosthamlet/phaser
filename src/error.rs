@@ -27,6 +27,12 @@ pub enum PhaserError {
 
     #[fail(display="MySql: {}", 0)]
     MySql(mysql::Error),
+
+    #[fail(display="HttpToStr: {}", 0)]
+    HttpToStr(http::header::ToStrError),
+
+    #[fail(display="Regex: {}", 0)]
+    Regex(regex::Error),
 }
 
 
@@ -64,5 +70,17 @@ impl From<reqwest::Error> for PhaserError {
 impl From<mysql::Error> for PhaserError {
     fn from(err: mysql::Error) -> Self {
         return PhaserError::MySql(err);
+    }
+}
+
+impl From<http::header::ToStrError> for PhaserError {
+    fn from(err: http::header::ToStrError) -> Self {
+        return PhaserError::HttpToStr(err);
+    }
+}
+
+impl From<regex::Error> for PhaserError {
+    fn from(err: regex::Error) -> Self {
+        return PhaserError::Regex(err);
     }
 }

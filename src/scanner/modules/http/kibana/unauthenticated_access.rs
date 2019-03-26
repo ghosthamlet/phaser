@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 
 
@@ -26,11 +29,9 @@ impl module::BaseModule for UnauthenticatedAccess {
     }
 }
 
+// TODO: error handling not found
 impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -39,28 +40,24 @@ impl module::PortModule for UnauthenticatedAccess {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}", &protocol, &target.host, &port.id);
-        let body = reqwest::get(&url)
-            .expect("error fetching url for http/kibana/unauthenticated-access")
-            .text()
-            .expect("error getting body to txt");
-
-
+        let body = reqwest::get(&url)?
+            .text()?;
 
         if body.contains(r#"</head><body kbn-chrome id="kibana-body"><kbn-initial-state"#)
             || body.contains(r#"<div class="ui-app-loading"><h1><strong>Kibana</strong><small>&nbsp;is loading."#)
             || Some(0) == body.find(r#"|| body.contains("#)
             || body.contains(r#"<div class="kibanaWelcomeLogo"></div></div></div><div class="kibanaWelcomeText">Loading Kibana</div></div>"#) {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);;
     }
 }
 

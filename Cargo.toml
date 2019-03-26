@@ -30,6 +30,7 @@ failure = "0.1"
 serde-xml-rs = "0.3"
 reqwest = "0.9"
 url = "1.7"
+http = "0.1.16"
 # trust-dns = "0.15" -> use dig instead
 postgres = "0.15"
 regex = "1"

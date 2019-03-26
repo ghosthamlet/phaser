@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 use regex::Regex;
 
@@ -28,11 +31,9 @@ impl module::BaseModule for Cve2015_2080 {
     }
 }
 
+// TODO: error handling not found
 impl module::PortModule for Cve2015_2080 {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -41,27 +42,26 @@ impl module::PortModule for Cve2015_2080 {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}", &protocol, &target.host, &port.id);
-        let res = reqwest::get(&url)
-            .expect("error fetching url for http/git/head-disclosure");
+        let res = reqwest::get(&url)?;
 
         if let Some(server) = res.headers().get("server") {
-            let server = server.to_str().unwrap().to_lowercase();
+            let server = server.to_str()?.to_lowercase();
             let server = server.trim();
-            let re = Regex::new(r"^jetty\(9\.2\.(3|4|5|6|7|8).*\)$|^jetty\(9\.3\.0\.(m0|m1).*\)$").unwrap();
+            let re = Regex::new(r"^jetty\(9\.2\.(3|4|5|6|7|8).*\)$|^jetty\(9\.3\.0\.(m0|m1).*\)$")?;
 
             if re.is_match(server) {
-                ret = Some(findings::Data::Url(findings::Url{
+                return Ok(findings::Data::Url(findings::Url{
                     url,
                 }));
             }
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 
