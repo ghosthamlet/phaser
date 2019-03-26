@@ -33,8 +33,6 @@ impl module::BaseModule for Spf {
 // TODO: only if root domain
 impl module::HostModule for Spf {
     fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut ret = findings::Data::None;
         let mut is_spf_record_missing = true;
 
         if let TargetKind::Ip = target.kind {
@@ -65,14 +63,14 @@ impl module::HostModule for Spf {
         }
 
         if is_spf_record_missing {
-            ret = findings::Data::Spf(findings::domain::Spf{
+            return Ok(findings::Data::Spf(findings::domain::Spf{
                 domain: target.host.clone(),
                 records,
                 resolves,
-            });
+            }));
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 

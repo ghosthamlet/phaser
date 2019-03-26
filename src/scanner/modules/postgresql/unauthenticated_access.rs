@@ -1,8 +1,12 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+        TargetKind,
+    },
+    error::PhaserError,
 };
 use postgres::{Connection, TlsMode};
 
@@ -27,22 +31,19 @@ impl module::BaseModule for UnauthenticatedAccess {
 }
 
 impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) ->  Result<findings::Data, PhaserError> {
         if port.http || port.https {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         }
 
         let url = format!("postgres://postgres@{}:{}", &target.host, &port.id);
 
-        match Connection::connect(url.clone(), TlsMode::None) {
-            Ok(_) => { ret = Some(findings::Data::Url(findings::Url{url})); },
-            _ =>  {},
-        }
+        let ret = match Connection::connect(url.clone(), TlsMode::None) {
+            Ok(_) => findings::Data::Url(findings::Url{url}),
+            _ => findings::Data::None,
+        };
 
-        return (ret, errs);
+        return Ok(ret);
     }
 }
 

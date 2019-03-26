@@ -32,8 +32,6 @@ impl module::BaseModule for Axfr {
 
 impl module::HostModule for Axfr {
     fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut ret = findings::Data::None;
         let mut data = vec!();
 
         if let TargetKind::Ip = target.kind {
@@ -75,10 +73,10 @@ impl module::HostModule for Axfr {
         }
 
         if data.len() != 0 {
-            ret = findings::Data::Axfr(data);
+            return Ok(findings::Data::Axfr(data));
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 

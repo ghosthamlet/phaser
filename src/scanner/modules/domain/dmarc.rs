@@ -33,8 +33,6 @@ impl module::BaseModule for Dmarc {
 // TODO: only if root domain
 impl module::HostModule for Dmarc {
     fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut ret = findings::Data::None;
         let mut is_dmarc_record_missing = true;
 
         if let TargetKind::Ip = target.kind {
@@ -66,14 +64,14 @@ impl module::HostModule for Dmarc {
         }
 
         if is_dmarc_record_missing {
-            ret = findings::Data::Dmarc(findings::domain::Dmarc{
+            return Ok(findings::Data::Dmarc(findings::domain::Dmarc{
                 domain: dmarc_domain,
                 records,
                 resolves,
-            });
+            }));
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 

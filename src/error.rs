@@ -15,6 +15,9 @@ pub enum PhaserError {
 
     #[fail(display="SerdeJson: {}", 0)]
     SerdeJson(serde_json::Error),
+
+    #[fail(display="Reqwest: {}", 0)]
+    Reqwest(reqwest::Error),
 }
 
 
@@ -35,4 +38,11 @@ impl From<serde_json::Error> for PhaserError {
         return PhaserError::SerdeJson(err);
     }
 }
+
+impl From<reqwest::Error> for PhaserError {
+    fn from(err: reqwest::Error) -> Self {
+        return PhaserError::Reqwest(err);
+    }
+}
+
 

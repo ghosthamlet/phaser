@@ -39,9 +39,6 @@ impl module::BaseModule for Cname {
 // TODO: remove unwraps
 impl module::HostModule for Cname {
     fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut ret = findings::Data::None;
-
         if let TargetKind::Ip = target.kind {
             return Ok(findings::Data::None);
         };
@@ -55,10 +52,10 @@ impl module::HostModule for Cname {
 
         output = output.trim().to_string();
         if !output.is_empty() {
-            ret = findings::Data::Domain(output);
+            return Ok(findings::Data::Domain(output));
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
         // let mut errs = vec!();
         // let mut ret = None;
         // // Google dns server, 8.8.8.8:53

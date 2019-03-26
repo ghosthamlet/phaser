@@ -45,8 +45,6 @@ struct Provider {
 
 impl module::HostModule for Takeover {
     fn run(&self, scan: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let errs = vec!();
-        let mut ret = findings::Data::None;
 
         if let TargetKind::Ip = target.kind {
             return Ok(findings::Data::None);
@@ -54,29 +52,24 @@ impl module::HostModule for Takeover {
 
         // parse fingerprints
         let fingerprints_path = format!("{}/takeover_fingerprints.json", &scan.config.assets_folder);
-        let fingerprints_data = fs::read_to_string(fingerprints_path)
-            .expect("Something went wrong reading the fingerprints file");
+        let fingerprints_data = fs::read_to_string(fingerprints_path)?;
 
-        let providers: Vec<Provider> = serde_json::from_str(&fingerprints_data)
-            .expect("error parsing providers fingerprints");
+        let providers: Vec<Provider> = serde_json::from_str(&fingerprints_data)?;
 
 
-        let body = reqwest::get(&format!("http://{}", &target.host))
-        .expect("error fetching url for takeover")
-        .text()
-        .expect("error getting body to txt");
+        let body = reqwest::get(&format!("http://{}", &target.host))?
+            .text()?;
 
-        'outer: for provider in &providers {
+        for provider in &providers {
             for fingerprint in &provider.fingerprints {
                 if body.contains(fingerprint) {
-                    ret = findings::Data::Takeover(findings::domain::Takeover{
+                    return Ok(findings::Data::Takeover(findings::domain::Takeover{
                         service: provider.service.to_string(),
-                    });
-                    break 'outer;
+                    }));
                 }
             }
         }
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 

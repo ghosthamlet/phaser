@@ -34,9 +34,6 @@ impl module::BaseModule for Whois {
 
 impl module::HostModule for Whois {
     fn run(&self, scan: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let mut errs = vec!();
-        let mut ret = findings::Data::None;
-
         if let TargetKind::Ip = target.kind {
             return Ok(findings::Data::None);
         };
@@ -47,17 +44,16 @@ impl module::HostModule for Whois {
             .output()?;
         let output = String::from_utf8_lossy(&whois_output.stdout).to_string();
 
-
         if !output.is_empty() {
             let relative_path = "whois.txt";
             let path = Path::new(&scan.config.data_folder).join(relative_path);
 
             fs::write(&path, output)?;
 
-            ret = findings::Data::File(findings::File{path: relative_path.to_owned()});
+            return Ok(findings::Data::File(findings::File{path: relative_path.to_owned()}));
         }
 
-        return Ok(ret);
+        return Ok(findings::Data::None);
     }
 }
 

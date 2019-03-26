@@ -32,8 +32,6 @@ impl module::BaseModule for Subdomains {
 
 impl module::HostModule for Subdomains {
     fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let errs = vec!();
-        let mut ret = findings::Data::None;
         let mut domains = vec!();
 
         if let TargetKind::Ip = target.kind {
@@ -67,9 +65,8 @@ impl module::HostModule for Subdomains {
         for row in &rows {
             domains.push(row.get(0));
         }
-        ret = findings::Data::Domains(domains);
 
-        return Ok(ret);
+        return Ok(findings::Data::Domains(domains));
     }
 }
 
