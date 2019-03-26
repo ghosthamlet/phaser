@@ -1,9 +1,12 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
-    TargetKind,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+        TargetKind,
+    },
+    error::PhaserError,
 };
 use std::process::{Command};
 
@@ -29,26 +32,22 @@ impl module::BaseModule for Spf {
 
 // TODO: only if root domain
 impl module::HostModule for Spf {
-    fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut errs = vec!();
-        let mut ret = None;
-        let mut txt_output = String::new();
+        let mut ret = findings::Data::None;
         let mut is_spf_record_missing = true;
 
         if let TargetKind::Ip = target.kind {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         };
 
         // first retrieve TXT records
-        match Command::new("dig")
+        let dig_output = Command::new("dig")
             .arg("+short")
             .arg("TXT")
             .arg(&target.host)
-            .output()
-            {
-            Ok(dig_output) => txt_output = String::from_utf8_lossy(&dig_output.stdout).to_string(),
-            Err(err)  => errs.push(format!("executing dig: {}", err)),
-        };
+            .output()?;
+        let txt_output = String::from_utf8_lossy(&dig_output.stdout).to_string();
 
         let records: Vec<String> = txt_output.split('\n')
             .map(|record| record.trim().to_string())
@@ -66,14 +65,14 @@ impl module::HostModule for Spf {
         }
 
         if is_spf_record_missing {
-            ret = Some(findings::Data::Spf(findings::domain::Spf{
+            ret = findings::Data::Spf(findings::domain::Spf{
                 domain: target.host.clone(),
                 records,
                 resolves,
-            }));
+            });
         }
 
-        return (ret, errs);
+        return Ok(ret);
     }
 }
 

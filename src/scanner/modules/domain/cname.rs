@@ -4,12 +4,15 @@
 // use trust_dns::op::DnsResponse;
 // use trust_dns::rr::{DNSClass, Name, RData, Record, RecordType};
 // use std::net::{SocketAddr, IpAddr, Ipv4Addr};
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
-    TargetKind,
+use crate::{
+        scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+        TargetKind,
+    },
+    error::PhaserError,
 };
 use std::process::{Command};
 
@@ -35,31 +38,27 @@ impl module::BaseModule for Cname {
 
 // TODO: remove unwraps
 impl module::HostModule for Cname {
-    fn run(&self, _: &Scan, target: &Target) -> (Option<findings::Data>, Vec<String>) {
+    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut errs = vec!();
-        let mut output = String::new();
-        let mut ret = None;
+        let mut ret = findings::Data::None;
 
         if let TargetKind::Ip = target.kind {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         };
 
-        match Command::new("dig")
+        let dig_output = Command::new("dig")
             .arg("+short")
             .arg("CNAME")
             .arg(&target.host)
-            .output()
-            {
-            Ok(dig_output) => output = String::from_utf8_lossy(&dig_output.stdout).to_string(),
-            Err(err)  => errs.push(format!("executing dig: {}", err)),
-        };
+            .output()?;
+        let output = String::from_utf8_lossy(&dig_output.stdout).to_string();
 
         output = output.trim().to_string();
         if !output.is_empty() {
-            ret = Some(findings::Data::Domain(output));
+            ret = findings::Data::Domain(output);
         }
 
-        return (ret, errs);
+        return Ok(ret);
         // let mut errs = vec!();
         // let mut ret = None;
         // // Google dns server, 8.8.8.8:53
