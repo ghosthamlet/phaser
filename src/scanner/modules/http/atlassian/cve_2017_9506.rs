@@ -1,10 +1,12 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
-
 
 pub struct Cve2017_9506{}
 
@@ -26,11 +28,9 @@ impl module::BaseModule for Cve2017_9506 {
     }
 }
 
+// TODO: error handling not found
 impl module::PortModule for Cve2017_9506 {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -39,23 +39,21 @@ impl module::PortModule for Cve2017_9506 {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}/plugins/servlet/oauth/users/icon-uri?consumerUri=https://google.com/robots.txt", &protocol, &target.host, &port.id);
-        let body = reqwest::get(&url)
-            .expect("error fetching url for Cve2017_95_06")
-            .text()
-            .expect("error getting body to txt").to_lowercase();
+        let body = reqwest::get(&url)?
+            .text()?;
 
         if body.contains("user-agent: *") && body.contains("disallow") {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 
