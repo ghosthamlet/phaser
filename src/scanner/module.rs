@@ -15,7 +15,7 @@ pub trait BaseModule {
     fn author(&self) -> String;
     fn version(&self) -> String;
 
-    fn err(&self, err: PhaserError) -> TargetError {
+    fn err(&self, err: &PhaserError) -> TargetError {
         return TargetError{
             module: findings::Module{
                 name: self.name(),

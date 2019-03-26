@@ -50,7 +50,7 @@ impl Scan {
             match ports_module_findings {
                 Ok(findings::Data::None) => {},
                 Ok(ref finding_data) => self.targets[i].findings.push(ports_module.findings(finding_data.clone())),
-                Err(err) =>  self.targets[i].errors.push(ports_module.err(err)),
+                Err(ref err) =>  self.targets[i].errors.push(ports_module.err(err)),
             }
 
             // then host modules
@@ -60,7 +60,7 @@ impl Scan {
                 match module.run(self, &target) {
                     Ok(findings::Data::None) => {},
                     Ok(ref finding_data) => self.targets[i].findings.push(module.findings(finding_data.clone())),
-                    Err(err) =>  self.targets[i].errors.push(module.err(err)),
+                    Err(ref err) =>  self.targets[i].errors.push(module.err(err)),
                 }
                 info!("module {} completed", module.name());
             });
@@ -75,7 +75,7 @@ impl Scan {
                             match module.run(self, &target, &port) {
                                 Ok(findings::Data::None) => {},
                                 Ok(ref finding_data) => self.targets[i].findings.push(module.findings(finding_data.clone())),
-                                Err(err) =>  self.targets[i].errors.push(module.err(err)),
+                                Err(ref err) =>  self.targets[i].errors.push(module.err(err)),
                             }
                             info!("module {} completed", module.name());
                         });
