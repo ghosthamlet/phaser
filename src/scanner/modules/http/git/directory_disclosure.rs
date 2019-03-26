@@ -54,7 +54,7 @@ impl module::PortModule for DirectoryDisclosure {
             }));
         }
 
-        return return Ok(findings::Data::None);
+        return Ok(findings::Data::None);
     }
 }
 

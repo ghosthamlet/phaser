@@ -38,8 +38,6 @@ impl module::BaseModule for Ports {
 
 impl module::HostModule for Ports {
     fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
-        let mut output = String::new();
-
         let ports = [
             1,
             3,
