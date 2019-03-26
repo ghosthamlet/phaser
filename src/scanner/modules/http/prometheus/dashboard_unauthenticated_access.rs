@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 
 
@@ -27,10 +30,7 @@ impl module::BaseModule for DashboardUnauthenticatedAccess {
 }
 
 impl module::PortModule for DashboardUnauthenticatedAccess {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -39,25 +39,23 @@ impl module::PortModule for DashboardUnauthenticatedAccess {
             ""
         };
 
-        if protocol == "" {
-            return (ret, errs);
+        if protocol.is_empty() {
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}", &protocol, &target.host, &port.id);
-        let body = reqwest::get(&url)
-            .expect("error fetching url for http/prometheus/dashboard-unauthenticated-access")
-            .text()
-            .expect("error getting body to txt");
+        let body = reqwest::get(&url)?
+            .text()?;
 
 
 
         if body.contains(r#"<title>Prometheus Time Series Collection and Processing Server</title>"#) {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 
