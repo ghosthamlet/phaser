@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 use regex::Regex;
 
@@ -26,11 +29,9 @@ impl module::BaseModule for DirectoryListing {
     }
 }
 
+// TODO: error handling not found
 impl module::PortModule for DirectoryListing {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -40,22 +41,20 @@ impl module::PortModule for DirectoryListing {
         };
 
         if protocol == "" {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}/", &protocol, &target.host, &port.id);
-        let body = reqwest::get(&url)
-            .expect("error fetching url for direcotry listing")
-            .text()
-            .expect("error getting body to txt");
+        let body = reqwest::get(&url)?
+            .text()?;
 
         if is_directory_listing(&body) {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 

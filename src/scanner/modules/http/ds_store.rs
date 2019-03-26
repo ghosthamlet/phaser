@@ -29,7 +29,7 @@ impl module::BaseModule for DsStore {
     }
 }
 
-// TODO: handle error
+// TODO: error handling not found
 impl module::PortModule for DsStore {
     fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
