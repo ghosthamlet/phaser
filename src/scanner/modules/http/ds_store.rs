@@ -1,8 +1,11 @@
-use crate::scanner::{
-    module,
-    findings,
-    Scan,
-    Target,
+use crate::{
+    scanner::{
+        module,
+        findings,
+        Scan,
+        Target,
+    },
+    error::PhaserError,
 };
 
 
@@ -28,10 +31,7 @@ impl module::BaseModule for DsStore {
 
 // TODO: handle error
 impl module::PortModule for DsStore {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> (Option<findings::Data>, Vec<String>) {
-        let errs = vec!();
-        let mut ret = None;
-
+    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -41,24 +41,23 @@ impl module::PortModule for DsStore {
         };
 
         if protocol == "" {
-            return (ret, errs);
+            return Ok(findings::Data::None);
         }
 
         let url = format!("{}://{}:{}/.DS_Store", &protocol, &target.host, &port.id);
-        let mut body = reqwest::get(&url)
-            .expect("error fetching url for direcotry listing");
+        let mut body = reqwest::get(&url)?;
 
         let mut buf: Vec<u8> = vec!();
-        body.copy_to(&mut buf).expect("reading http response to buffer");
+        body.copy_to(&mut buf)?;
 
 
         if is_ds_store(&buf) {
-            ret = Some(findings::Data::Url(findings::Url{
+            return Ok(findings::Data::Url(findings::Url{
                 url,
             }));
         }
 
-        return (ret, errs);
+        return Ok(findings::Data::None);
     }
 }
 
