@@ -132,7 +132,7 @@ impl module::HostModule for Ports {
                 }
                 return Ok(findings::Data::Ports(ports));
             } else {
-                return Err(PhaserError::Sslyze(format!("wrong number of nmap hosts: expected 1, got: {}", run.hosts.len())));
+                return Err(PhaserError::Nmap(format!("wrong number of nmap hosts: expected 1, got: {}", run.hosts.len())));
             }
 
         }
