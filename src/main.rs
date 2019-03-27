@@ -11,6 +11,8 @@ use std::process;
 use serde::{Deserialize, Serialize};
 // use crate::log::macros::*;
 
+pub use error::PhaserError;
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct User {
     name: String,

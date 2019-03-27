@@ -20,6 +20,18 @@ pub struct Worker {
     s3_client: S3Client,
 }
 
+macro_rules! continue_fail {
+    ($res:expr) => {
+        match $res {
+            Ok(val) => val,
+            Err(e) => {
+                warn!("An error: {}; continue.", e);
+                continue;
+            }
+        }
+    };
+}
+
 impl Worker {
      pub fn new() -> Worker {
         let config = Config::new();
@@ -51,14 +63,14 @@ impl Worker {
 
         loop {
             info!("fetching job {}", &endpoint);
-            let mut res = self.api_client.get(&endpoint).send().expect("sending request from worker");
-            let res: messages::ApiResponse = res.json().expect("parsing api response to JSON");
+            let mut res = continue_fail!(self.api_client.get(&endpoint).send());
+            let res: messages::ApiResponse = continue_fail!(res.json());
             if res.status == 200 {
                 match res.data {
                     Some(messages::ApiData::ScanQueued(ref payload)) => {
                         info!("job received report: {}", &payload.report_id);
                         let targets = payload.targets.iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
-                        let data_folder = Path::new(&self.config.data_folder).join(&payload.report_id).to_str().expect("error creating data folder").to_string();
+                        let data_folder = Path::new(&self.config.data_folder).join(&payload.report_id).to_str().expect("error creating data folder path").to_string();
                         let config = scanner::Config{
                             data_folder,
                             assets_folder: self.config.assets_folder.clone(),
@@ -80,16 +92,17 @@ impl Worker {
                                 self.s3_client.put_object(req).sync().expect("Couldn't PUT object");
                                 let endpoint = format!("{}/phaser/reports/{}", self.config.api_url, &payload.report_id);
 
-                                self.api_client.put(&endpoint)
+                                // TODO: retry
+                                continue_fail!(self.api_client.put(&endpoint)
                                     // .json(&messages::ScanCompleted{report_id: payload.report_id.clone()})
-                                    .send().expect("sending scan_completed request from worker");
+                                    .send());
                             }
                         }
                     },
                     _ => {},
                 }
             } else {
-                info!("no jobs, witing 15 secs");
+                info!("no jobs, waiting 15 secs");
                 thread::sleep(time::Duration::from_secs(15))
             }
         }
