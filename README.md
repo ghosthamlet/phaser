@@ -6,8 +6,7 @@
 
 --------
 
-[![Build Status](https://travis-ci.org/bloom42/phaser.svg?branch=master)](https://travis-ci.org/bloom42/phaser)
-[![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
+[![Build Status](https://travis-ci.com/z0mbie42/phaser.svg?token=8WFNhu6wffpdLjmEs8Fi&branch=master)](https://travis-ci.com/z0mbie42/phaser)[![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
 [![phaser crate](https://img.shields.io/crates/v/phaser.svg)](https://crates.io/crates/phaser)
 [![phaser documentation](https://docs.rs/phaser/badge.svg)](https://docs.rs/phaser)
 
