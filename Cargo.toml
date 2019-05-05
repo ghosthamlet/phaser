@@ -31,6 +31,7 @@ regex = "1"
 mysql = "15.1"
 uuid = { version = "0.7", features = ["v4"] }
 zip = "0.5"
+walkdir="2.2"
 
 # to use datetime types
 chrono = "0.4"
