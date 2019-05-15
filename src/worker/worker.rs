@@ -77,10 +77,9 @@ impl Worker {
                         let mut report = scanner::ReportV1::new(config, payload.id, payload.scan_id, targets);
                         report.run();
 
-                        let folder = format!("{}/{}", &self.config.data_folder, &payload.id);
-                        let zip_file = format!("{}/report.zip", &folder);
+                        let zip_file = format!("{}/report.zip", &report.config.data_folder);
                         continue_fail!(
-                            doit(&folder, &zip_file, zip::CompressionMethod::Deflated)
+                            doit(&report.config.data_folder, &zip_file, zip::CompressionMethod::Deflated)
                         );
 
                         let form = continue_fail!(
