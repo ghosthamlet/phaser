@@ -1,7 +1,7 @@
 use crate::{
     scanner::{
         findings,
-        Scan,
+        ReportV1,
         Target,
         TargetError,
     },
@@ -36,14 +36,14 @@ pub trait BaseModule {
     }
 }
 
-// HostModule must be implemented by all modules to be used by the phaser scan engine.
+// HostModule must be implemented by all modules to be used by the phaser report engine.
 // They will be run at most once per host.
 pub trait HostModule: BaseModule {
-    fn run(&self, scan: &Scan, target: &Target) -> Result<findings::Data, PhaserError>;
+    fn run(&self, report: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError>;
 }
 
 // PortModule must be implemented by all modules to be used by the phaser scanner engine.
 // They will be run at most once per port per host.
 pub trait PortModule: BaseModule {
-    fn run(&self, scan: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError>;
+    fn run(&self, report: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError>;
 }

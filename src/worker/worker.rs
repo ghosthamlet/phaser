@@ -1,22 +1,21 @@
 use config::Config;
-use crate::log::macros::*;
 use std::str::FromStr;
-use crate::worker::{config, messages};
-use crate::scanner;
 use std::path::{Path};
 use reqwest::header;
 use std::{thread, time};
-use std::fs;
-use std::io::Read;
-
-use std::io::prelude::*;
-use std::io::{Write, Seek};
-use std::iter::Iterator;
-use zip::write::FileOptions;
-use zip::result::ZipError;
-
+use std::io::{Write, Seek, Read};
+use zip::{
+    write::FileOptions,
+    result::ZipError,
+};
 use walkdir::{WalkDir, DirEntry};
 use std::fs::File;
+use crate::{
+    worker::{config, messages},
+    scanner,
+    log::macros::*,
+};
+
 
 
 #[derive(Clone)]
@@ -57,7 +56,7 @@ impl Worker {
      }
 
     pub fn run(&self) {
-        let endpoint = format!("{}/phaser/job", self.config.api_url);
+        let endpoint = format!("{}/phaser/v1/job", self.config.api_url);
 
         loop {
             info!("fetching job {}", &endpoint);
@@ -70,33 +69,25 @@ impl Worker {
                         let targets = payload.targets
                             .iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
                         let data_folder = Path::new(&self.config.data_folder)
-                            .join(&payload.report_id).to_str().expect("error creating data folder path").to_string();
-                        let config = scanner::Config{
+                            .join(&payload.report_id.to_string()).to_str().expect("error creating data folder path").to_string();
+                        let config = scanner::ConfigV1{
                             data_folder,
                             assets_folder: self.config.assets_folder.clone(),
                         };
-                        let mut scan = scanner::Scan::new(config, &payload.scan_id, &payload.report_id, targets);
-                        scan.run();
+                        let mut report = scanner::ReportV1::new(config, payload.report_id, payload.scan_id, targets);
+                        report.run();
 
-                        let mut f = fs::File::open(&format!("{}/{}/scan.json", &self.config.data_folder, &payload.report_id)).unwrap();
-                        let mut contents: Vec<u8> = Vec::new();
-                        match f.read_to_end(&mut contents) {
-                            Err(why) => panic!("Error opening file to send to S3: {}", why),
-                            Ok(_) => {
-                                // TODO: zip
+                        let folder = format!("{}/{}", &self.config.data_folder, &payload.report_id);
+                        let zip_file = format!("{}.zip", &folder);
+                        continue_fail!(
+                            doit(&folder, &zip_file, zip::CompressionMethod::Deflated)
+                        );
 
-                                let folder = format!("{}/{}", &self.config.data_folder, &payload.report_id);
-                                let zip_file = format!("{}.zip", &folder);
-                                continue_fail!(
-                                    doit(&folder, &zip_file, zip::CompressionMethod::Deflated)
-                                );
-
-                                // TODO: retry
-                                continue_fail!(self.api_client.put(&endpoint)
-                                    // .json(&messages::ScanCompleted{report_id: payload.report_id.clone()})
-                                    .send());
-                            }
-                        }
+                        // TODO: retry
+                        let endpoint = format!("{}/phaser/v1/scans/{}/reports/{}/complete", &self.config.api_url, report.scan_id, report.id);
+                        continue_fail!(self.api_client.post(&endpoint)
+                            // .json(&messages::ScanCompleted{report_id: payload.report_id.clone()})
+                            .send());
                     },
                     _ => {},
                 }

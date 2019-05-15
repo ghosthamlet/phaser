@@ -12,31 +12,36 @@ use std::path::{Path};
 use std::fs;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Scan {
-    pub id: String,
-    pub report_id: String,
-    pub config: Config,
+pub enum Report {
+    V1(ReportV1),
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ReportV1 {
+    pub id: uuid::Uuid,
+    pub scan_id: uuid::Uuid,
+    pub config: ConfigV1,
     pub targets: Vec<Target>,
-    pub version: String,
+    pub phaser_version: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
-pub struct Config {
+pub struct ConfigV1 {
     pub data_folder: String,
     pub assets_folder: String,
     // pub s3_client: S3Client,
 }
 
 
-impl Scan {
-    pub fn new(config: Config, id: &str, report_id: &str, targets: Vec<Target>) -> Scan {
+impl ReportV1 {
+    pub fn new(config: ConfigV1, id: uuid::Uuid, scan_id: uuid::Uuid, targets: Vec<Target>) -> ReportV1 {
         // fs::create_dir_all(&config.data_folder).expect("error creating scan's data folder");
-        return Scan{
-            id: id.to_string(),
-            report_id: report_id.to_string(),
+        return ReportV1{
+            id,
+            scan_id,
             targets,
             config,
-            version: info::VERSION.to_string(),
+            phaser_version: info::VERSION.to_string(),
         };
     }
 
@@ -86,10 +91,11 @@ impl Scan {
 
         };
 
-        let relative_path = "scan.json";
+        let relative_path = "report.json";
         let path = Path::new(&self.config.data_folder).join(relative_path);
         // TODO: handle error
-        fs::write(path, serde_json::to_string_pretty(&self).expect("serializing scan to json"))
-            .expect("error saving scan.json");
+        let shell = Report::V1(self.clone());
+        fs::write(path, serde_json::to_string_pretty(&shell).expect("serializing scan to json"))
+            .expect("error saving report.json");
     }
 }

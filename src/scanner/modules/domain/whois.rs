@@ -2,7 +2,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
         TargetKind,
     },
@@ -33,7 +33,7 @@ impl module::BaseModule for Whois {
 }
 
 impl module::HostModule for Whois {
-    fn run(&self, scan: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, scan: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
         if let TargetKind::Ip = target.kind {
             return Ok(findings::Data::None);
         };

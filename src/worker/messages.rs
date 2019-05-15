@@ -26,10 +26,10 @@ pub enum ApiData {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ScanQueued {
-    pub scan_id: String,
+    pub scan_id: uuid::Uuid,
     pub targets: Vec<String>,
     pub profile: String,
-    pub report_id: String
+    pub report_id: uuid::Uuid
 }
 
 // MessageOut is used to send and receive messages between services
@@ -43,7 +43,7 @@ pub enum Out {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ScanStarted {
-    pub report_id: String,
+    pub report_id: uuid::Uuid,
     pub started_at: String,
 }
 

@@ -2,7 +2,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
         TargetKind,
     },
@@ -32,7 +32,7 @@ impl module::BaseModule for Spf {
 
 // TODO: only if root domain
 impl module::HostModule for Spf {
-    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut is_spf_record_missing = true;
 
         if let TargetKind::Ip = target.kind {

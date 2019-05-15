@@ -2,7 +2,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
         TargetKind,
     },
@@ -31,7 +31,7 @@ impl module::BaseModule for Subdomains {
 }
 
 impl module::HostModule for Subdomains {
-    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut domains = vec!();
 
         if let TargetKind::Ip = target.kind {

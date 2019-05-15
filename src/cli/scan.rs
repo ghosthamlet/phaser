@@ -1,5 +1,5 @@
 use clap::{ArgMatches};
-use crate::scanner::{Scan, Target, Config};
+use crate::scanner::{ReportV1, Target, ConfigV1};
 use std::process;
 use std::str::FromStr;
 use uuid::Uuid;
@@ -15,13 +15,14 @@ pub fn run(matches: &ArgMatches) -> Result<(), String> {
 
         match targets {
             Ok(targets) => {
-                let uuid = Uuid::new_v4().to_hyphenated().to_string();
-                let data_folder = Path::new("reports").join(&uuid).to_str().expect("error creating data folder").to_string();
-                let config = Config{
+                let random_report_id = Uuid::new_v4();
+                let random_scan_id = Uuid::new_v4();
+                let data_folder = format!("reports/{}", random_report_id);
+                let config = ConfigV1{
                     data_folder,
                     assets_folder: "assets".to_string(),
                 };
-                let mut scan = Scan::new(config, &uuid, &uuid, targets);
+                let mut scan = ReportV1::new(config, random_report_id, random_scan_id, targets);
                 scan.run();
             },
             Err(err) => {

@@ -3,7 +3,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
         TargetKind,
     },
@@ -31,7 +31,7 @@ impl module::BaseModule for Axfr {
 }
 
 impl module::HostModule for Axfr {
-    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
         let mut data = vec!();
 
         if let TargetKind::Ip = target.kind {

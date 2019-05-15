@@ -8,7 +8,7 @@ use crate::{
         scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
         TargetKind,
     },
@@ -38,7 +38,7 @@ impl module::BaseModule for Cname {
 
 // TODO: remove unwraps
 impl module::HostModule for Cname {
-    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
         if let TargetKind::Ip = target.kind {
             return Ok(findings::Data::None);
         };

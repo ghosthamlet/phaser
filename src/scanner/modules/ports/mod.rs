@@ -4,7 +4,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
     },
     error::PhaserError,
@@ -37,7 +37,7 @@ impl module::BaseModule for Ports {
 }
 
 impl module::HostModule for Ports {
-    fn run(&self, _: &Scan, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
         let ports = [
             1,
             3,

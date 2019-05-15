@@ -2,7 +2,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
     },
     error::PhaserError,
@@ -32,7 +32,7 @@ impl module::BaseModule for Cve2014_0224 {
 }
 
 impl module::PortModule for Cve2014_0224 {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         if !port.https {
             return Ok(findings::Data::None);
         }

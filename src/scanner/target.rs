@@ -1,8 +1,9 @@
 use serde::{Serialize, Deserialize};
-use crate::scanner::findings::{Finding, Module};
 use std::net::{IpAddr};
 use url::Host;
 use std::str::FromStr;
+use crate::scanner::findings::{Finding, Module};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Target {
