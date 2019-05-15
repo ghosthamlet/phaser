@@ -3,7 +3,7 @@ use crate::scanner::{ReportV1, Target, ConfigV1};
 use std::process;
 use std::str::FromStr;
 use uuid::Uuid;
-use std::path::{Path};
+
 
 // TODO
 pub fn run(matches: &ArgMatches) -> Result<(), String> {
