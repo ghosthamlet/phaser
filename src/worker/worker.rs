@@ -41,7 +41,7 @@ impl Worker {
         let config = Config::new();
 
         let mut headers = header::HeaderMap::new();
-        let auth_header = format!("Secret {}", &config.phaser_secret);
+        let auth_header = format!("Secret phaser:{}", &config.phaser_secret);
         headers.insert(header::AUTHORIZATION, header::HeaderValue::from_str(&auth_header).unwrap());
 
         let api_client = reqwest::Client::builder()
@@ -61,6 +61,7 @@ impl Worker {
         loop {
             info!("fetching job {}", &endpoint);
             let mut res = continue_fail!(self.api_client.get(&endpoint).send());
+            info!("status: {}", res.status());
             if res.status() == 200 {
                 let payload: messages::ApiResponse = continue_fail!(res.json());
                 match payload.data {
