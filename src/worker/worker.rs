@@ -78,15 +78,21 @@ impl Worker {
                         report.run();
 
                         let folder = format!("{}/{}", &self.config.data_folder, &payload.report_id);
-                        let zip_file = format!("{}.zip", &folder);
+                        let zip_file = format!("{}/report.zip", &folder);
                         continue_fail!(
                             doit(&folder, &zip_file, zip::CompressionMethod::Deflated)
+                        );
+
+                        let form = continue_fail!(
+                            reqwest::multipart::Form::new()
+                            .file("report.zip", &zip_file)
                         );
 
                         // TODO: retry
                         let endpoint = format!("{}/phaser/v1/scans/{}/reports/{}/complete", &self.config.api_url, report.scan_id, report.id);
                         continue_fail!(self.api_client.post(&endpoint)
                             // .json(&messages::ScanCompleted{report_id: payload.report_id.clone()})
+                            .multipart(form)
                             .send());
                     },
                     _ => {},
