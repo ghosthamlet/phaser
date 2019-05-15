@@ -2,7 +2,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
     },
     error::PhaserError,
@@ -32,7 +32,7 @@ impl module::BaseModule for Cve2018_7600 {
 
 // TODO: error handling not found
 impl module::PortModule for Cve2018_7600 {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -138,7 +138,7 @@ mod tests {
 // 	return "0.1.0"
 // }
 
-// func (CVE_2018_7600) Run(scan *phaser.Scan, target *phaser.Target, port phaser.Port) (module.Result, []error) {
+// func (CVE_2018_7600) Run(scan *phaser.ReportV1, target *phaser.Target, port phaser.Port) (module.Result, []error) {
 // 	errs := []error{}
 // 	var ret module.Result
 // 	protocol := "http"

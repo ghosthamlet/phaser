@@ -2,7 +2,7 @@ use crate::{
     scanner::{
         module,
         findings,
-        Scan,
+        ReportV1,
         Target,
     },
     error::PhaserError,
@@ -33,7 +33,7 @@ impl module::BaseModule for ConfigDisclosure {
 
 // TODO: error handling not found
 impl module::PortModule for ConfigDisclosure {
-    fn run(&self, _: &Scan, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
