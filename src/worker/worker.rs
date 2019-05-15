@@ -61,23 +61,23 @@ impl Worker {
         loop {
             info!("fetching job {}", &endpoint);
             let mut res = continue_fail!(self.api_client.get(&endpoint).send());
-            let res: messages::ApiResponse = continue_fail!(res.json());
-            if res.status == 200 {
-                match res.data {
-                    Some(messages::ApiData::ScanQueued(ref payload)) => {
-                        info!("job received report: {}", &payload.report_id);
+            if res.status() == 200 {
+                let payload: messages::ApiResponse = continue_fail!(res.json());
+                match payload.data {
+                    Some(messages::ApiData::ReportQueued(ref payload)) => {
+                        info!("job received report: {}", &payload.id);
                         let targets = payload.targets
                             .iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
                         let data_folder = Path::new(&self.config.data_folder)
-                            .join(&payload.report_id.to_string()).to_str().expect("error creating data folder path").to_string();
+                            .join(&payload.id.to_string()).to_str().expect("error creating data folder path").to_string();
                         let config = scanner::ConfigV1{
                             data_folder,
                             assets_folder: self.config.assets_folder.clone(),
                         };
-                        let mut report = scanner::ReportV1::new(config, payload.report_id, payload.scan_id, targets);
+                        let mut report = scanner::ReportV1::new(config, payload.id, payload.scan_id, targets);
                         report.run();
 
-                        let folder = format!("{}/{}", &self.config.data_folder, &payload.report_id);
+                        let folder = format!("{}/{}", &self.config.data_folder, &payload.id);
                         let zip_file = format!("{}/report.zip", &folder);
                         continue_fail!(
                             doit(&folder, &zip_file, zip::CompressionMethod::Deflated)
@@ -91,7 +91,6 @@ impl Worker {
                         // TODO: retry
                         let endpoint = format!("{}/phaser/v1/scans/{}/reports/{}/complete", &self.config.api_url, report.scan_id, report.id);
                         continue_fail!(self.api_client.post(&endpoint)
-                            // .json(&messages::ScanCompleted{report_id: payload.report_id.clone()})
                             .multipart(form)
                             .send());
                     },
