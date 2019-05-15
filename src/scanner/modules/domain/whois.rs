@@ -46,7 +46,7 @@ impl module::HostModule for Whois {
 
         if !output.is_empty() {
             let relative_path = "whois.txt";
-            let path = Path::new(&scan.config.data_folder).join(relative_path);
+            let path = Path::new(&scan.report_folder).join(relative_path);
 
             fs::write(&path, output)?;
 

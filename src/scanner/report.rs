@@ -8,8 +8,8 @@ use crate::scanner::{
 use serde::{Serialize, Deserialize};
 use crate::log::macros::*;
 use crate::info;
-use std::path::{Path};
 use std::fs;
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum Report {
@@ -23,6 +23,7 @@ pub struct ReportV1 {
     pub config: ConfigV1,
     pub targets: Vec<Target>,
     pub phaser_version: String,
+    pub report_folder: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
@@ -36,16 +37,21 @@ pub struct ConfigV1 {
 impl ReportV1 {
     pub fn new(config: ConfigV1, id: uuid::Uuid, scan_id: uuid::Uuid, targets: Vec<Target>) -> ReportV1 {
         // fs::create_dir_all(&config.data_folder).expect("error creating scan's data folder");
+        let report_folder = format!("{}/{}", &config.data_folder, id);
         return ReportV1{
             id,
             scan_id,
             targets,
             config,
+            report_folder,
             phaser_version: info::VERSION.to_string(),
         };
     }
 
     pub fn run(&mut self) {
+        // create direcotry
+        fs::create_dir_all(&self.report_folder).expect("error creating report/{id} folder");
+
         let targets = self.targets.clone();
         // for each target
         for (i, target) in targets.iter().enumerate() {
@@ -91,8 +97,7 @@ impl ReportV1 {
 
         };
 
-        let relative_path = "report.json";
-        let path = Path::new(&self.config.data_folder).join(relative_path);
+        let path = format!("{}/report.json", &self.report_folder);
         // TODO: handle error
         let shell = Report::V1(self.clone());
         fs::write(path, serde_json::to_string_pretty(&shell).expect("serializing scan to json"))
