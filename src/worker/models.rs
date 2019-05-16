@@ -4,18 +4,13 @@ use serde::{Serialize, Deserialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ApiResponse {
     pub error: Option<String>,
-    pub data: Option<ApiData>,
+    pub data: Option<ReportJob>,
     // pub status: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum ApiData {
-    ReportQueued(ReportQueued),
-}
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ReportQueued {
+pub struct ReportJob {
     pub id: uuid::Uuid,
     pub scan_id: uuid::Uuid,
     pub targets: Vec<String>,

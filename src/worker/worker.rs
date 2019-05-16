@@ -11,7 +11,7 @@ use zip::{
 use walkdir::{WalkDir, DirEntry};
 use std::fs::File;
 use crate::{
-    worker::{config, messages},
+    worker::{config, models},
     scanner,
     log::macros::*,
 };
@@ -63,39 +63,35 @@ impl Worker {
             let mut res = continue_fail!(self.api_client.get(&endpoint).send());
             info!("status: {}", res.status());
             if res.status() == 200 {
-                let payload: messages::ApiResponse = continue_fail!(res.json());
-                match payload.data {
-                    Some(messages::ApiData::ReportQueued(ref payload)) => {
-                        info!("job received report: {}", &payload.id);
-                        let targets = payload.targets
-                            .iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
-                        let data_folder = Path::new(&self.config.data_folder)
-                            .join(&payload.id.to_string()).to_str().expect("error creating data folder path").to_string();
-                        let config = scanner::ConfigV1{
-                            data_folder,
-                            assets_folder: self.config.assets_folder.clone(),
-                        };
-                        let mut report = scanner::ReportV1::new(config, payload.id, payload.scan_id, targets);
-                        report.run();
+                let payload: models::ApiResponse = continue_fail!(res.json());
+                let payload = payload.data.expect("error unwraping reportJob");
+                info!("job received report: {}", &payload.id);
+                let targets = payload.targets
+                    .iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
+                let data_folder = Path::new(&self.config.data_folder)
+                    .join(&payload.id.to_string()).to_str().expect("error creating data folder path").to_string();
+                let config = scanner::ConfigV1{
+                    data_folder,
+                    assets_folder: self.config.assets_folder.clone(),
+                };
+                let mut report = scanner::ReportV1::new(config, payload.id, payload.scan_id, targets);
+                report.run();
 
-                        let zip_file = format!("{}/report.zip", &report.config.data_folder);
-                        continue_fail!(
-                            doit(&report.config.data_folder, &zip_file, zip::CompressionMethod::Deflated)
-                        );
+                let zip_file = format!("{}/report.zip", &report.config.data_folder);
+                continue_fail!(
+                    doit(&report.config.data_folder, &zip_file, zip::CompressionMethod::Deflated)
+                );
 
-                        let form = continue_fail!(
-                            reqwest::multipart::Form::new()
-                            .file("report.zip", &zip_file)
-                        );
+                let form = continue_fail!(
+                    reqwest::multipart::Form::new()
+                    .file("report.zip", &zip_file)
+                );
 
-                        // TODO: retry
-                        let endpoint = format!("{}/phaser/v1/scans/{}/reports/{}/complete", &self.config.api_url, report.scan_id, report.id);
-                        continue_fail!(self.api_client.post(&endpoint)
-                            .multipart(form)
-                            .send());
-                    },
-                    _ => {},
-                }
+                // TODO: retry
+                let endpoint = format!("{}/phaser/v1/scans/{}/reports/{}/complete", &self.config.api_url, report.scan_id, report.id);
+                continue_fail!(self.api_client.post(&endpoint)
+                    .multipart(form)
+                    .send());
             } else {
                 info!("no jobs, waiting 15 secs");
                 thread::sleep(time::Duration::from_secs(15))
