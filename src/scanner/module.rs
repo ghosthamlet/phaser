@@ -105,6 +105,8 @@ pub enum ModuleName {
 
 impl std::fmt::Display for ModuleName {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", serde_json::to_string(self).expect("error serializing ModuleName"))
+        let str_rep = serde_json::to_string(self).expect("error serializing ModuleName");
+        let length = str_rep.len();
+        write!(f, "{}", str_rep[1..length-1].to_string()) // remove quotes
     }
 }
