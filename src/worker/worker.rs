@@ -77,7 +77,7 @@ impl Worker {
                 let mut report = scanner::ReportV1::new(config, payload.id, payload.scan_id, targets);
                 report.run();
 
-                let zip_file = format!("{}/report.zip", &report.config.data_folder);
+                let zip_file = format!("{}.zip", &report.config.data_folder);
                 continue_fail!(
                     doit(&report.config.data_folder, &zip_file, zip::CompressionMethod::Deflated)
                 );
@@ -89,9 +89,12 @@ impl Worker {
 
                 // TODO: retry
                 let endpoint = format!("{}/phaser/v1/scans/{}/reports/{}/complete", &self.config.api_url, report.scan_id, report.id);
-                continue_fail!(self.api_client.post(&endpoint)
+                match self.api_client.post(&endpoint)
                     .multipart(form)
-                    .send());
+                    .send() {
+                    Ok(_) => info!("report zip successfully sent to API"),
+                    Err(err) => slog_warn!(slog_scope::logger(), "error sending report to api"; "err" => err.to_string()),
+                }
             } else {
                 info!("no jobs, waiting 15 secs");
                 thread::sleep(time::Duration::from_secs(15))
