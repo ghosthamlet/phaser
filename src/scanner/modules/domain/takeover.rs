@@ -45,9 +45,9 @@ struct Provider {
 
 
 impl module::HostModule for Takeover {
-    fn run(&self, scan: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, scan: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
         // parse fingerprints
@@ -63,13 +63,13 @@ impl module::HostModule for Takeover {
         for provider in &providers {
             for fingerprint in &provider.fingerprints {
                 if body.contains(fingerprint) {
-                    return Ok(findings::Data::Takeover(findings::domain::Takeover{
+                    return Ok(findings::ModuleResult::Takeover(findings::domain::Takeover{
                         service: provider.service.to_string(),
                     }));
                 }
             }
         }
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

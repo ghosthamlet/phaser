@@ -22,7 +22,7 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 	}
 	message := async.Message{
 		Type: "scan_started",
-		Data: data,
+		ModuleResult: data,
 	}
 
 	encodedMessage, err := json.Marshal(message)
@@ -50,14 +50,14 @@ func (worker *Worker) sendScanStarted(reportID string, startedAt time.Time) erro
 
 func (worker *Worker) sendScanCompleted(scan phaser.Scan) error {
 	svc := sqs.New(worker.awsSession)
-	messageData := phaser.ScanCompletedMessage{
+	messageModuleResult := phaser.ScanCompletedMessage{
 		ReportID: *scan.ReportID,
 		File:     scan.ResultFile,
 	}
 
 	message := async.Message{
 		Type: "scan_completed",
-		Data: messageData,
+		ModuleResult: messageModuleResult,
 	}
 
 	encodedMessage, err := json.Marshal(message)

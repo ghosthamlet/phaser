@@ -38,7 +38,7 @@ impl module::BaseModule for Ports {
 }
 
 impl module::HostModule for Ports {
-    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         let ports = [
             1,
             3,
@@ -131,14 +131,14 @@ impl module::HostModule for Ports {
                         https,
                     });
                 }
-                return Ok(findings::Data::Ports(ports));
+                return Ok(findings::ModuleResult::Ports(ports));
             } else {
                 return Err(PhaserError::Nmap(format!("wrong number of nmap hosts: expected 1, got: {}", run.hosts.len())));
             }
 
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

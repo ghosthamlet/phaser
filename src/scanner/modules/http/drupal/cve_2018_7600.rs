@@ -33,7 +33,7 @@ impl module::BaseModule for Cve2018_7600 {
 
 // TODO: error handling not found
 impl module::PortModule for Cve2018_7600 {
-    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -43,7 +43,7 @@ impl module::PortModule for Cve2018_7600 {
         };
 
         if protocol.is_empty() {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         let token = "08d15a4aef553492d8971cdd5198f31408d15a4aef553492d8971cdd5198f314";
@@ -82,14 +82,14 @@ impl module::PortModule for Cve2018_7600 {
                     .text()?;
 
                 if body.contains(&token) {
-                    return Ok(findings::Data::Url(findings::Url{
+                    return Ok(findings::ModuleResult::Url(findings::Url{
                         url,
                     }));
                 }
             }
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

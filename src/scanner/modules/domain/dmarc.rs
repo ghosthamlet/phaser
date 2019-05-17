@@ -33,11 +33,11 @@ impl module::BaseModule for Dmarc {
 
 // TODO: only if root domain
 impl module::HostModule for Dmarc {
-    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         let mut is_dmarc_record_missing = true;
 
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
         // first retrieve TXT records
@@ -65,14 +65,14 @@ impl module::HostModule for Dmarc {
         }
 
         if is_dmarc_record_missing {
-            return Ok(findings::Data::Dmarc(findings::domain::Dmarc{
+            return Ok(findings::ModuleResult::Dmarc(findings::domain::Dmarc{
                 domain: dmarc_domain,
                 records,
                 resolves,
             }));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

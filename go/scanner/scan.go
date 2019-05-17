@@ -80,7 +80,7 @@ func RunScan(scan *phaser.Scan) {
 		logger.Info("scan successfully completed",
 			rz.Any("report_id", scan.ReportID),
 			rz.String("file", scan.ResultFile.Path), rz.String("sha256", scan.ResultFile.SHA256),
-			rz.String("directory", scan.Config.DataFolder),
+			rz.String("directory", scan.Config.ModuleResultFolder),
 		)
 	}
 }
@@ -128,7 +128,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 			finding := phaser.Finding{
 				Module:  moduleName,
 				Version: moduleVersion,
-				Data:    result,
+				ModuleResult:    result,
 			}
 			target.Findings = append(target.Findings, finding)
 		}
@@ -146,12 +146,12 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 		// start by scanning ports
 		logger.Info("starting ports scan")
 		portsModule := ports.Ports{}
-		portsData, errs := portsModule.Run(scan, target)
+		portsModuleResult, errs := portsModule.Run(scan, target)
 		logger.Info("ports scan ended")
 		portsFinding := phaser.Finding{
 			Module:  portsModule.Name(),
 			Version: portsModule.Version(),
-			Data:    portsData,
+			ModuleResult:    portsModuleResult,
 		}
 		target.Findings = append(target.Findings, portsFinding)
 		if len(errs) != 0 {
@@ -160,7 +160,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 			return
 		}
 
-		scannedPorts := portsData.([]phaser.Port)
+		scannedPorts := portsModuleResult.([]phaser.Port)
 		for _, port := range scannedPorts {
 			for _, module := range portModules {
 				moduleName := module.Name()
@@ -177,7 +177,7 @@ func scanTarget(scan *phaser.Scan, target *phaser.Target) {
 					finding := phaser.Finding{
 						Module:  moduleName,
 						Version: moduleVersion,
-						Data:    result,
+						ModuleResult:    result,
 					}
 					target.Findings = append(target.Findings, finding)
 				}

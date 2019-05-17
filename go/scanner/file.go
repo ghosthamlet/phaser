@@ -95,7 +95,7 @@ func saveFile(scan *phaser.Scan, filePath string, data []byte) (phaser.File, err
 	// 	})
 	// } else
 	// save to local FS
-	filePath = filepath.Join(scan.Config.DataFolder, filePath)
+	filePath = filepath.Join(scan.Config.ModuleResultFolder, filePath)
 	logger.Info("writing file to fs", rz.String("file", filePath))
 	err = ioutil.WriteFile(filePath, data, 0600)
 

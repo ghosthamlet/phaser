@@ -95,7 +95,7 @@ var scanCmd = &cobra.Command{
 		scanConfig := phaser.Config{
 			Profile:    scanProfile,
 			Targets:    targetsStr,
-			DataFolder: scanOutputFolder,
+			ModuleResultFolder: scanOutputFolder,
 			AssetsFolder: scanAssetsFolder,
 		}
 

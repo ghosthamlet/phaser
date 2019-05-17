@@ -32,11 +32,11 @@ impl module::BaseModule for Subdomains {
 }
 
 impl module::HostModule for Subdomains {
-    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         let mut domains = vec!();
 
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
         let conn = Connection::connect("postgres://guest@crt.sh:5432/certwatch", TlsMode::None)?;
@@ -67,7 +67,7 @@ impl module::HostModule for Subdomains {
             domains.push(row.get(0));
         }
 
-        return Ok(findings::Data::Domains(domains));
+        return Ok(findings::ModuleResult::Domains(domains));
     }
 }
 

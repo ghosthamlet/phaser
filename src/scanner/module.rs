@@ -16,10 +16,10 @@ pub trait BaseModule {
     fn author(&self) -> String;
     fn version(&self) -> String;
 
-    fn finding(&self, data: findings::Data) -> findings::Finding {
+    fn finding(&self, result: findings::ModuleResult) -> findings::Finding {
         return findings::Finding{
             module_version: self.version(),
-            data,
+            result,
         };
     }
 }
@@ -27,13 +27,13 @@ pub trait BaseModule {
 // HostModule must be implemented by all modules to be used by the phaser report engine.
 // They will be run at most once per host.
 pub trait HostModule: BaseModule {
-    fn run(&self, report: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError>;
+    fn run(&self, report: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError>;
 }
 
 // PortModule must be implemented by all modules to be used by the phaser scanner engine.
 // They will be run at most once per port per host.
 pub trait PortModule: BaseModule {
-    fn run(&self, report: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError>;
+    fn run(&self, report: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError>;
 }
 
 

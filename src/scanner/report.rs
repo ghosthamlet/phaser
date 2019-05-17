@@ -57,7 +57,7 @@ impl ReportV1 {
             let ports_module_findings = ports_module.run(self, &target);
             let data = match &ports_module_findings {
                 Ok(ref finding_data) => finding_data.clone(),
-                Err(ref err) => findings::Data::Err(err.to_string()),
+                Err(ref err) => findings::ModuleResult::Err(err.to_string()),
             };
             self.targets[i].findings.insert(ports_module.name(), ports_module.finding(data));
 
@@ -67,7 +67,7 @@ impl ReportV1 {
                 info!("starting module: {}", module.name());
                 let data = match module.run(self, &target) {
                     Ok(finding_data) => finding_data,
-                    Err(err) => findings::Data::Err(err.to_string()),
+                    Err(err) => findings::ModuleResult::Err(err.to_string()),
                 };
                 self.targets[i].findings.insert(module.name(), module.finding(data));
                 info!("module {} completed", module.name());
@@ -76,13 +76,13 @@ impl ReportV1 {
             // and finally, for each open port of the target, ports modules
             let port_modules = modules::get_port_modules();
             match ports_module_findings {
-                Ok(findings::Data::Ports(ref ports)) => {
+                Ok(findings::ModuleResult::Ports(ref ports)) => {
                     ports.iter().for_each(|port| {
                         port_modules.iter().for_each(|module| {
                             info!("starting module: {}", module.name());
                             let data = match module.run(self, &target, &port) {
                                 Ok(finding_data) => finding_data,
-                                Err(err) => findings::Data::Err(err.to_string()),
+                                Err(err) => findings::ModuleResult::Err(err.to_string()),
                             };
                             self.targets[i].findings.insert(module.name(), module.finding(data));
                             info!("module {} completed", module.name());

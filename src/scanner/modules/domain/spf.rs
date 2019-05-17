@@ -33,11 +33,11 @@ impl module::BaseModule for Spf {
 
 // TODO: only if root domain
 impl module::HostModule for Spf {
-    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         let mut is_spf_record_missing = true;
 
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
         // first retrieve TXT records
@@ -64,14 +64,14 @@ impl module::HostModule for Spf {
         }
 
         if is_spf_record_missing {
-            return Ok(findings::Data::Spf(findings::domain::Spf{
+            return Ok(findings::ModuleResult::Spf(findings::domain::Spf{
                 domain: target.host.clone(),
                 records,
                 resolves,
             }));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

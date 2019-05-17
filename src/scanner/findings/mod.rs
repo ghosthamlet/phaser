@@ -13,11 +13,11 @@ pub mod domain;
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Finding {
     pub module_version: String,
-    pub data: Data,
+    pub result: ModuleResult,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum Data {
+pub enum ModuleResult {
     None,
     Err(String),
     Ports(Vec<Port>),

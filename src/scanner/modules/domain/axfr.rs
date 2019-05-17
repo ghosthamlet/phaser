@@ -32,11 +32,11 @@ impl module::BaseModule for Axfr {
 }
 
 impl module::HostModule for Axfr {
-    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         let mut data = vec!();
 
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
         // first retrieve NS servers
@@ -48,7 +48,7 @@ impl module::HostModule for Axfr {
         let ns_output = String::from_utf8_lossy(&dig_output.stdout).to_string();
 
         if ns_output.is_empty() {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         let ns_servers: Vec<&str> = ns_output.split(',').collect();
@@ -74,10 +74,10 @@ impl module::HostModule for Axfr {
         }
 
         if data.len() != 0 {
-            return Ok(findings::Data::Axfr(data));
+            return Ok(findings::ModuleResult::Axfr(data));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

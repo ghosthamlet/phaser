@@ -32,7 +32,7 @@ impl module::BaseModule for UnauthenticatedAccess {
 
 // TODO: error handling not found
 impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -42,7 +42,7 @@ impl module::PortModule for UnauthenticatedAccess {
         };
 
         if protocol.is_empty() {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         let url = format!("{}://{}:{}", &protocol, &target.host, &port.id);
@@ -53,12 +53,12 @@ impl module::PortModule for UnauthenticatedAccess {
             || body.contains(r#"<div class="ui-app-loading"><h1><strong>Kibana</strong><small>&nbsp;is loading."#)
             || Some(0) == body.find(r#"|| body.contains("#)
             || body.contains(r#"<div class="kibanaWelcomeLogo"></div></div></div><div class="kibanaWelcomeText">Loading Kibana</div></div>"#) {
-            return Ok(findings::Data::Url(findings::Url{
+            return Ok(findings::ModuleResult::Url(findings::Url{
                 url,
             }));
         }
 
-        return Ok(findings::Data::None);;
+        return Ok(findings::ModuleResult::None);;
     }
 }
 

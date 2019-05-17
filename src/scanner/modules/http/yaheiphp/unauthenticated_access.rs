@@ -33,7 +33,7 @@ impl module::BaseModule for UnauthenticatedAccess {
 
 // TODO: error handling not found
 impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -43,7 +43,7 @@ impl module::PortModule for UnauthenticatedAccess {
         };
 
         if protocol.is_empty() {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         // TODO: also check tz_e.php
@@ -52,12 +52,12 @@ impl module::PortModule for UnauthenticatedAccess {
             .text()?;
 
         if body.contains(r#"<title>Yahei-PHP"#) {
-            return Ok(findings::Data::Url(findings::Url{
+            return Ok(findings::ModuleResult::Url(findings::Url{
                 url,
             }));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

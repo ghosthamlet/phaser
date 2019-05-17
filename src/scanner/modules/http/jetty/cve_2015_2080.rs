@@ -34,7 +34,7 @@ impl module::BaseModule for Cve2015_2080 {
 
 // TODO: error handling not found
 impl module::PortModule for Cve2015_2080 {
-    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -44,7 +44,7 @@ impl module::PortModule for Cve2015_2080 {
         };
 
         if protocol.is_empty() {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         let url = format!("{}://{}:{}", &protocol, &target.host, &port.id);
@@ -56,13 +56,13 @@ impl module::PortModule for Cve2015_2080 {
             let re = Regex::new(r"^jetty\(9\.2\.(3|4|5|6|7|8).*\)$|^jetty\(9\.3\.0\.(m0|m1).*\)$")?;
 
             if re.is_match(server) {
-                return Ok(findings::Data::Url(findings::Url{
+                return Ok(findings::ModuleResult::Url(findings::Url{
                     url,
                 }));
             }
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

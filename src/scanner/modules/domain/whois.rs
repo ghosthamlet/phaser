@@ -34,9 +34,9 @@ impl module::BaseModule for Whois {
 }
 
 impl module::HostModule for Whois {
-    fn run(&self, scan: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, scan: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
 
@@ -51,10 +51,10 @@ impl module::HostModule for Whois {
 
             fs::write(&path, output)?;
 
-            return Ok(findings::Data::File(findings::File{path: relative_path.to_owned()}));
+            return Ok(findings::ModuleResult::File(findings::File{path: relative_path.to_owned()}));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 

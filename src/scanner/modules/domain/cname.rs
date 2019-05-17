@@ -33,9 +33,9 @@ impl module::BaseModule for Cname {
 
 // TODO: remove unwraps
 impl module::HostModule for Cname {
-    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target) -> Result<findings::ModuleResult, PhaserError> {
         if let TargetKind::Ip = target.kind {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         };
 
         let dig_output = Command::new("dig")
@@ -47,10 +47,10 @@ impl module::HostModule for Cname {
 
         let output = output.trim().to_string();
         if !output.is_empty() {
-            return Ok(findings::Data::Domain(output));
+            return Ok(findings::ModuleResult::Domain(output));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
         // let mut errs = vec!();
         // let mut ret = None;
         // // Google dns server, 8.8.8.8:53
@@ -81,8 +81,8 @@ impl module::HostModule for Cname {
         // //  In order to access it we need to first check what type of record it is
         // //  In this case we are interested in A, IPv4 address
         // if answers.len() > 0 {
-        //     if let &RData::CNAME(ref name) = answers[0].rdata() {
-        //         ret = Some(findings::Data::Domain(name.to_utf8()));
+        //     if let &RModuleResult::CNAME(ref name) = answers[0].rdata() {
+        //         ret = Some(findings::ModuleResult::Domain(name.to_utf8()));
         //     }
         //     // TODO: else, log weird data
         // }

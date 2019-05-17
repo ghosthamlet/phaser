@@ -81,7 +81,7 @@ func (worker *Worker) Run() error {
 			switch asyncMessage.Type {
 			case "scan_queued":
 				scanMessage := phaser.ScanQueuedMessage{}
-				err := json.Unmarshal(asyncMessage.Data, &scanMessage)
+				err := json.Unmarshal(asyncMessage.ModuleResult, &scanMessage)
 				if err != nil {
 					log.Error("decoding scan_queued message data", rz.Err(err))
 					continue

@@ -31,16 +31,16 @@ impl module::BaseModule for UnauthenticatedAccess {
 }
 
 impl module::PortModule for UnauthenticatedAccess {
-    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError> {
         if port.http || port.https {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         let url = format!("postgres://postgres@{}:{}", &target.host, &port.id);
 
         let ret = match Connection::connect(url.clone(), TlsMode::None) {
-            Ok(_) => findings::Data::Url(findings::Url{url}),
-            _ => findings::Data::None,
+            Ok(_) => findings::ModuleResult::Url(findings::Url{url}),
+            _ => findings::ModuleResult::None,
         };
 
         return Ok(ret);

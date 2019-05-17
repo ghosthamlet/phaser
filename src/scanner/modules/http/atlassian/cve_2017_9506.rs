@@ -31,7 +31,7 @@ impl module::BaseModule for Cve2017_9506 {
 
 // TODO: error handling not found
 impl module::PortModule for Cve2017_9506 {
-    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::Data, PhaserError> {
+    fn run(&self, _: &ReportV1, target: &Target, port: &findings::Port) -> Result<findings::ModuleResult, PhaserError> {
         let protocol = if port.http {
             "http"
         } else if port.https {
@@ -41,7 +41,7 @@ impl module::PortModule for Cve2017_9506 {
         };
 
         if protocol.is_empty() {
-            return Ok(findings::Data::None);
+            return Ok(findings::ModuleResult::None);
         }
 
         let url = format!("{}://{}:{}/plugins/servlet/oauth/users/icon-uri?consumerUri=https://google.com/robots.txt", &protocol, &target.host, &port.id);
@@ -49,12 +49,12 @@ impl module::PortModule for Cve2017_9506 {
             .text()?;
 
         if body.contains("user-agent: *") && body.contains("disallow") {
-            return Ok(findings::Data::Url(findings::Url{
+            return Ok(findings::ModuleResult::Url(findings::Url{
                 url,
             }));
         }
 
-        return Ok(findings::Data::None);
+        return Ok(findings::ModuleResult::None);
     }
 }
 
