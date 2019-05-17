@@ -71,6 +71,36 @@ pub enum ModuleName {
     DomainTakeover,
     #[serde(rename = "domain/whois")]
     DomainWhois,
+    #[serde(rename = "http/atlassian/cve-2017-9506")]
+    HttpAtlassianCve20179506,
+    #[serde(rename = "http/cadvisor/unauthenticated-access")]
+    HttpCadvisorUnauthenticatedAccess,
+    #[serde(rename = "http/consul/unauthenticated-access")]
+    HttpConsulUnauthenticatedAccess,
+    #[serde(rename = "http/drupal/cve-2018-7600")]
+    HttpDrupalCve20187600,
+    #[serde(rename = "http/elasticsearch/unauthenticated-access")]
+    HttpElasticsearchUnauthenticatedAccess,
+    #[serde(rename = "http/etcd/unauthenticated-access")]
+    HttpEtcdUnauthenticatedAccess,
+    #[serde(rename = "http/yaheiphp/unauthenticated-access")]
+    HttpYaheiphpUnauthenticatedAccess,
+    #[serde(rename = "http/traefik/dashboard-unauthenticated-access")]
+    HttpTraefikDashboardUnauthenticatedAccess,
+    #[serde(rename = "http/prometheus/dashboard-unauthenticated-access")]
+    HttpPrometheusDashboardUnauthenticatedAccess,
+    #[serde(rename = "http/kibana/unauthenticated-access")]
+    HttpKibanaUnauthenticatedAccess,
+    #[serde(rename = "http/jetty/cve-2015-2080")]
+    HttpJettyCve20152080,
+    #[serde(rename = "http/gitlab/open-registration")]
+    HttpGitlabOpenRegistration,
+    #[serde(rename = "http/git/config-disclosure")]
+    HttpGitConfigDisclosure,
+    #[serde(rename = "http/git/directory-disclosure")]
+    HttpGitDirectoryDisclosure,
+    #[serde(rename = "http/git/head-disclosure")]
+    HttpGitheadDisclosure,
 }
 
 impl std::fmt::Display for ModuleName {

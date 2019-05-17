@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -14,8 +15,8 @@ use regex::Regex;
 pub struct ConfigDisclosure{}
 
 impl module::BaseModule for ConfigDisclosure {
-    fn name(&self) -> String {
-        return "http/git/config-disclosure".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpGitConfigDisclosure;
     }
 
     fn description(&self) -> String {
@@ -73,7 +74,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::ConfigDisclosure{};
-        assert_eq!("http/git/config-disclosure", module.name());
+        assert_eq!("http/git/config-disclosure", module.name().to_string());
     }
 
     #[test]

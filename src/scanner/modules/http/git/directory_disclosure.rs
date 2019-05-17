@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct DirectoryDisclosure{}
 
 impl module::BaseModule for DirectoryDisclosure {
-    fn name(&self) -> String {
-        return "http/git/directory-disclosure".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpGitDirectoryDisclosure;
     }
 
     fn description(&self) -> String {
@@ -74,7 +75,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::DirectoryDisclosure{};
-        assert_eq!("http/git/directory-disclosure", module.name());
+        assert_eq!("http/git/directory-disclosure", module.name().to_string());
     }
 
     #[test]

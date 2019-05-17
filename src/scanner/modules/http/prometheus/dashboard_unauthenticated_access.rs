@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct DashboardUnauthenticatedAccess{}
 
 impl module::BaseModule for DashboardUnauthenticatedAccess {
-    fn name(&self) -> String {
-        return "http/prometheus/dashboard-unauthenticated-access".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpPrometheusDashboardUnauthenticatedAccess;
     }
 
     fn description(&self) -> String {
@@ -67,6 +68,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::DashboardUnauthenticatedAccess{};
-        assert_eq!("http/prometheus/dashboard-unauthenticated-access", module.name());
+        assert_eq!("http/prometheus/dashboard-unauthenticated-access", module.name().to_string());
     }
 }

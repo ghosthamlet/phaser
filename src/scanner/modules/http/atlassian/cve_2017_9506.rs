@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -11,8 +12,8 @@ use crate::{
 pub struct Cve2017_9506{}
 
 impl module::BaseModule for Cve2017_9506 {
-    fn name(&self) -> String {
-        return "http/atlassian/cve-2017-9506".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpAtlassianCve20179506;
     }
 
     fn description(&self) -> String {
@@ -65,6 +66,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Cve2017_9506{};
-        assert_eq!("http/atlassian/cve-2017-9506", module.name());
+        assert_eq!("http/atlassian/cve-2017-9506", module.name().to_string());
     }
 }

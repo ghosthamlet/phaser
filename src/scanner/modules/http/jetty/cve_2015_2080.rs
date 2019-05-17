@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -14,8 +15,8 @@ use regex::Regex;
 pub struct Cve2015_2080{}
 
 impl module::BaseModule for Cve2015_2080 {
-    fn name(&self) -> String {
-        return "http/jetty/cve-2015-2080".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpJettyCve20152080;
     }
 
     fn description(&self) -> String {
@@ -73,6 +74,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Cve2015_2080{};
-        assert_eq!("http/jetty/cve-2015-2080", module.name());
+        assert_eq!("http/jetty/cve-2015-2080", module.name().to_string());
     }
 }

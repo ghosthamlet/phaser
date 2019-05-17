@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct UnauthenticatedAccess{}
 
 impl module::BaseModule for UnauthenticatedAccess {
-    fn name(&self) -> String {
-        return "http/etcd/unauthenticated-access".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpEtcdUnauthenticatedAccess;
     }
 
     fn description(&self) -> String {
@@ -68,6 +69,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::UnauthenticatedAccess{};
-        assert_eq!("http/etcd/unauthenticated-access", module.name());
+        assert_eq!("http/etcd/unauthenticated-access", module.name().to_string());
     }
 }

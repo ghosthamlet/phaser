@@ -55,9 +55,9 @@ impl ReportV1 {
             // can ports
             let ports_module = modules::Ports{};
             let ports_module_findings = ports_module.run(self, &target);
-            let data = match ports_module_findings {
-                Ok(finding_data) => finding_data,
-                Err(err) => findings::Data::Err(err.to_string()),
+            let data = match &ports_module_findings {
+                Ok(ref finding_data) => finding_data.clone(),
+                Err(ref err) => findings::Data::Err(err.to_string()),
             };
             self.targets[i].findings.insert(ports_module.name(), ports_module.finding(data));
 

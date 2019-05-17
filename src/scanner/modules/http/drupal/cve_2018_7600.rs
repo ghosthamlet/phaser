@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -13,8 +14,8 @@ use regex::Regex;
 pub struct Cve2018_7600{}
 
 impl module::BaseModule for Cve2018_7600 {
-    fn name(&self) -> String {
-        return "http/drupal/cve-2018-7600".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpDrupalCve20187600;
     }
 
     fn description(&self) -> String {
@@ -100,7 +101,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Cve2018_7600{};
-        assert_eq!("http/drupal/cve-2018-7600", module.name());
+        assert_eq!("http/drupal/cve-2018-7600", module.name().to_string());
     }
 }
 

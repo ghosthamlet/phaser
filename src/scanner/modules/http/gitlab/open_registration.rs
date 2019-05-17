@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct OpenRegistration{}
 
 impl module::BaseModule for OpenRegistration {
-    fn name(&self) -> String {
-        return "http/gitlab/open-registration".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpGitlabOpenRegistration;
     }
 
     fn description(&self) -> String {
@@ -66,6 +67,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::OpenRegistration{};
-        assert_eq!("http/gitlab/open-registration", module.name());
+        assert_eq!("http/gitlab/open-registration", module.name().to_string());
     }
 }

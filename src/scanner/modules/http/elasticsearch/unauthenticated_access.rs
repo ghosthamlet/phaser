@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -13,8 +14,8 @@ use serde::{Deserialize, Serialize};
 pub struct UnauthenticatedAccess{}
 
 impl module::BaseModule for UnauthenticatedAccess {
-    fn name(&self) -> String {
-        return "http/elasticsearch/unauthenticated-access".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpElasticsearchUnauthenticatedAccess;
     }
 
     fn description(&self) -> String {
@@ -80,6 +81,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::UnauthenticatedAccess{};
-        assert_eq!("http/elasticsearch/unauthenticated-access", module.name());
+        assert_eq!("http/elasticsearch/unauthenticated-access", module.name().to_string());
     }
 }

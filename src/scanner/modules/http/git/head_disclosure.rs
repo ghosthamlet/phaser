@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct HeadDisclosure{}
 
 impl module::BaseModule for HeadDisclosure {
-    fn name(&self) -> String {
-        return "http/git/head-disclosure".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpGitheadDisclosure;
     }
 
     fn description(&self) -> String {
@@ -69,7 +70,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::HeadDisclosure{};
-        assert_eq!("http/git/head-disclosure", module.name());
+        assert_eq!("http/git/head-disclosure", module.name().to_string());
     }
 
     #[test]
