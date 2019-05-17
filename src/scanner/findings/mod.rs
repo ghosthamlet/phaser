@@ -4,7 +4,10 @@ mod url;
 
 
 use serde::{Serialize, Deserialize};
-use crate::scanner::BaseModule;
+use crate::scanner::{
+    BaseModule,
+    ModuleName,
+};
 
 pub use ports::{Port, PortState};
 pub use file::File;
@@ -19,7 +22,7 @@ pub struct Finding {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Module {
-    pub name: String,
+    pub name: ModuleName,
     pub version: String,
 }
 

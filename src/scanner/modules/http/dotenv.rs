@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct Dotenv{}
 
 impl module::BaseModule for Dotenv {
-    fn name(&self) -> String {
-        return "http/dotenv".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpDotenv;
     }
 
     fn description(&self) -> String {
@@ -101,7 +102,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Dotenv{};
-        assert_eq!("http/dotenv", module.name());
+        assert_eq!("http/dotenv", module.name().to_string());
     }
 
     #[test]

@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use regex::Regex;
 pub struct DirectoryListing{}
 
 impl module::BaseModule for DirectoryListing {
-    fn name(&self) -> String {
-        return "http/directory-listing".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpDirectoryListing;
     }
 
     fn description(&self) -> String {
@@ -71,7 +72,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::DirectoryListing{};
-        assert_eq!("http/directory-listing", module.name());
+        assert_eq!("http/directory-listing", module.name().to_string());
     }
 
     #[test]

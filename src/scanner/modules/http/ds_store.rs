@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use crate::{
 pub struct DsStore{}
 
 impl module::BaseModule for DsStore {
-    fn name(&self) -> String {
-        return "http/ds-store".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::HttpDsStore;
     }
 
     fn description(&self) -> String {
@@ -79,7 +80,7 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::DsStore{};
-        assert_eq!("http/ds-store", module.name());
+        assert_eq!("http/ds-store", module.name().to_string());
     }
 
     #[test]
