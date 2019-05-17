@@ -2,7 +2,11 @@ use serde::{Serialize, Deserialize};
 use std::net::{IpAddr};
 use url::Host;
 use std::str::FromStr;
-use crate::scanner::findings::{Finding, Module};
+use std::collections::HashMap;
+use crate::scanner::{
+    ModuleName,
+    findings::{Finding},
+};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -10,8 +14,8 @@ pub struct Target {
     pub host: String,
     pub kind: TargetKind,
     pub ip_version: Option<IpVersion>,
-    pub findings:  Vec<Finding>,
-    pub errors: Vec<TargetError>,
+    pub findings:  HashMap<ModuleName, Finding>,
+    // pub errors: Vec<TargetError>,
     pub subdomains: Vec<Target>,
 }
 
@@ -27,11 +31,11 @@ pub enum IpVersion{
     V6,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct TargetError {
-    pub module: Module,
-    pub error: String,
-}
+// #[derive(Clone, Debug, Deserialize, Serialize)]
+// pub struct TargetError {
+//     pub module: Module,
+//     pub error: String,
+// }
 
 // TODO: improve error type
 impl FromStr for Target {
@@ -62,8 +66,8 @@ impl FromStr for Target {
                 host: String::from(target),
                 kind: kind,
                 ip_version: ip_version,
-                findings:  vec!(),
-                errors: vec!(),
+                findings:  HashMap::new(),
+                // errors: vec!(),
                 subdomains: vec!(),
             });
         }

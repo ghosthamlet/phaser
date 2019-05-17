@@ -4,10 +4,10 @@ use crate::{
         findings,
         ReportV1,
         Target,
-        TargetError,
     },
     error::PhaserError,
 };
+
 
 // BaseModule must be implemented by all modules, whether it be HostModules or PortModule
 pub trait BaseModule {
@@ -16,22 +16,9 @@ pub trait BaseModule {
     fn author(&self) -> String;
     fn version(&self) -> String;
 
-    fn err(&self, err: &PhaserError) -> TargetError {
-        return TargetError{
-            module: findings::Module{
-                name: self.name(),
-                version: self.version(),
-            },
-            error: err.to_string(),
-        };
-    }
-
-    fn findings(&self, data: findings::Data) -> findings::Finding {
+    fn finding(&self, data: findings::Data) -> findings::Finding {
         return findings::Finding{
-            module: findings::Module{
-                name: self.name(),
-                version: self.version(),
-            },
+            module_version: self.version(),
             data,
         };
     }
@@ -50,7 +37,7 @@ pub trait PortModule: BaseModule {
 }
 
 
-#[derive(Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub enum ModuleName {
     #[serde(rename = "http/directory-listing")]
     HttpDirectoryListing,

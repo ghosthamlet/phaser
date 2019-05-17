@@ -16,24 +16,24 @@ pub mod domain;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Finding {
-    pub module: Module,
+    pub module_version: String,
     pub data: Data,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Module {
-    pub name: ModuleName,
-    pub version: String,
-}
+// #[derive(Clone, Debug, Deserialize, Serialize)]
+// pub struct Module {
+//     pub name: ModuleName,
+//     pub version: String,
+// }
 
-impl From<&BaseModule> for Module {
-    fn from(module: &BaseModule) -> Module {
-        return Module{
-            name: module.name(),
-            version: module.version(),
-        };
-    }
-}
+// impl From<&BaseModule> for Module {
+//     fn from(module: &BaseModule) -> Module {
+//         return Module{
+//             name: module.name(),
+//             version: module.version(),
+//         };
+//     }
+// }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

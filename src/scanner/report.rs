@@ -55,21 +55,21 @@ impl ReportV1 {
             // can ports
             let ports_module = modules::Ports{};
             let ports_module_findings = ports_module.run(self, &target);
-            match ports_module_findings {
-                Ok(findings::Data::None) => {},
-                Ok(ref finding_data) => self.targets[i].findings.push(ports_module.findings(finding_data.clone())),
-                Err(ref err) =>  self.targets[i].errors.push(ports_module.err(err)),
-            }
+            let data = match ports_module_findings {
+                Ok(finding_data) => finding_data,
+                Err(err) => findings::Data::Err(err.to_string()),
+            };
+            self.targets[i].findings.insert(ports_module.name(), ports_module.finding(data));
 
             // then host modules
             let host_modules = modules::get_host_modules();
             host_modules.iter().for_each(|module| {
                 info!("starting module: {}", module.name());
-                match module.run(self, &target) {
-                    Ok(findings::Data::None) => {},
-                    Ok(ref finding_data) => self.targets[i].findings.push(module.findings(finding_data.clone())),
-                    Err(ref err) =>  self.targets[i].errors.push(module.err(err)),
-                }
+                let data = match module.run(self, &target) {
+                    Ok(finding_data) => finding_data,
+                    Err(err) => findings::Data::Err(err.to_string()),
+                };
+                self.targets[i].findings.insert(module.name(), module.finding(data));
                 info!("module {} completed", module.name());
             });
 
@@ -80,11 +80,11 @@ impl ReportV1 {
                     ports.iter().for_each(|port| {
                         port_modules.iter().for_each(|module| {
                             info!("starting module: {}", module.name());
-                            match module.run(self, &target, &port) {
-                                Ok(findings::Data::None) => {},
-                                Ok(ref finding_data) => self.targets[i].findings.push(module.findings(finding_data.clone())),
-                                Err(ref err) =>  self.targets[i].errors.push(module.err(err)),
-                            }
+                            let data = match module.run(self, &target, &port) {
+                                Ok(finding_data) => finding_data,
+                                Err(err) => findings::Data::Err(err.to_string()),
+                            };
+                            self.targets[i].findings.insert(module.name(), module.finding(data));
                             info!("module {} completed", module.name());
                         });
                     });
