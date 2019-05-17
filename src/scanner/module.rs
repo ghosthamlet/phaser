@@ -45,6 +45,32 @@ pub enum ModuleName {
     HttpDsStore,
     #[serde(rename = "http/dotenv")]
     HttpDotenv,
+    #[serde(rename = "ssltls/robot")]
+    SsltlsRobot,
+    #[serde(rename = "ssltls/cve-2014-0224")]
+    SsltlsCve20140224,
+    #[serde(rename = "ssltls/cve-2014-0160")]
+    SsltlsCve20140160,
+    #[serde(rename = "postgresql/unauthenticated-access")]
+    PostgresqlUnauthenticatedAccess,
+    #[serde(rename = "ports")]
+    Ports,
+    #[serde(rename = "mysql/unauthenticated-access")]
+    MysqlUnauthenticatedAccess,
+    #[serde(rename = "domain/axfr")]
+    DomainAxfr,
+    #[serde(rename = "domain/cname")]
+    DomainCname,
+    #[serde(rename = "domain/dmarc")]
+    DomainDmarc,
+    #[serde(rename = "domain/spf")]
+    DomainSpf,
+    #[serde(rename = "domain/subdomains")]
+    DomainSubdomains,
+    #[serde(rename = "domain/takeover")]
+    DomainTakeover,
+    #[serde(rename = "domain/whois")]
+    DomainWhois,
 }
 
 impl std::fmt::Display for ModuleName {

@@ -6,6 +6,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
 };
 use std::process::{Command};
@@ -13,8 +14,8 @@ use std::process::{Command};
 pub struct Axfr{}
 
 impl module::BaseModule for Axfr {
-    fn name(&self) -> String {
-        return String::from("domain/axfr");
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainAxfr;
     }
 
     fn description(&self) -> String {
@@ -88,6 +89,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Axfr{};
-        assert_eq!("domain/axfr", module.name());
+        assert_eq!("domain/axfr", module.name().to_string());
     }
 }

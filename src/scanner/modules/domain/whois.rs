@@ -5,6 +5,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -15,8 +16,8 @@ use std::path::{Path};
 pub struct Whois{}
 
 impl module::BaseModule for Whois {
-    fn name(&self) -> String {
-        return String::from("domain/whois");
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainWhois;
     }
 
     fn description(&self) -> String {
@@ -64,6 +65,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Whois{};
-        assert_eq!("domain/whois", module.name());
+        assert_eq!("domain/whois", module.name().to_string());
     }
 }

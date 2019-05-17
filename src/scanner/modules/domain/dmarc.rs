@@ -5,6 +5,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -13,8 +14,8 @@ use std::process::{Command};
 pub struct Dmarc{}
 
 impl module::BaseModule for Dmarc {
-    fn name(&self) -> String {
-        return String::from("domain/dmarc");
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainDmarc;
     }
 
     fn description(&self) -> String {
@@ -82,6 +83,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Dmarc{};
-        assert_eq!("domain/dmarc", module.name());
+        assert_eq!("domain/dmarc", module.name().to_string());
     }
 }

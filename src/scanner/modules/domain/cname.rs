@@ -1,9 +1,3 @@
-// use std::str::FromStr;
-// use trust_dns::client::{Client, SyncClient};
-// use trust_dns::udp::UdpClientConnection;
-// use trust_dns::op::DnsResponse;
-// use trust_dns::rr::{DNSClass, Name, RData, Record, RecordType};
-// use std::net::{SocketAddr, IpAddr, Ipv4Addr};
 use crate::{
         scanner::{
         module,
@@ -11,6 +5,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -19,8 +14,8 @@ use std::process::{Command};
 pub struct Cname{}
 
 impl module::BaseModule for Cname {
-    fn name(&self) -> String {
-        return String::from("domain/cname");
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainCname;
     }
 
     fn description(&self) -> String {
@@ -102,6 +97,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Cname{};
-        assert_eq!("domain/cname", module.name());
+        assert_eq!("domain/cname", module.name().to_string());
     }
 }

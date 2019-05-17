@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -14,8 +15,8 @@ use crate::scanner::modules::ssltls::sslyze;
 pub struct Robot{}
 
 impl module::BaseModule for Robot {
-    fn name(&self) -> String {
-        return "ssltls/robot".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::SsltlsRobot;
     }
 
     fn description(&self) -> String {
@@ -69,6 +70,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Robot{};
-        assert_eq!("ssltls/robot", module.name());
+        assert_eq!("ssltls/robot", module.name().to_string());
     }
 }

@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -12,8 +13,8 @@ use postgres::{Connection, TlsMode};
 pub struct UnauthenticatedAccess{}
 
 impl module::BaseModule for UnauthenticatedAccess {
-    fn name(&self) -> String {
-        return "postgresql/unauthenticated-access".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::PostgresqlUnauthenticatedAccess;
     }
 
     fn description(&self) -> String {
@@ -54,6 +55,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::UnauthenticatedAccess{};
-        assert_eq!("postgresql/unauthenticated-access", module.name());
+        assert_eq!("postgresql/unauthenticated-access", module.name().to_string());
     }
 }

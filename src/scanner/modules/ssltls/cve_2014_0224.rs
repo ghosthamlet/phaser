@@ -4,6 +4,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -14,8 +15,8 @@ use crate::scanner::modules::ssltls::sslyze;
 pub struct Cve2014_0224{}
 
 impl module::BaseModule for Cve2014_0224 {
-    fn name(&self) -> String {
-        return "ssltls/cve-2014-0224".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::SsltlsCve20140224;
     }
 
     fn description(&self) -> String {
@@ -69,6 +70,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Cve2014_0224{};
-        assert_eq!("ssltls/cve-2014-0224", module.name());
+        assert_eq!("ssltls/cve-2014-0224", module.name().to_string());
     }
 }

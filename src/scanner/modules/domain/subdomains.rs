@@ -5,6 +5,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -13,8 +14,8 @@ use postgres::{Connection, TlsMode};
 pub struct Subdomains{}
 
 impl module::BaseModule for Subdomains {
-    fn name(&self) -> String {
-        return String::from("domain/subdomains");
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainSubdomains;
     }
 
     fn description(&self) -> String {
@@ -77,6 +78,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Subdomains{};
-        assert_eq!("domain/subdomains", module.name());
+        assert_eq!("domain/subdomains", module.name().to_string());
     }
 }

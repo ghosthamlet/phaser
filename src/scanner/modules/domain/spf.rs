@@ -5,6 +5,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -13,8 +14,8 @@ use std::process::{Command};
 pub struct Spf{}
 
 impl module::BaseModule for Spf {
-    fn name(&self) -> String {
-        return String::from("domain/spf");
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainSpf;
     }
 
     fn description(&self) -> String {
@@ -81,6 +82,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Spf{};
-        assert_eq!("domain/spf", module.name());
+        assert_eq!("domain/spf", module.name().to_string());
     }
 }

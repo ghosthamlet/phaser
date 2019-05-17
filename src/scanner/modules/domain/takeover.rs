@@ -5,6 +5,7 @@ use crate::{
         ReportV1,
         Target,
         TargetKind,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -15,8 +16,8 @@ use std::fs;
 pub struct Takeover{}
 
 impl module::BaseModule for Takeover {
-    fn name(&self) -> String {
-        return "domain/takeover".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::DomainTakeover;
     }
 
     fn description(&self) -> String {
@@ -79,6 +80,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Takeover{};
-        assert_eq!("domain/takeover", module.name());
+        assert_eq!("domain/takeover", module.name().to_string());
     }
 }

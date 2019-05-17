@@ -6,6 +6,7 @@ use crate::{
         findings,
         ReportV1,
         Target,
+        ModuleName,
     },
     error::PhaserError,
 };
@@ -19,8 +20,8 @@ use std::time::Duration;
 pub struct Ports{}
 
 impl module::BaseModule for Ports {
-    fn name(&self) -> String {
-        return "ports".to_string();
+    fn name(&self) -> ModuleName {
+        return ModuleName::Ports;
     }
 
     fn description(&self) -> String {
@@ -176,6 +177,6 @@ mod tests {
     #[test]
     fn module_name() {
         let module = super::Ports{};
-        assert_eq!("ports", module.name());
+        assert_eq!("ports", module.name().to_string());
     }
 }
