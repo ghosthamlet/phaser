@@ -138,7 +138,7 @@ fn zip_dir<T>(it: &mut Iterator<Item=DirEntry>, prefix: &str, writer: T, method:
         // Write file or directory explicitly
         // Some unzip tools unzip files with directory paths correctly, some do not!
         if path.is_file() {
-            println!("adding file {:?} as {:?} ...", path, name);
+            info!("adding file {:?} as {:?} ...", path, name);
             zip.start_file_from_path(name, options)?;
             let mut f = File::open(path)?;
 
@@ -148,7 +148,7 @@ fn zip_dir<T>(it: &mut Iterator<Item=DirEntry>, prefix: &str, writer: T, method:
         } else if name.as_os_str().len() != 0 {
             // Only if not root! Avoids path spec / warning
             // and mapname conversion failed error on unzip
-            println!("adding dir {:?} as {:?} ...", path, name);
+            info!("adding dir {:?} as {:?} ...", path, name);
             zip.add_directory_from_path(name, options)?;
         }
     }
