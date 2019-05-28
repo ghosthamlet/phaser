@@ -21,12 +21,6 @@ It can be used both from CLI and as a worker waiting for messages from a message
 
 --------
 
-## Usage
-
-```bash
-phaser scan example.com
-```
-
 
 ## Documentation
 
