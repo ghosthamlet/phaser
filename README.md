@@ -11,13 +11,10 @@ It can be used both from CLI and as a worker waiting for messages from a message
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
-3. [Build](#build)
-4. [Development](#Development)
-5. [Tests](#tests)
-6. [Contributing](#contributing)
-7. [Licensing](#licensing)
-8. [Sponsoring](#sponsoring)
-9. [Security](#security)
+3. [Contributing](#contributing)
+4. [Licensing](#licensing)
+5. [Sponsoring](#sponsoring)
+6. [Security](#security)
 
 --------
 
@@ -30,27 +27,6 @@ See the [Wiki](https://gitlab.com/bloom42/phaser/wikis)
 ## Docker image
 
 [registry.gitlab.com/bloom42/phaser](https://gitlab.com/bloom42/phaser/container_registry)
-
-
-## Build
-
-```
-$ make
-```
-
-
-## Development
-
-```
-$ make dev
-```
-
-
-## Tests
-
-```
-$ make test
-```
 
 
 ## Contributing
