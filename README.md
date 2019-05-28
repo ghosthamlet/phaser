@@ -1,48 +1,102 @@
 <p align="center">
-  <img alt="phaser logo" src="https://bloom.sh/imgs/logos/phaser_256.png" height="180" />
+  <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/phaser_256.png" height="180" />
   <h3 align="center">Phaser</h3>
   <p align="center">The cloud native security scanner ☁️</p>
 </p>
 
 --------
 
-[![Build Status](https://travis-ci.com/z0mbie42/phaser.svg?token=8WFNhu6wffpdLjmEs8Fi&branch=master)](https://travis-ci.com/z0mbie42/phaser)[![GitHub release](https://img.shields.io/github/release/bloom42/phaser.svg)](https://github.com/bloom42/phaser/releases)
-[![phaser crate](https://img.shields.io/crates/v/phaser.svg)](https://crates.io/crates/phaser)
-[![phaser documentation](https://docs.rs/phaser/badge.svg)](https://docs.rs/phaser)
-
-`phaser` is an automated security scanner for both networks and web applications.
+**Phaser** is an automated security scanner for both networks and web applications.
 It can be used both from CLI and as a worker waiting for messages from a message queue.
 
-1. [Usage](#usage)
-2. [Documentation](#documentation)
-3. [Docker image](#docker-image)
-4. [Contributing](#contributing)
-5. [License](#license)
+1. [Documentation](#documentation)
+2. [Docker image](#docker-image)
+3. [Build](#build)
+4. [Development](#Development)
+5. [Tests](#tests)
+6. [Contributing](#contributing)
+7. [Licensing](#licensing)
+8. [Sponsoring](#sponsoring)
+9. [Security](#security)
 
--------------------
-
-## Usage
-
-```bash
-phaser help
-```
-
+--------
 
 ## Documentation
 
-See [https://opensource.bloom.sh/phaser](https://opensource.bloom.sh/phaser)
+See the [Wiki](https://gitlab.com/bloom42/phaser/wikis)
 
 
 ## Docker image
 
-[quay.io/bloom42/phaser](https://quay.io/repository/bloom42/phaser?tab=tags)
+[registry.gitlab.com/bloom42/phaser](https://gitlab.com/bloom42/phaser/container_registry)
+
+
+## Build
+
+```
+$ make
+```
+
+
+## Development
+
+```
+$ make dev
+```
+
+
+## Tests
+
+```
+$ make test
+```
 
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://opensource.bloom.sh/contributing](https://opensource.bloom.sh/contributing) for guidance.
+[https://bloom.sh/contribute](https://bloom.sh/contribute) for guidance.
 
-## License
+
+
+## Licensing
 
 See `LICENSE.txt` and [https://opensource.bloom.sh/licensing](https://opensource.bloom.sh/licensing)
+
+
+## Sponsoring
+
+Phaser is a free and open source project. If you are interested in supporting this project, the core team
+and the contributors please consider:
+
+* Becoming a patron
+
+<a href="https://www.patreon.com/bloom42" target="_blank" rel="noopener">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="42"/>
+</a>
+
+* Donate using PayPal
+
+<a href="https://paypal.me/z0mbie42" target="_blank" rel="noopener">
+  <img src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif" height="42"/>
+</a>
+
+
+* Donate using crypto currencies
+
+**BTC**: `38QY24nHRkMxUFsEDobwJU2b5QzuSL39Yb`
+
+**ETH**: `0x5121FE2A1014C4d57FCD2E8C4134A179851aFe6F`
+
+**XMR**: `4GdoN7NCTi8a5gZug7PrwZNKjvHFmKeV11L6pNJPgj5QNEHsN6eeX3DaAQFwZ1ufD4LYCZKArktt113W7QjWvQ7CW7fRk3auob6QWFSgYJ`
+
+
+
+If you want to have your logo on our [about page](https://bloom.sh/company/about) please visit our
+[dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
+
+
+## Security
+
+If you found a security issue affecting this project, please do not open a public issue and refer to our
+[dedicated security page](https://bloom.sh/company/security) instead. Tahnk you.
