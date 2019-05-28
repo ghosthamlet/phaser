@@ -9,16 +9,15 @@
 **Phaser** is an automated security scanner for both networks and web applications.
 It can be used both from CLI and as a worker waiting for messages from a message queue.
 
-1. [Usage](#usage)
-2. [Documentation](#documentation)
-3. [Docker image](#docker-image)
-4. [Build](#build)
-5. [Development](#Development)
-6. [Tests](#tests)
-7. [Contributing](#contributing)
-8. [Licensing](#licensing)
-9. [Sponsoring](#sponsoring)
-10. [Security](#security)
+1. [Documentation](#documentation)
+2. [Docker image](#docker-image)
+3. [Build](#build)
+4. [Development](#Development)
+5. [Tests](#tests)
+6. [Contributing](#contributing)
+7. [Licensing](#licensing)
+8. [Sponsoring](#sponsoring)
+9. [Security](#security)
 
 --------
 
