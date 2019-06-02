@@ -10,7 +10,7 @@ RUN mkdir -p /home/bloom/.local/bin && chown -R bloom:bloom /home/bloom/.local &
 RUN mkdir /phaser && chown -R bloom:bloom /phaser && chmod 700 /phaser
 
 # Add phaser to path
-COPY --from=builder /phaser/dist/phaser /home/bloom/.local/bin/phaser
+COPY dist/phaser /home/bloom/.local/bin/phaser
 
 # copy assets
 COPY assets /phaser/assets
