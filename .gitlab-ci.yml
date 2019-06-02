@@ -1,68 +1,75 @@
-image: docker:stable
-
 services:
   - docker:dind
 
 stages:
   - test
   - build
-  - push
+  - package
   - release
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+
+cache:
+  paths:
+    - cargo_home/
+    - target/
+
 
 test:
   stage: test
-  image: 'golang:1.11-stretch'
+  image: 'rust:1.35'
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
   script:
     - apt update && apt install -y gcc make git
+    - rustup default nightly-2019-05-09
     - make test
+
 
 build:
   stage: build
+  image: 'rust:1.35'
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
   script:
-    - apk update && apk add make
-    - make docker
+    - apt update && apt install -y gcc make git
+    - rustup default nightly-2019-05-09
+    - make build
+  artifacts:
+    paths:
+    - dist
 
-push:
-  stage: push
-  only:
-    refs:
-      - master
+
+package:docker:
+  stage: package
+  dependencies:
+    - build
+  image: docker:stable
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
+  cache: {}
   script:
     - apk update && apk add make
-    - make docker
-    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
-    - make docker_push
+    - make docker_build
 
 
-release_docker:
-  stage: release
+release:docker:
   only:
     - tags
+  stage: release
+  dependencies:
+    - build
+  image: docker:stable
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
+  cache: {}
   script:
     - apk update && apk add make
-    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+    - make docker_build
+    - make docker_login
     - make docker_release
-
-release_github:
-  stage: release
-  image: 'golang:1.11-stretch'
-  only:
-    - tags
-  tags:
-    - docker
-    - bloom42cicd
-  script:
-    - go get -u github.com/bloom42/rocket
-    - rocket

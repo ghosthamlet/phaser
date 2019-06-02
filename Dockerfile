@@ -1,11 +1,3 @@
-FROM rust:1.34-stretch AS builder
-
-RUN apt update && apt install -y make openssl libssl-dev pkg-config
-
-WORKDIR /phaser
-COPY ./ ./
-RUN make build
-
 ####################################################################################################
 ## Image
 ####################################################################################################
