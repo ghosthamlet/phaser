@@ -4,7 +4,7 @@
 DIST_DIR = dist
 NAME := $(shell cat Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
 VERSION := $(shell cat Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
-DOCKER_IMAGE = quay.io/bloom42/$(NAME)
+DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 
 all: build
@@ -48,6 +48,8 @@ crates_login:
 
 crates_publish:
 	cargo publish
+
+
 
 docker_build:
 	docker build -t $(DOCKER_IMAGE):latest .
