@@ -23,7 +23,7 @@ impl module::BaseModule for Cname {
     }
 
     fn author(&self) -> String {
-        return String::from("Sylvain Kerkour <sylvain@kerkour.com>")
+        return String::from("Sylvain Kerkour <sylvain@kerkour.fr>")
     }
 
     fn version(&self) -> String {

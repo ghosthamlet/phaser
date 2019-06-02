@@ -25,7 +25,7 @@ impl module::BaseModule for Whois {
     }
 
     fn author(&self) -> String {
-        return String::from("Sylvain Kerkour <sylvain@kerkour.com>")
+        return String::from("Sylvain Kerkour <sylvain@kerkour.fr>")
     }
 
     fn version(&self) -> String {

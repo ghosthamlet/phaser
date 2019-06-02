@@ -22,7 +22,7 @@ impl module::BaseModule for DirectoryDisclosure {
     }
 
     fn author(&self) -> String {
-        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
+        return "Sylvain Kerkour <sylvain@kerkour.fr>".to_string();
     }
 
     fn version(&self) -> String {
@@ -93,7 +93,7 @@ logs
 objects
 refs"#;
 
-        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.fr</title> sdsds";
 
         assert_eq!(true, super::is_git_directory_listing(body));
         assert_eq!(false, super::is_git_directory_listing(body2));

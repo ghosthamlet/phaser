@@ -22,7 +22,7 @@ impl module::BaseModule for HeadDisclosure {
     }
 
     fn author(&self) -> String {
-        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
+        return "Sylvain Kerkour <sylvain@kerkour.fr>".to_string();
     }
 
     fn version(&self) -> String {
@@ -77,7 +77,7 @@ mod tests {
     fn is_head_file() {
         let body = r#"ref: refs/heads/master"#;
         let body2 = r#"ref: refs/heads/heroku"#;
-        let body3 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+        let body3 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.fr</title> sdsds";
 
         assert_eq!(true, super::is_head_file(body));
         assert_eq!(true, super::is_head_file(body2));

@@ -22,7 +22,7 @@ impl module::BaseModule for DsStore {
     }
 
     fn author(&self) -> String {
-        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
+        return "Sylvain Kerkour <sylvain@kerkour.fr>".to_string();
     }
 
     fn version(&self) -> String {

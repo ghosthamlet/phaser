@@ -1,7 +1,7 @@
 [package]
 name = "phaser"
 version = "0.5.8"
-authors = ["z0mbie42 <sylvain@kerkour.com>"]
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
 homepage = "https://bloom.sh/platform/phaser"
 repository = "https://gitlab.com/bloom42/phaser.git"

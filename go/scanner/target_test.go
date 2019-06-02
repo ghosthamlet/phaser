@@ -15,7 +15,7 @@ func checkTarget(t *testing.T, target string, expected phaser.Target) {
 }
 
 func TestParseTarget(t *testing.T) {
-	host := "kerkour.com"
+	host := "kerkour.fr"
 	expected := phaser.Target{
 		Host:      host,
 		Type:      phaser.TargetTypeDomain,

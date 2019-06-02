@@ -24,7 +24,7 @@ impl module::BaseModule for Cve2014_0224 {
     }
 
     fn author(&self) -> String {
-        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
+        return "Sylvain Kerkour <sylvain@kerkour.fr>".to_string();
     }
 
     fn version(&self) -> String {

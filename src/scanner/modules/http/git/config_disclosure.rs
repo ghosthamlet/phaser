@@ -24,7 +24,7 @@ impl module::BaseModule for ConfigDisclosure {
     }
 
     fn author(&self) -> String {
-        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
+        return "Sylvain Kerkour <sylvain@kerkour.fr>".to_string();
     }
 
     fn version(&self) -> String {
@@ -93,7 +93,7 @@ mod tests {
         remote = origin
         merge = refs/heads/master"#;
 
-        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.fr</title> sdsds";
 
         assert_eq!(true, super::is_config_file(body));
         assert_eq!(false, super::is_config_file(body2));

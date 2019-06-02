@@ -22,7 +22,7 @@ impl module::BaseModule for Dotenv {
     }
 
     fn author(&self) -> String {
-        return "Sylvain Kerkour <sylvain@kerkour.com>".to_string();
+        return "Sylvain Kerkour <sylvain@kerkour.fr>".to_string();
     }
 
     fn version(&self) -> String {
@@ -113,7 +113,7 @@ mod tests {
         xsxs
         xs
         xs";
-        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.com</title> sdsds";
+        let body2 = "lol lol lol ol ol< LO> OL  <tle>Index of kerkour.fr</title> sdsds";
         let body3 = "";
 
         assert_eq!(true, super::is_dotenv(body));
