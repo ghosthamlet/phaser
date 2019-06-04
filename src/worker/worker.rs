@@ -20,8 +20,10 @@ use crate::{
 
 #[derive(Clone)]
 pub struct Worker {
+    id: u64,
     config: config::Config,
     api_client: reqwest::Client,
+    logger: slog::Logger,
 }
 
 macro_rules! continue_fail {
@@ -37,12 +39,14 @@ macro_rules! continue_fail {
 }
 
 impl Worker {
-     pub fn new() -> Worker {
+     pub fn new(id: u64) -> Worker {
         let config = Config::new();
 
         let mut headers = header::HeaderMap::new();
         let auth_header = format!("Secret phaser:{}", &config.phaser_secret);
         headers.insert(header::AUTHORIZATION, header::HeaderValue::from_str(&auth_header).unwrap());
+
+        let logger = slog_scope::logger().new(slog_o!("worker" => id));
 
         let api_client = reqwest::Client::builder()
             .gzip(true)
@@ -50,8 +54,10 @@ impl Worker {
             .default_headers(headers)
             .build().expect("error building api client");
         return Worker{
+            id,
             config,
             api_client,
+            logger,
         };
      }
 
@@ -59,13 +65,13 @@ impl Worker {
         let endpoint = format!("{}/phaser/v1/job", self.config.api_url);
 
         loop {
-            info!("fetching job {}", &endpoint);
+            slog_info!(self.logger, "fetching job {}", &endpoint);
             let mut res = continue_fail!(self.api_client.get(&endpoint).send());
-            info!("status: {}", res.status());
+            slog_info!(self.logger, "status: {}", res.status());
             if res.status() == 200 {
                 let payload: models::ApiResponse = continue_fail!(res.json());
                 let payload = payload.data.expect("error unwraping reportJob");
-                info!("job received report: {}", &payload.id);
+                slog_info!(self.logger, "job received report: {}", &payload.id);
                 let targets = payload.targets
                     .iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
                 let data_folder = Path::new(&self.config.data_folder)
@@ -92,11 +98,11 @@ impl Worker {
                 match self.api_client.post(&endpoint)
                     .multipart(form)
                     .send() {
-                    Ok(_) => info!("report zip successfully sent to API"),
-                    Err(err) => slog_warn!(slog_scope::logger(), "error sending report to api"; "err" => err.to_string()),
+                    Ok(_) => slog_info!(self.logger, "report zip successfully sent to API"),
+                    Err(err) => slog_warn!(self.logger, "error sending report to api"; "err" => err.to_string()),
                 }
             } else {
-                info!("no jobs, waiting 15 secs");
+                slog_info!(self.logger, "no jobs, waiting 15 secs");
                 thread::sleep(time::Duration::from_secs(15))
             }
         }

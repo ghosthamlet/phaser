@@ -3,6 +3,9 @@ use crate::worker::{Worker};
 use sentry;
 use dotenv::dotenv;
 use std::env;
+use std::{thread, time};
+use std::sync::mpsc;
+
 
 // we start sentry here, because tracking stop when guard go out of scope, so it can't be in Worker::new
 pub fn run(_: &ArgMatches) -> Result<(), String> {
