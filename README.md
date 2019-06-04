@@ -4,6 +4,8 @@
   <p align="center">The cloud native security scanner ☁️</p>
 </p>
 
+[Try it online for free](https://bloom.sh/platform/phaser)
+
 --------
 
 [![pipeline status](https://gitlab.com/bloom42/phaser/badges/master/pipeline.svg)](https://gitlab.com/bloom42/phaser/commits/master)
@@ -13,8 +15,6 @@
 
 **Phaser** is an automated security scanner for both networks and web applications.
 It can be used both from CLI and as a worker waiting for messages from a message queue.
-
-[Try it online for free](https://bloom.sh/platform/phaser)
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
