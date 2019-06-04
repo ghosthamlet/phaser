@@ -12,6 +12,8 @@
 **Phaser** is an automated security scanner for both networks and web applications.
 It can be used both from CLI and as a worker waiting for messages from a message queue.
 
+[Try it online for free](https://bloom.sh/platform/phaser)
+
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
 3. [Contributing](#contributing)
