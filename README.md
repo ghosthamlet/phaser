@@ -7,6 +7,8 @@
 --------
 
 [![pipeline status](https://gitlab.com/bloom42/phaser/badges/master/pipeline.svg)](https://gitlab.com/bloom42/phaser/commits/master)
+[![crate](https://img.shields.io/crates/v/phaser.svg)](https://crates.io/crates/phaser)
+[![Released API docs](https://docs.rs/phaser/badge.svg)](https://docs.rs/phaser)
 
 
 **Phaser** is an automated security scanner for both networks and web applications.
