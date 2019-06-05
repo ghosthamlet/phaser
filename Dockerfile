@@ -32,5 +32,6 @@ ENV PATH="${PATH}:/home/bloom/.local/bin"
 RUN pip3 install --upgrade -U sslyze dnspython
 
 WORKDIR /phaser
+RUN mkdir reports
 
 CMD ["phaser", "worker"]
