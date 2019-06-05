@@ -72,8 +72,9 @@ impl Worker {
                 let payload: models::ApiResponse = continue_fail!(res.json());
                 let payload = payload.data.expect("error unwraping reportJob");
                 slog_info!(self.logger, "job received report: {}", &payload.id);
-                let targets = payload.targets
-                    .iter().map(|target| scanner::Target::from_str(target).unwrap()).collect();
+                let targets = continue_fail!(payload.targets
+                    .iter().map(|target| scanner::Target::from_str(target)).collect()
+                );
                 let data_folder = Path::new(&self.config.data_folder)
                     .join(&payload.id.to_string()).to_str().expect("error creating data folder path").to_string();
                 let config = scanner::ConfigV1{
