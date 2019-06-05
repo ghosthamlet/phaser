@@ -1,6 +1,6 @@
 [package]
 name = "phaser"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
 homepage = "https://bloom.sh/platform/phaser"
